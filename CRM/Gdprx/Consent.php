@@ -62,11 +62,25 @@ class CRM_Gdprx_Consent {
   /**
    * add a new user consent entry for the contact
    */
-  protected function createConsentRecord($contact_id, $category, $source, $date = 'now', $note = '') {
+  public static function createConsentRecord($contact_id, $category, $source, $date = 'now', $note = '') {
+    // look up values
+    if (!is_numeric($source)) {
+      $source = CRM_Core_OptionGroup::getValue('consent_source', $source, 'label');
+    }
+    if (!is_numeric($category)) {
+      $category = CRM_Core_OptionGroup::getValue('consent_category', $category, 'label');
+    }
+
+    if (empty($category) || empty($source)) {
+      // these fields are mandatory
+      CRM_Core_Error::debug_log_message("Couldn't create consent record, category/source missing!");
+      return;
+    }
+
     $data = array(
       'consent.consent_date'     => date('YmdHis', strtotime($date)),
-      'consent.consent_category' => CRM_Core_OptionGroup::getValue('consent_category', $category, 'label'),
-      'consent.consent_source'   => CRM_Core_OptionGroup::getValue('consent_source', $source, 'label'),
+      'consent.consent_category' => $category,
+      'consent.consent_source'   => $source,
       'consent.consent_note'     => $note,
     );
 

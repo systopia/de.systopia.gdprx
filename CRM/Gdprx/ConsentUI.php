@@ -41,7 +41,7 @@ class CRM_Gdprx_ConsentUI {
     $form->add('select',
       "consent_ui_category",
       E::ts("Category"),
-      CRM_Gdprx_Consent::getCategoryList(),
+      array('0' => E::ts("- please select -")) + CRM_Gdprx_Consent::getCategoryList(),
       TRUE,
       array('class' => 'user-category')
     );
@@ -50,7 +50,7 @@ class CRM_Gdprx_ConsentUI {
     $form->add('select',
       "consent_ui_source",
       E::ts("Source"),
-      CRM_Gdprx_Consent::getSourceList(),
+      array('0' => E::ts("- please select -")) + CRM_Gdprx_Consent::getSourceList(),
       TRUE,
       array('class' => 'user-source')
     );
@@ -105,16 +105,18 @@ class CRM_Gdprx_ConsentUI {
    * handles the post process hook action
    */
   public static function postProcess($formName, &$form) {
-    if (!empty($form->_contactId)) {
-      // we are in edit mode, nothing to do here!
+    if (empty($form->_contactId)) {
+      // contact doesn't exist yet
       return;
     }
 
     $values = $form->exportValues();
-    CRM_Gdprx_Consent::createConsentRecord($form->_contactId,
-                                           $values['consent_ui_category'],
-                                           $values['consent_ui_source'],
-                                           $values['consent_ui_date'],
-                                           $values['consent_ui_note']);
+    if (!empty($values['consent_ui_category'])) {
+      CRM_Gdprx_Consent::createConsentRecord($form->_contactId,
+                                             $values['consent_ui_category'],
+                                             $values['consent_ui_source'],
+                                             $values['consent_ui_date'],
+                                             $values['consent_ui_note']);
+    }
   }
 }
