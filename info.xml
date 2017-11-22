@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<extension key="de.systopia.gdprx" type="module">
+  <file>gdprx</file>
+  <name>GPDR Extension</name>
+  <description>Helps you to comply with the GDP Regulations</description>
+  <license>AGPL-3.0</license>
+  <maintainer>
+    <author>SYSTOPIA</author>
+    <email>endres@systopia.de</email>
+  </maintainer>
+  <urls>
+    <url desc="Main Extension Page">http://FIXME</url>
+    <url desc="Documentation">http://FIXME</url>
+    <url desc="Support">http://FIXME</url>
+    <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
+  </urls>
+  <releaseDate>2017-11-22</releaseDate>
+  <version>0.1</version>
+  <develStage>dev</develStage>
+  <compatibility>
+    <ver>4.7</ver>
+  </compatibility>
+  <comments>See https://en.wikipedia.org/wiki/General_Data_Protection_Regulation</comments>
+  <civix>
+    <namespace>CRM/Gdprx</namespace>
+  </civix>
+</extension>
