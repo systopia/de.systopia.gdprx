@@ -20,16 +20,16 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
   protected $action;
   protected $category;
   protected $source;
-  protected $note_field;
+  protected $note;
   protected $date_field;
   protected $contact_field;
 
-  public function __construct($entity, $action, $category, $source, $note_field = 'consent_note', $date_field = 'now', $contact_field = 'contact_id') {
+  public function __construct($entity, $action, $category, $source, $note = NULL, $date_field = 'now', $contact_field = 'contact_id') {
     $this->entity        = $entity;
     $this->action        = $action;
     $this->category      = $category;
     $this->source        = $source;
-    $this->note_field    = $note_field;
+    $this->note          = $note;
     $this->date_field    = $date_field;
     $this->contact_field = $contact_field;
   }
@@ -63,7 +63,7 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
           $this->category,
           $this->source,
           CRM_Utils_Array::value($this->date_field, $result, 'now'),
-          CRM_Utils_Array::value($this->note_field, $result, '')
+          ($this->note !== NULL) ? $this->note : CRM_Utils_Array::value('consent_note', $result, '')
         );
       }
     }
