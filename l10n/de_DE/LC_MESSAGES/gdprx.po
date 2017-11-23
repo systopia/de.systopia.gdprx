@@ -1,0 +1,65 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: GDPR Compliance Extension\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Bjoern Endres <Bjoern.Endres@didonai.com>\n"
+"Language-Team: SYSTOPIA <info@systopia.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+
+#: CRM/Gdprx/ConsentUI.php resources/*.json
+msgid "Date"
+msgstr "Datum"
+
+#: CRM/Gdprx/ConsentUI.php
+msgid "Category"
+msgstr "Kategorie"
+
+#: CRM/Gdprx/ConsentUI.php
+msgid "- please select -"
+msgstr "- bitte wählen -"
+
+#: CRM/Gdprx/ConsentUI.php resources/*.json
+msgid "Source"
+msgstr "Quelle"
+
+#: CRM/Gdprx/ConsentUI.php resources/*.json
+msgid "Note"
+msgstr "Anmerkung"
+
+#: CRM/Gdprx/ConsentUI.php
+msgid "Category is mandatory"
+msgstr "'Kategorie' ist ein Pflichtfeld"
+
+#: CRM/Gdprx/ConsentUI.php
+msgid "Source is mandatory"
+msgstr "'Quelle' ist ein Pflichtfeld"
+
+#: CRM/Gdprx/ConsentUI.php
+msgid "Note cannot be more the 1024 characters"
+msgstr "'Anmerkung' maximal 1024 Zeichen betragen"
+
+#: resources/*.json
+msgid "Consent Category"
+msgstr "Kategorie der Nutzungsberechtigung"
+
+#: resources/*.json
+msgid "Contact Consent"
+msgstr "Kontaktherkunft"
+
+#: resources/*.json
+msgid "Consent Source"
+msgstr "Quelle der Nutzungsberechtigung"
+
+#: resources/*.json
+msgid "Default"
+msgstr "Standard"
+
+#: resources/*.json
+msgid "Catgeory"
+msgstr ""
+

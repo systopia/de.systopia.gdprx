@@ -1,0 +1,47 @@
+#: CRM/Gdprx/ConsentUI.php resources/*.json
+msgid "Date"
+msgstr ""
+
+#: CRM/Gdprx/ConsentUI.php resources/*.json
+msgid "Category"
+msgstr ""
+
+#: CRM/Gdprx/ConsentUI.php
+msgid "- please select -"
+msgstr ""
+
+#: CRM/Gdprx/ConsentUI.php resources/*.json
+msgid "Source"
+msgstr ""
+
+#: CRM/Gdprx/ConsentUI.php resources/*.json
+msgid "Note"
+msgstr ""
+
+#: CRM/Gdprx/ConsentUI.php
+msgid "Category is mandatory"
+msgstr ""
+
+#: CRM/Gdprx/ConsentUI.php
+msgid "Source is mandatory"
+msgstr ""
+
+#: CRM/Gdprx/ConsentUI.php
+msgid "Note cannot be more the 1024 characters"
+msgstr ""
+
+#: resources/*.json
+msgid "Consent Category"
+msgstr ""
+
+#: resources/*.json
+msgid "Contact Consent"
+msgstr ""
+
+#: resources/*.json
+msgid "Consent Source"
+msgstr ""
+
+#: resources/*.json
+msgid "Default"
+msgstr ""

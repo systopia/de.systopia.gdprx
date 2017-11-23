@@ -36,7 +36,7 @@
       "weight": "20",
       "name": "consent_category",
       "column_name": "category",
-      "label": "Catgeory",
+      "label": "Category",
       "data_type": "String",
       "html_type": "Select",
       "text_length": "32",
