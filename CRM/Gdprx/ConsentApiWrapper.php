@@ -20,18 +20,35 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
   protected $action;
   protected $category;
   protected $source;
-  protected $note;
-  protected $date_field;
-  protected $contact_field;
+  protected $note_source;
+  protected $date_source;
+  protected $contact_source;
 
-  public function __construct($entity, $action, $category, $source, $note = NULL, $date_field = 'now', $contact_field = 'contact_id') {
-    $this->entity        = $entity;
-    $this->action        = $action;
-    $this->category      = $category;
-    $this->source        = $source;
-    $this->note          = $note;
-    $this->date_field    = $date_field;
-    $this->contact_field = $contact_field;
+  /**
+   * Create an API Wrapper to derive GDPR consent records
+   * from a successful API call, e.g. a group sign-up
+   *
+   * @param $entity          the API entity to process
+   * @param $action          the API action to process
+   * @param $category        data specifier (see below) forlabel or value of the consent_category option group.
+   * @param $source          data specifier (see below) forlabel or value of the consent_source option group.
+   * @param $note_source     data specifier (see below) for the note field, or NULL (default)
+   * @param $date_source     data specifier (see below) for the date entry
+   * @param $contact_source  data specifier (see below) for the contact
+   *
+   * data specifiers can be either:
+   *  'request::<attribute>' in this case the attribute is taken from the API request.params
+   *  'reply::<attribute>'   in this case the attribute is taken from the API reply
+   *  otherwise              the string is taken literally
+   */
+  public function __construct($entity, $action, $category, $source, $note_source = NULL, $date_source = 'now', $contact_source = 'reply::contact_id') {
+    $this->entity         = $entity;
+    $this->action         = $action;
+    $this->category       = $category;
+    $this->source         = $source;
+    $this->note_source    = $note_source;
+    $this->date_source    = $date_source;
+    $this->contact_source = $contact_source;
   }
 
   /**
@@ -57,17 +74,53 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
    */
   public function toApiOutput($apiRequest, $result) {
     if ($apiRequest['entity'] == $this->entity && $apiRequest['action'] == $this->action) {
-      if (empty($result['is_error']) && !empty($result[$this->contact_field])) {
-        CRM_Gdprx_Consent::createConsentRecord(
-          $result[$this->contact_field],
-          $this->category,
-          $this->source,
-          CRM_Utils_Array::value($this->date_field, $result, 'now'),
-          ($this->note !== NULL) ? $this->note : CRM_Utils_Array::value('consent_note', $result, '')
-        );
+
+      // check if the call was successfull
+      if (empty($result['is_error'])) {
+
+        // check if the contact is there
+        $contact_id = $this->getDataValue($this->contact_source, $apiRequest, $result);
+        if (!empty($contact_id)) {
+
+          // all good: create GDPR consent record
+          CRM_Gdprx_Consent::createConsentRecord(
+            $contact_id,
+            $this->getDataValue($this->category, $apiRequest, $result),
+            $this->getDataValue($this->source, $apiRequest, $result),
+            date('YmdHis', strtotime($this->getDataValue($this->date_source, $apiRequest, $result))),
+            $this->getDataValue($this->note_source, $apiRequest, $result)
+          );
+        }
       }
     }
 
     return $result;
+  }
+
+  /**
+   * Extract the speficied value, see constructor definition
+   */
+  protected function getDataValue($data_spec, $request, $reply) {
+    if ($data_spec === NULL || $data_spec === '') {
+      return NULL;
+
+    } elseif (substr($data_spec, 0, 9) == 'request::') {
+      // parameter should be taken from request parameters
+      $attribute = substr($data_spec, 9);
+      if (isset($request['params'][$attribute])) {
+        return $request['params'][$attribute];
+      } else {
+        return '';
+      }
+
+    } elseif (substr($data_spec, 0, 7) == 'reply::') {
+      // parameter should be taken from reply data
+      $attribute = substr($data_spec, 7);
+      return CRM_Utils_Array::value($attribute, $reply, '');
+
+    } else {
+      // if nothing else fits, it's just a string.
+      return $data_spec;
+    }
   }
 }

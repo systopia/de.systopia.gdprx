@@ -63,20 +63,29 @@ class CRM_Gdprx_Consent {
    * add a new user consent entry for the contact
    */
   public static function createConsentRecord($contact_id, $category, $source, $date = 'now', $note = '') {
-    // look up values
+    // CRM_Core_Error::debug_log_message("createConsentRecord: {$contact_id}, {$category}, {$source}, {$date}, {$note}");
+
+    // look up SOURCE
+    $original_source = $source;
     if (!is_numeric($source)) {
       $source = CRM_Core_OptionGroup::getValue('consent_source', $source, 'label');
     }
-    if (!is_numeric($category)) {
-      $category = CRM_Core_OptionGroup::getValue('consent_category', $category, 'label');
-    }
-
-    if (empty($category) || empty($source)) {
-      // these fields are mandatory
-      CRM_Core_Error::debug_log_message("Couldn't create consent record, category/source missing!");
+    if (empty($source)) {
+      CRM_Core_Error::debug_log_message("Couldn't map source '{$original_source}'");
       return;
     }
 
+    // look up CATEGORY
+    $original_category = $category;
+    if (!is_numeric($category)) {
+      $category = CRM_Core_OptionGroup::getValue('consent_category', $category, 'label');
+    }
+    if (empty($category)) {
+      CRM_Core_Error::debug_log_message("Couldn't map category '{$original_category}'");
+      return;
+    }
+
+    // create record
     $data = array(
       'consent.consent_date'     => date('YmdHis', strtotime($date)),
       'consent.consent_category' => $category,
