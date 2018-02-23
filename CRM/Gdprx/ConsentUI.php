@@ -28,14 +28,30 @@ class CRM_Gdprx_ConsentUI {
     }
 
     // add date, prefilled with current date
-    $form->add(
-      'datepicker',
-      'consent_ui_date',
-      E::ts("Date"),
-      array('class' => ''),
-      TRUE,
-      array('time' => FALSE)
-    );
+    $currentVer = CRM_Core_BAO_Domain::version();
+    $form->assign('civi_version', $currentVer);
+    if (version_compare($currentVer, '4.7') < 0) {
+      // this is 4.6
+      $form->addDate(
+        'consent_ui_date',
+        E::ts("Date"),
+        TRUE,
+        array('dateFormat' => 'dateformatFull', 'class' => '', 'time' => FALSE));
+      $form->assign('needs_calendar_include', 1);
+      $form->setDefaults(array('consent_ui_date' => date('m/d/Y')));
+
+    } else {
+      // add date, prefilled with current date
+      $form->add(
+        'datepicker',
+        'consent_ui_date',
+        E::ts("Date"),
+        array('class' => ''),
+        TRUE,
+        array('time' => FALSE)
+      );
+      $form->setDefaults(array('consent_ui_date' => date('Y-m-d')));
+    }
 
     // add category dropdown from option group
     $form->add('select',
@@ -66,7 +82,6 @@ class CRM_Gdprx_ConsentUI {
     $form->setDefaults(array(
       'consent_ui_category'   => '0',
       'consent_ui_source'     => '0',
-      'consent_ui_date'       => date("Y-m-d"),
     ));
 
     // add template path for these fields
