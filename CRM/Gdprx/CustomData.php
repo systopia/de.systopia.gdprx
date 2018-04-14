@@ -14,7 +14,7 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-define('CUSTOM_DATA_HELPER_VERSION', '0.3.9.dev');
+define('CUSTOM_DATA_HELPER_VERSION', '0.4.dev');
 define('CUSTOM_DATA_HELPER_LOG_LEVEL', 1);
 
 // log levels
@@ -25,9 +25,10 @@ define('CUSTOM_DATA_HELPER_LOG_ERROR', 5);
 class CRM_Gdprx_CustomData {
 
   /** caches custom field data, indexed by group name */
-  protected static $custom_group2name  = NULL;
-  protected static $custom_group_cache = array();
-  protected static $custom_field_cache = array();
+  protected static $custom_group2name       = NULL;
+  protected static $custom_group2table_name = NULL;
+  protected static $custom_group_cache      = array();
+  protected static $custom_field_cache      = array();
 
   protected $ts_domain = NULL;
   protected $version   = CUSTOM_DATA_HELPER_VERSION;
@@ -487,18 +488,36 @@ class CRM_Gdprx_CustomData {
    */
   public static function getGroup2Name() {
     if (self::$custom_group2name === NULL) {
-      // load groups
-      $group_search = civicrm_api3('CustomGroup', 'get', array(
-        'return'       => 'name',
-        'option.limit' => 0,
-        ));
-      self::$custom_group2name = array();
-      foreach ($group_search['values'] as $customGroup) {
-        self::$custom_group2name[$customGroup['id']] = $customGroup['name'];
-      }
+      self::loadGroups();
     }
-
     return self::$custom_group2name;
+  }
+
+  /**
+   * Get a mapping: custom_group_id => table_name
+   */
+  public static function getGroup2TableName() {
+    if (self::$custom_group2table_name === NULL) {
+      self::loadGroups();
+    }
+    return self::$custom_group2table_name;
+  }
+
+
+  /**
+   * Load group data (all groups)
+   */
+  protected static function loadGroups() {
+    self::$custom_group2name = array();
+    self::$custom_group2table_name = array();
+    $group_search = civicrm_api3('CustomGroup', 'get', array(
+      'return'       => 'name,table_name',
+      'option.limit' => 0,
+      ));
+    foreach ($group_search['values'] as $customGroup) {
+      self::$custom_group2name[$customGroup['id']]       = $customGroup['name'];
+      self::$custom_group2table_name[$customGroup['id']] = $customGroup['table_name'];
+    }
   }
 
   /**
@@ -551,10 +570,42 @@ class CRM_Gdprx_CustomData {
         if ($first_character == '[' || $first_character == '{') {
           $unpacked_value = json_decode($value, TRUE);
           if ($unpacked_value) {
-            $value = $unpacked_value;
+            if (is_array($unpacked_value) && empty($unpacked_value)) {
+              // this is a strange behaviour in the API,
+              //   but empty arrays are not processed properly
+              $value = '';
+            } else {
+              $value = $unpacked_value;
+            }
           }
         }
       }
     }
+  }
+
+  /**
+   * Get the table of a certain group
+   */
+  public static function getGroupTable($group_name) {
+    $id2name = self::getGroup2Name();
+    $name2id = array_flip($id2name);
+    if (isset($name2id[$group_name])) {
+      $group_id = $name2id[$group_name];
+      $id2table = self::getGroup2TableName();
+      if (isset($id2table[$group_id])) {
+        return $id2table[$group_id];
+      }
+    }
+    return NULL;
+  }
+
+  /**
+   * Generates the following SQL join statment:
+   * "LEFT JOIN {$group_table_name} AS {$table_alias} ON {$table_alias}.entity_id = {$join_entity_id}"
+   */
+  public static function createSQLJoin($group_name, $table_alias, $join_entity_id) {
+    // cache the groups used
+    $group_table_name = self::getGroupTable($group_name);
+    return "LEFT JOIN `{$group_table_name}` AS {$table_alias} ON {$table_alias}.entity_id = {$join_entity_id}";
   }
 }
