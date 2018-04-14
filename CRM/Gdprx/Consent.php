@@ -62,8 +62,8 @@ class CRM_Gdprx_Consent {
   /**
    * add a new user consent entry for the contact
    */
-  public static function createConsentRecord($contact_id, $category, $source, $date = 'now', $note = '') {
-    // CRM_Core_Error::debug_log_message("createConsentRecord: {$contact_id}, {$category}, {$source}, {$date}, {$note}");
+  public static function createConsentRecord($contact_id, $category, $source, $date = 'now', $note = '', $type = NULL, $terms_id = NULL, $expiry_date = NULL) {
+    CRM_Core_Error::debug_log_message("createConsentRecord: {$contact_id}, {$category}, {$source}, {$date}, {$note} {$type} {$terms_id} {$expiry_date}");
 
     // look up SOURCE
     $original_source = $source;
@@ -93,8 +93,22 @@ class CRM_Gdprx_Consent {
       'consent.consent_note'     => $note,
     );
 
+    if (!empty($expiry_date)) {
+      $data['consent.consent_expiry_date'] = date('YmdHis', strtotime($expiry_date));
+    }
+
+    if (!empty($type)) {
+      $data['consent.consent_type'] = $type;
+    }
+
+    if (!empty($terms_id)) {
+      $data['consent.consent_terms'] = $terms_id;
+    }
+
     // resolve custom fields
+    error_log(json_encode($data));
     CRM_Gdprx_CustomData::resolveCustomFields($data, array('consent'));
+    error_log(json_encode($data));
 
     // since this is a multi-entry group, we need to clarify the index (-1 = new entry)
     $request = array('entity_id' => $contact_id);
@@ -102,6 +116,6 @@ class CRM_Gdprx_Consent {
       $request[$key . ':-1'] = $value;
     }
 
-    civicrm_api3('CustomValue', 'create', $request);
+    return civicrm_api3('CustomValue', 'create', $request);
   }
 }
