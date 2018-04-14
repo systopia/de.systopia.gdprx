@@ -1,0 +1,48 @@
+{
+  "_lookup": ["name"],
+  "_translate": ["title"],
+  "name": "consent_type",
+  "title": "Consent Type",
+  "_values": [
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "none",
+      "value": "1",
+      "label": "None",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "opt_in",
+      "value": "2",
+      "label": "Opt-In",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "opt_out",
+      "value": "3",
+      "label": "Opt-Out",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    },
+    {
+      "_lookup": ["name"],
+      "_translate": ["label"],
+      "name": "opt_in_soft",
+      "value": "4",
+      "label": "Soft Opt-In",
+      "filter": "0",
+      "is_reserved": "0",
+      "is_active": "1"
+    }
+  ]
+}

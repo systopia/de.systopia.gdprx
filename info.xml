@@ -2,7 +2,7 @@
 <extension key="de.systopia.gdprx" type="module">
   <file>gdprx</file>
   <name>GPDR Extension</name>
-  <description>Helps you to comply with the GDP Regulations</description>
+  <description>Helps you implement your GDPR policies</description>
   <license>AGPL-3.0</license>
   <maintainer>
     <author>SYSTOPIA</author>

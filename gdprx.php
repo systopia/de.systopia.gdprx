@@ -74,6 +74,7 @@ function gdprx_civicrm_enable() {
   require_once 'CRM/Gdprx/CustomData.php';
   $customData = new CRM_Gdprx_CustomData('de.systopia.gdprx');
   $customData->syncOptionGroup(__DIR__ . '/resources/consent_category_option_group.json');
+  $customData->syncOptionGroup(__DIR__ . '/resources/consent_type_option_group.json');
   $customData->syncOptionGroup(__DIR__ . '/resources/consent_source_option_group.json');
   $customData->syncCustomGroup(__DIR__ . '/resources/consent_custom_group.json');
 }

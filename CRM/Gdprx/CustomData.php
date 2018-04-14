@@ -14,7 +14,7 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-define('CUSTOM_DATA_HELPER_VERSION', '0.4.dev');
+define('CUSTOM_DATA_HELPER_VERSION', '0.5.dev');
 define('CUSTOM_DATA_HELPER_LOG_LEVEL', 1);
 
 // log levels
@@ -284,6 +284,15 @@ class CRM_Gdprx_CustomData {
        if (isset($current_data[$field]) && $value != $current_data[$field]) {
           $update_query[$field] = $value;
        }
+    }
+
+    // if _no_override list is set, remove those fields from the update
+    if (isset($requested_data['_no_override']) && is_array($requested_data['_no_override'])) {
+      foreach ($requested_data['_no_override'] as $field_name) {
+        if (isset($update_query[$field_name])) {
+          unset($update_query[$field_name]);
+        }
+      }
     }
 
     // run update if required
