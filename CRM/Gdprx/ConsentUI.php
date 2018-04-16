@@ -27,6 +27,12 @@ class CRM_Gdprx_ConsentUI {
       return;
     }
 
+    // check if this is enabled
+    $config = CRM_Gdprx_Configuration::getSingleton();
+    if (!$config->getSetting('enforce_record_for_new_contacts')) {
+      return;
+    }
+
     // add date, prefilled with current date
     $currentVer = CRM_Core_BAO_Domain::version();
     $form->assign('civi_version', $currentVer);
@@ -100,6 +106,12 @@ class CRM_Gdprx_ConsentUI {
       return;
     }
 
+    // check if this is enabled
+    $config = CRM_Gdprx_Configuration::getSingleton();
+    if (!$config->getSetting('enforce_record_for_new_contacts')) {
+      return;
+    }
+
     $category = CRM_Utils_Array::value( 'consent_ui_category', $fields );
     if (!$category || $category == '0') {
       $errors['consent_ui_category'] = E::ts('Category is mandatory');
@@ -122,6 +134,12 @@ class CRM_Gdprx_ConsentUI {
   public static function postProcess($formName, &$form) {
     if (empty($form->_contactId)) {
       // contact doesn't exist yet
+      return;
+    }
+
+    // check if this is enabled
+    $config = CRM_Gdprx_Configuration::getSingleton();
+    if (!$config->getSetting('enforce_record_for_new_contacts')) {
       return;
     }
 

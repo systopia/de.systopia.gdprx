@@ -34,10 +34,15 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
   }
 
   public function buildQuickForm() {
+    // add general settings
+    $this->addElement('checkbox',
+                      "enforce_record_for_new_contacts",
+                      E::ts("Require GDPR Record"));
+
     // add privacy defaults
     $this->addElement('checkbox',
                       "default_privacy_settings_enabled",
-                      E::ts("Apply Default Privacy Settings"));
+                      E::ts("Default Privacy Settings"));
     $fields = self::getPrivacyFields();
     foreach ($fields as $setting => $label) {
       $this->addElement('checkbox',
@@ -80,6 +85,9 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
     foreach ($fields as $setting => $label) {
       $config->setSetting("default_privacy_{$setting}", CRM_Utils_Array::value("default_privacy_{$setting}", $values, FALSE));
     }
+
+    // store general options
+    $config->setSetting("enforce_record_for_new_contacts", CRM_Utils_Array::value("enforce_record_for_new_contacts", $values, FALSE));
 
     $config->writeSettings();
     parent::postProcess();

@@ -1,0 +1,22 @@
+{*-------------------------------------------------------+
+| SYSTOPIA GDPR Compliance Extension                     |
+| Copyright (C) 2018 SYSTOPIA                            |
+| Author: B. Endres (endres@systopia.de)                 |
+| http://www.systopia.de/                                |
++--------------------------------------------------------+
+| This program is released as free software under the    |
+| Affero GPL license. You can redistribute it and/or     |
+| modify it under the terms of this license which you    |
+| can read by viewing the included agpl.txt or online    |
+| at www.gnu.org/licenses/agpl.html. Removal of this     |
+| copyright header is strictly prohibited without        |
+| written permission from the original author(s).        |
++-------------------------------------------------------*}
+
+{htxt id="id-gdprx-enforce-record"}
+  <p>{ts domain="de.systopia.gdprx"}If you enable this, you will be forced to enter a consent record on the "create new contact" form.{/ts}</p>
+{/htxt}
+
+{htxt id="id-gdprx-default-privacy"}
+  <p>{ts domain="de.systopia.gdprx"}You can use this feature to define the default privacy options to be applied to every newly created contact.{/ts}</p>
+{/htxt}
