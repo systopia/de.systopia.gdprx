@@ -18,6 +18,28 @@ require_once 'gdprx.civix.php';
 use CRM_Gdprx_ExtensionUtil as E;
 
 /**
+ * Implements hook_civicrm_pre().
+ *
+ * Will make sure that edits to contact/bpks will be
+ *  handled correctly
+ */
+function gdprx_civicrm_pre($op, $objectName, $id, &$params) {
+  // see if we should apply the default privacy settings
+  if ($objectName == 'Individual' || $objectName == 'Organization' || $objectName == 'Household') {
+    if (empty($id)) {
+      // only apply if it's a new contact (no ID)
+      $config = CRM_Gdprx_Configuration::getSingleton();
+      if (!empty($params['privacy']) && is_array($params['privacy'])) {
+        $config->addDefaultPrivacySettings($params['privacy']);
+      } else {
+        $config->addDefaultPrivacySettings($params['privacy']);
+      }
+    }
+  }
+}
+
+
+/**
  * Implements hook_civicrm_config().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config

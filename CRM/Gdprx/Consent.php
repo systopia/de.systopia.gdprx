@@ -106,9 +106,7 @@ class CRM_Gdprx_Consent {
     }
 
     // resolve custom fields
-    error_log(json_encode($data));
     CRM_Gdprx_CustomData::resolveCustomFields($data, array('consent'));
-    error_log(json_encode($data));
 
     // since this is a multi-entry group, we need to clarify the index (-1 = new entry)
     $request = array('entity_id' => $contact_id);
