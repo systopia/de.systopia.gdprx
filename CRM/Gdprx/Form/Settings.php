@@ -23,16 +23,6 @@ use CRM_Gdprx_ExtensionUtil as E;
  */
 class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
 
-  public static function getPrivacyFields() {
-    return array(
-      'do_not_email'  => ts("Do Not Email"),
-      'do_not_phone'  => ts("Do Not Phone"),
-      'do_not_mail'   => ts("Do Not Mail"),
-      'do_not_sms'    => ts("Do Not SMS"),
-      'do_not_trade'  => ts("Do Not Trade"),
-      'is_opt_out'    => ts("Is Opt Out"));
-  }
-
   public function buildQuickForm() {
     // add general settings
     $this->addElement('checkbox',
@@ -50,6 +40,13 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
                         $label);
     }
 
+    // add optional fields
+    $fields = self::getOptionalConsentFields();
+    foreach ($fields as $field_name => $label) {
+      $this->addElement('checkbox',
+                        "use_{$field_name}",
+                        $label);
+    }
 
     $this->addButtons(array(
       array(
@@ -92,4 +89,25 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
     $config->writeSettings();
     parent::postProcess();
   }
+
+
+  public static function getPrivacyFields() {
+    return array(
+      'do_not_email'  => ts("Do Not Email"),
+      'do_not_phone'  => ts("Do Not Phone"),
+      'do_not_mail'   => ts("Do Not Mail"),
+      'do_not_sms'    => ts("Do Not SMS"),
+      'do_not_trade'  => ts("Do Not Trade"),
+      'is_opt_out'    => ts("Is Opt Out"));
+  }
+
+  public static function getOptionalConsentFields() {
+    return array(
+      'consent_expiry_date' => E::ts("Use Expiry Date"),
+      'consent_type'        => E::ts("Use Type"),
+      'consent_terms'       => E::ts("Use Terms"),
+      'consent_note'        => E::ts("Use Note"),
+    );
+  }
+
 }

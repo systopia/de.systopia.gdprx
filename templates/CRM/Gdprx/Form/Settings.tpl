@@ -20,12 +20,32 @@
   <div class="clear"></div>
 </div>
 
-<h3>{ts}GDPR Fields{/ts}</h3>
+
+<h3>{ts}Optional GDPR Fields{/ts}</h3>
 <div class="crm-section">
-  <div class="label">{$form.field_expiry_enabled.label}</div>
-  <div class="content">{$form.field_expiry_enabled.html}</div>
+  <div class="label">{$form.use_consent_expiry_date.label}</div>
+  <div class="content">{$form.use_consent_expiry_date.html}</div>
   <div class="clear"></div>
 </div>
+
+<div class="crm-section">
+  <div class="label">{$form.use_consent_type.label}</div>
+  <div class="content">{$form.use_consent_type.html}</div>
+  <div class="clear"></div>
+</div>
+
+<div class="crm-section">
+  <div class="label">{$form.use_consent_terms.label}</div>
+  <div class="content">{$form.use_consent_terms.html}</div>
+  <div class="clear"></div>
+</div>
+
+<div class="crm-section">
+  <div class="label">{$form.use_consent_note.label}</div>
+  <div class="content">{$form.use_consent_note.html}</div>
+  <div class="clear"></div>
+</div>
+
 
 <h3>{ts}Default Privacy Settings{/ts}</h3>
 <div class="crm-section">
