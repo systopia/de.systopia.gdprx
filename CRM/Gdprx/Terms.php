@@ -79,4 +79,16 @@ class CRM_Gdprx_Terms {
       return NULL;
     }
   }
+
+  /**
+   * Get a list of all known terms
+   */
+  public static function getList() {
+    $list = array();
+    $record = CRM_Core_DAO::executeQuery("SELECT id AS term_id, name FROM civicrm_gdpr_terms ORDER BY create_date DESC;");
+    while ($record->fetch()) {
+      $list[$record->term_id] = $record->name;
+    }
+    return $list;
+  }
 }

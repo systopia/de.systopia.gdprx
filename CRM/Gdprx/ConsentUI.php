@@ -46,6 +46,15 @@ class CRM_Gdprx_ConsentUI {
       $form->assign('needs_calendar_include', 1);
       $form->setDefaults(array('consent_ui_date' => date('m/d/Y')));
 
+      if ($config->getSetting('use_consent_expiry_date')) {
+        $form->addDate(
+          'consent_ui_expiry_date',
+          E::ts("Expires"),
+          FALSE,
+          array('dateFormat' => 'dateformatFull', 'class' => '', 'time' => FALSE));
+        $form->assign('needs_calendar_include', 1);
+      }
+
     } else {
       // add date, prefilled with current date
       $form->add(
@@ -57,6 +66,17 @@ class CRM_Gdprx_ConsentUI {
         array('time' => FALSE)
       );
       $form->setDefaults(array('consent_ui_date' => date('Y-m-d')));
+
+      if ($config->getSetting('use_consent_expiry_date')) {
+        $form->add(
+          'datepicker',
+          'consent_ui_expiry_date',
+          E::ts("Expires"),
+          array('class' => ''),
+          FALSE,
+          array('time' => FALSE)
+        );
+      }
     }
 
     // add category dropdown from option group
@@ -77,12 +97,36 @@ class CRM_Gdprx_ConsentUI {
       array('class' => 'user-source')
     );
 
+    // add type dropdown from option group
+    if ($config->getSetting('use_consent_type')) {
+      $form->add('select',
+        "consent_ui_type",
+        E::ts("Type"),
+        CRM_Gdprx_Consent::getTypeList(),
+        FALSE,
+        array('class' => 'user-type')
+      );
+    }
+
+    // terms
+    if ($config->getSetting('use_consent_terms')) {
+      $form->add('select',
+        "consent_ui_terms",
+        E::ts("Terms"),
+        array('0' => E::ts("- none -")) + CRM_Gdprx_Terms::getList(),
+        FALSE,
+        array('class' => 'user-type')
+      );
+    }
+
     // remark (note)
-    $form->add(
-      'text',
-      "consent_ui_note",
-      E::ts("Note")
-    );
+    if ($config->getSetting('use_consent_note')) {
+      $form->add(
+        'text',
+        "consent_ui_note",
+        E::ts("Note")
+      );
+    }
 
     // set default values
     $form->setDefaults(array(
@@ -149,7 +193,10 @@ class CRM_Gdprx_ConsentUI {
                                              $values['consent_ui_category'],
                                              $values['consent_ui_source'],
                                              $values['consent_ui_date'],
-                                             $values['consent_ui_note']);
+                                             CRM_Utils_Array::value('consent_ui_note', $values),
+                                             CRM_Utils_Array::value('consent_ui_type', $values),
+                                             CRM_Utils_Array::value('consent_ui_terms', $values),
+                                             CRM_Utils_Array::value('consent_ui_expiry_date', $values));
     }
   }
 }

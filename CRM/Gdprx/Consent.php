@@ -21,6 +21,7 @@ class CRM_Gdprx_Consent {
 
   private static $category_list = NULL;
   private static $sources_list  = NULL;
+  private static $types_list  = NULL;
 
 
   /**
@@ -57,6 +58,24 @@ class CRM_Gdprx_Consent {
       }
     }
     return self::$sources_list;
+  }
+
+  /**
+   * Get a list id -> label for the sources
+   */
+  public static function getTypeList() {
+    if (self::$types_list === NULL) {
+      self::$types_list = array();
+      $query = civicrm_api3('OptionValue', 'get', array(
+        'option_group_id' => 'consent_type',
+        'option.limit'    => 0,
+        'sequential'      => 1,
+        'return'          => 'value,label'));
+      foreach ($query['values'] as $option_value) {
+        self::$types_list[$option_value['value']] = $option_value['label'];
+      }
+    }
+    return self::$types_list;
   }
 
   /**

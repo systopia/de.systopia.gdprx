@@ -83,6 +83,11 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
       $config->setSetting("default_privacy_{$setting}", CRM_Utils_Array::value("default_privacy_{$setting}", $values, FALSE));
     }
 
+    $fields = self::getOptionalConsentFields();
+    foreach ($fields as $setting => $label) {
+      $config->setSetting("use_{$setting}", CRM_Utils_Array::value("use_{$setting}", $values, FALSE));
+    }
+
     // store general options
     $config->setSetting("enforce_record_for_new_contacts", CRM_Utils_Array::value("enforce_record_for_new_contacts", $values, FALSE));
 

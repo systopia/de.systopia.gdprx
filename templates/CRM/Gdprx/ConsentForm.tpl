@@ -37,12 +37,41 @@
                 {$form.consent_ui_source.html}
             </div>
         </td>
+        {if $form.consent_ui_date}
+        <td>
+            <div id="user-clearance-type">
+                {$form.consent_ui_type.label}
+                {$form.consent_ui_type.html}
+            </div>
+        </td>
+        {/if}
+        {if $form.consent_ui_expiry_date}
+        <td>
+            <div id="user-clearance-expiry-date">
+                {$form.consent_ui_expiry_date.label}
+                {$form.consent_ui_expiry_date.html}
+                {if $needs_calendar_include}
+                    {include file="CRM/common/jcalendar.tpl" elementName=consent_ui_expiry_date}
+                {/if}
+            </div>
+        </td>
+        {/if}
+        {if $form.consent_ui_terms}
+        <td>
+            <div id="user-clearance-terms">
+                {$form.consent_ui_terms.label}
+                {$form.consent_ui_terms.html}
+            </div>
+        </td>
+        {/if}
+        {if $form.consent_ui_note}
         <td>
             <div id="user-clearance-note">
                 {$form.consent_ui_note.label}
                 {$form.consent_ui_note.html}
             </div>
         </td>
+        {/if}
     </tr>
 </table>
 
