@@ -21,6 +21,7 @@ class CRM_Gdprx_Configuration {
 
   private static $singleton = NULL;
   private $config;
+  private $option_groups = NULL;
 
   /**
    * Get the configuration singleton
@@ -85,5 +86,21 @@ class CRM_Gdprx_Configuration {
       $params['do_not_trade'] = $this->getSetting('default_privacy_do_not_trade');
       $params['is_opt_out']   = $this->getSetting('default_privacy_is_opt_out');
     }
+  }
+
+  /**
+   * Get a name => entity list of the option groups involved
+   */
+  public function getOptionGroups() {
+    if ($this->option_groups === NULL) {
+      $this->option_groups = array();
+      $query = civicrm_api3('OptionGroup', 'get', array(
+        'name' => array('IN' => array('consent_category','consent_source','consent_type'))
+      ));
+      foreach ($query['values'] as $entity) {
+        $this->option_groups[$entity['name']] = $entity;
+      }
+    }
+    return $this->option_groups;
   }
 }

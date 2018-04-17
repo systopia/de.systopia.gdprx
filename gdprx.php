@@ -38,6 +38,28 @@ function gdprx_civicrm_pre($op, $objectName, $id, &$params) {
   }
 }
 
+/**
+ * Implements hook_civicrm_tabs()
+ *
+ * Will inject a custom gdprx tab
+ */
+function gdprx_civicrm_tabs(&$tabs, $contactID) {
+  // remove the default table
+  for ($i=0; $i < count($tabs); $i++) {
+    if ($tabs[$i]['id'] == 'custom_39') {
+      unset($tabs[$i]);
+      break;
+    }
+  }
+
+  // add our own tab
+  $tabs[] = array( 'id'     => 'gdprx',
+                   'url'    => CRM_Utils_System::url('civicrm/gdprx/tab', "reset=1&snippet=1&force=1&cid={$contactID}"),
+                   'title'  => E::ts('Consent'),
+                   'count'  => CRM_Gdprx_Page_SummaryTab::getRecordCount($contactID),
+                   'weight' => 400);
+}
+
 
 /**
  * Implements hook_civicrm_config().

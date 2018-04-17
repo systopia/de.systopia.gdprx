@@ -6,4 +6,10 @@
     <title>Settings</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/gdprx/tab</path>
+    <page_callback>CRM_Gdprx_Page_SummaryTab</page_callback>
+    <title>SummaryTab</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>
