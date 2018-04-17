@@ -30,6 +30,7 @@ class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
     // query the DB
     $data = CRM_Core_DAO::executeQuery("
       SELECT
+        record.id       AS record_id,
         record.date     AS record_date,
         record.expiry   AS record_expiry,
         category.label  AS record_category,
@@ -52,6 +53,7 @@ class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
       ));
     while ($data->fetch()) {
       $records[] = array(
+        'record_id'          => $data->record_id,
         'record_date'        => CRM_Utils_Date::customFormat($data->record_date, $civi_config->dateformatFull),
         'record_date_full'   => CRM_Utils_Date::customFormat($data->record_date, $civi_config->dateformatDatetime),
         'record_expiry'      => $data->record_expiry ? CRM_Utils_Date::customFormat($data->record_expiry, $civi_config->dateformatFull) : '',
@@ -68,6 +70,7 @@ class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
 
     $this->assign('records', $records);
     $this->assign('gdprx',   $config->getSettings());
+    $this->assign('contact_id', $contact_id);
     parent::run();
   }
 

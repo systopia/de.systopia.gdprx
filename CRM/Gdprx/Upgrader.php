@@ -22,6 +22,24 @@ use CRM_Gdprx_ExtensionUtil as E;
 class CRM_Gdprx_Upgrader extends CRM_Gdprx_Upgrader_Base {
 
   /**
+   * Installer
+   */
+  public function install() {
+    // create new terms table
+    $this->executeSqlFile('sql/civicrm_gdpr_terms.sql');
+
+    // run the custom group sync
+    require_once 'CRM/Gdprx/CustomData.php';
+    $customData = new CRM_Gdprx_CustomData('de.systopia.gdprx');
+    $customData->syncOptionGroup(__DIR__ . '/../../resources/consent_category_option_group.json');
+    $customData->syncOptionGroup(__DIR__ . '/../../resources/consent_type_option_group.json');
+    $customData->syncOptionGroup(__DIR__ . '/../../resources/consent_source_option_group.json');
+    $customData->syncCustomGroup(__DIR__ . '/../../resources/consent_custom_group.json');
+
+    return TRUE;
+  }
+
+  /**
    * Update to 0.2
    *
    * @return TRUE on success

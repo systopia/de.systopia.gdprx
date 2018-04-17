@@ -13,6 +13,11 @@
 | written permission from the original author(s).        |
 +-------------------------------------------------------*}
 
+<div class="action-link">
+  <a accesskey="N" href="{crmURL p='civicrm/gdprx/consent/edit' q="id=new&cid=$contact_id&reset=1"}" class="button crm-popup"><span><div class="icon ui-icon-circle-plus"></div>{ts}Add Record{/ts}</span></a>
+  <br><br>
+</div>
+
 <table class='gdprx gdprx-tab'>
   <thead>
     <tr>
@@ -68,6 +73,10 @@
         {$record.record_note_short}
       </td>
       {/if}
+      <td>
+        {assign value=$record.record_id var=record_id}
+        <span><a href="{crmURL p='civicrm/gdprx/consent/edit' q="id=$record_id&cid=$contact_id&reset=1"}" class="action-item crm-hover-button crm-popup" title="{ts}Edit{/ts}">{ts}Edit{/ts}</a></span>
+      </td>
     </tr>
     {/foreach}
   </tbody>

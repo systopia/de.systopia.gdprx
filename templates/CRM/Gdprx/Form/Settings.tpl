@@ -60,11 +60,6 @@
     <div class="clear"></div>
   </div>
   <div class="crm-section">
-    <div class="label">{$form.default_privacy_do_not_email.label}</div>
-    <div class="content">{$form.default_privacy_do_not_email.html}</div>
-    <div class="clear"></div>
-  </div>
-  <div class="crm-section">
     <div class="label">{$form.default_privacy_do_not_phone.label}</div>
     <div class="content">{$form.default_privacy_do_not_phone.html}</div>
     <div class="clear"></div>

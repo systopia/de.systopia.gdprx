@@ -82,7 +82,14 @@ class CRM_Gdprx_Consent {
    * add a new user consent entry for the contact
    */
   public static function createConsentRecord($contact_id, $category, $source, $date = 'now', $note = '', $type = NULL, $terms_id = NULL, $expiry_date = NULL) {
-    CRM_Core_Error::debug_log_message("createConsentRecord: {$contact_id}, {$category}, {$source}, {$date}, {$note} {$type} {$terms_id} {$expiry_date}");
+    self::updateConsentRecord('-1', $contact_id, $category, $source, $date, $note, $type, $terms_id, $expiry_date);
+  }
+
+  /**
+   * update existing consent record
+   */
+  public static function updateConsentRecord($record_id, $contact_id, $category, $source, $date = 'now', $note = '', $type = NULL, $terms_id = NULL, $expiry_date = NULL) {
+    CRM_Core_Error::debug_log_message("create/update consent record: {$contact_id}, {$category}, {$source}, {$date}, {$note} {$type} {$terms_id} {$expiry_date}");
 
     // look up SOURCE
     $original_source = $source;
@@ -130,9 +137,31 @@ class CRM_Gdprx_Consent {
     // since this is a multi-entry group, we need to clarify the index (-1 = new entry)
     $request = array('entity_id' => $contact_id);
     foreach ($data as $key => $value) {
-      $request[$key . ':-1'] = $value;
+      $request[$key . ':'. $record_id] = $value;
     }
 
     return civicrm_api3('CustomValue', 'create', $request);
+  }
+
+  /**
+   * get a consent record by ID
+   */
+  public static function getRecord($id) {
+    $data = CRM_Core_DAO::executeQuery("SELECT * FROM civicrm_value_gdpr_consent WHERE id = %1",
+      array(1 => array($id, 'Integer')));
+    if ($data->fetch()) {
+      return array(
+        'entity_id'           => $data->entity_id,
+        'consent_date'        => $data->date,
+        'consent_expiry_date' => $data->expiry,
+        'consent_category'    => $data->category,
+        'consent_source'      => $data->source,
+        'consent_type'        => $data->type,
+        'consent_terms'       => $data->terms_id,
+        'consent_note'        => $data->note,
+      );
+    } else {
+      return NULL;
+    }
   }
 }

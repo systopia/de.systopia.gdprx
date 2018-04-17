@@ -37,7 +37,7 @@
                 {$form.consent_ui_source.html}
             </div>
         </td>
-        {if $form.consent_ui_date}
+        {if $form.consent_ui_type}
         <td>
             <div id="user-clearance-type">
                 {$form.consent_ui_type.label}

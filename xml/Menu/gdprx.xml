@@ -12,4 +12,10 @@
     <title>SummaryTab</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/gdprx/consent/edit</path>
+    <page_callback>CRM_Gdprx_Form_ConsentEdit</page_callback>
+    <title>Consent Record</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>
