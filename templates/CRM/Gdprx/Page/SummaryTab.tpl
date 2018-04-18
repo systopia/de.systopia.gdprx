@@ -14,7 +14,7 @@
 +-------------------------------------------------------*}
 
 <div class="action-link">
-  <a accesskey="N" href="{crmURL p='civicrm/gdprx/consent/edit' q="id=new&cid=$contact_id&reset=1"}" class="button crm-popup"><span><div class="icon ui-icon-circle-plus"></div>{ts}Add Record{/ts}</span></a>
+  <a accesskey="N" href="{crmURL p='civicrm/gdprx/consent/edit' q="id=new&cid=$contact_id&reset=1&action=update"}" class="button crm-popup"><span><div class="icon ui-icon-circle-plus"></div>{ts}Add Record{/ts}</span></a>
   <br><br>
 </div>
 

@@ -102,6 +102,14 @@ cj("[name=consent_ui_terms]").change(function() {
 // trigger once
 cj(document).ready(function() {
   cj("[name=consent_ui_terms]").change();
-})
+});
+
+// trigger reload after 'save'
+cj("#crm-container").on('crmPopupFormSuccess', function(event) {
+  if(cj(event.target).attr('href').includes('civicrm/gdprx/consent/edit')) {
+    cj("table.gdprx-tab").closest("div.crm-ajax-container").crmSnippet('refresh');
+  }
+});
+
 {/literal}
 </script>

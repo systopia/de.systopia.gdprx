@@ -609,6 +609,18 @@ class CRM_Gdprx_CustomData {
   }
 
   /**
+   * Get group ID
+   */
+  public static function getGroupID($group_name) {
+    $id2name = self::getGroup2Name();
+    $name2id = array_flip($id2name);
+    if (isset($name2id[$group_name])) {
+      return $name2id[$group_name];
+    }
+    return NULL;
+  }
+
+  /**
    * Generates the following SQL join statment:
    * "LEFT JOIN {$group_table_name} AS {$table_alias} ON {$table_alias}.entity_id = {$join_entity_id}"
    */

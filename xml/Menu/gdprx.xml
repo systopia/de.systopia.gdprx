@@ -18,4 +18,10 @@
     <title>Consent Record</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/gdprx/consent/create</path>
+    <page_callback>CRM_Gdprx_Form_ConsentTask</page_callback>
+    <title>Add Consent Records</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>

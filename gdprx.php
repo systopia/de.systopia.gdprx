@@ -18,6 +18,19 @@ require_once 'gdprx.civix.php';
 use CRM_Gdprx_ExtensionUtil as E;
 
 /**
+ * Add a task to create multiple records
+ */
+function gdprx_civicrm_searchTasks($objectType, &$tasks) {
+  if ($objectType == 'contact') {
+    $tasks['create_gdprx'] = array(
+        'title'  => E::ts("Add Consent Records"),
+        'class'  => 'CRM_Gdprx_Form_ConsentTask',
+        'result' => false);
+  }
+}
+
+
+/**
  * Implements hook_civicrm_pre().
  *
  * Will make sure that edits to contact/bpks will be
@@ -45,8 +58,10 @@ function gdprx_civicrm_pre($op, $objectName, $id, &$params) {
  */
 function gdprx_civicrm_tabs(&$tabs, $contactID) {
   // remove the default table
+  $group_id = CRM_Gdprx_CustomData::getGroupID('consent');
+  $tab_key = "custom_{$group_id}";
   for ($i=0; $i < count($tabs); $i++) {
-    if ($tabs[$i]['id'] == 'custom_39') {
+    if ($tabs[$i]['id'] == $tab_key) {
       unset($tabs[$i]);
       break;
     }
