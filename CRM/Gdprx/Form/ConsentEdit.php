@@ -119,12 +119,13 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
         E::ts("Terms"),
         array('0' => E::ts("new")) + CRM_Gdprx_Terms::getList(),
         FALSE,
-        array('class' => 'user-type')
+        array('class' => 'user-type huge')
       );
       $this->add(
         'textarea',
         "consent_ui_terms_full",
-        E::ts("Terms")
+        E::ts("Terms"),
+        array('class' => 'big')
       );
     }
 
@@ -133,7 +134,8 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
       $this->add(
         'textarea',
         "consent_ui_note",
-        E::ts("Note")
+        E::ts("Note"),
+        array('class' => 'big')
       );
     }
 
@@ -142,20 +144,28 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
     $this->assign('contact_id', $this->contact_id);
     $this->assign('record_id',  $this->record_id);
 
+    // add all term texts
+    // TODO: use AJAX call instead
+    $all_terms = CRM_Gdprx_Terms::getFullTexts();
+    $this->assign('all_terms', json_encode($all_terms));
+
     // set default values
     if ($this->record_id > 0) {
       // there is alread a record
       $data = CRM_Gdprx_Consent::getRecord($this->record_id);
-      error_log(json_encode($data));
       $this->setDefaults(array(
         'consent_ui_date'        => date('m/d/Y', strtotime($data['consent_date'])),
-        'consent_ui_expiry_date' => date('m/d/Y', strtotime($data['consent_expiry_date'])),
         'consent_ui_category'    => $data['consent_category'],
         'consent_ui_source'      => $data['consent_source'],
         'consent_ui_type'        => $data['consent_type'],
         'consent_ui_note'        => $data['consent_note'],
         'consent_ui_terms'       => $data['consent_terms'],
       ));
+      if (!empty($data['consent_expiry_date'])) {
+        $this->setDefaults(array(
+          'consent_ui_expiry_date' => date('m/d/Y', strtotime($data['consent_expiry_date'])),
+        ));
+      }
     } else {
       // set default values
       // TODO:
@@ -179,12 +189,14 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
     // get terms_id
     $terms_id = NULL;
     if (!empty($values['consent_ui_terms'])) {
+
       // an ID was set
       $terms_id = (int) $values['consent_ui_terms'];
     } elseif (!empty($values['consent_ui_terms_full'])) {
-      $terms = CRM_Gdprx_Terms::getOrCreate($values['consent_ui_terms']);
+      $terms = CRM_Gdprx_Terms::getOrCreate($values['consent_ui_terms_full']);
       $terms_id = $terms->getID();
     }
+
 
     // get expiry date
     $expiry_date = CRM_Utils_Array::value('consent_ui_expiry_date', $values);

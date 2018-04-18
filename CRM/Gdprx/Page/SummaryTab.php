@@ -38,6 +38,7 @@ class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
         type.label      AS record_type,
         terms.name      AS record_terms_name,
         terms.id        AS record_terms_id,
+        terms.text_full AS record_terms_full,
         record.note     AS record_note
       FROM civicrm_value_gdpr_consent record
       LEFT JOIN civicrm_gdpr_terms    terms      ON terms.id = terms_id
@@ -62,6 +63,7 @@ class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
         'record_source'      => $data->record_source,
         'record_type'        => $data->record_type,
         'record_terms_name'  => $data->record_terms_name,
+        'record_terms_full'  => $data->record_terms_full,
         'record_terms_id'    => $data->record_terms_id,
         'record_note_short'  => count($data->record_note) > 16 ? (substr($data->record_note, 0, 13) . '...') : $data->record_note,
         'record_note'        => $data->record_note,

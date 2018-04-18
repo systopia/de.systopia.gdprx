@@ -121,14 +121,20 @@ class CRM_Gdprx_Consent {
 
     if (!empty($expiry_date)) {
       $data['consent.consent_expiry_date'] = date('YmdHis', strtotime($expiry_date));
+    } else {
+      $data['consent.consent_expiry_date'] = '';
     }
 
     if (!empty($type)) {
       $data['consent.consent_type'] = $type;
+    } else {
+      $data['consent.consent_type'] = '';
     }
 
     if (!empty($terms_id)) {
       $data['consent.consent_terms'] = $terms_id;
+    } else {
+      $data['consent.consent_terms'] = '';
     }
 
     // resolve custom fields

@@ -96,7 +96,7 @@ class CRM_Gdprx_CustomData {
        return;
     } else {
        // update OptionGroup
-       $this->updateEntity('OptionGroup', $data, $optionGroup);
+       $this->updateEntity('OptionGroup', $data, $optionGroup, array('is_active'));
     }
 
     // now run the update for the OptionValues
@@ -114,7 +114,7 @@ class CRM_Gdprx_CustomData {
           $this->log(CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update OptionValue: " . json_encode($optionValueSpec));
        } else {
           // update OptionValue
-          $this->updateEntity('OptionValue', $optionValueSpec, $optionValue);
+          $this->updateEntity('OptionValue', $optionValueSpec, $optionValue, array('is_active'));
        }
     }
   }

@@ -3,6 +3,7 @@
   "_translate": ["title"],
   "name": "consent_category",
   "title": "Consent Category",
+  "is_active": "1",
   "_values": [
     {
       "_lookup": ["name"],

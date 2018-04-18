@@ -3,6 +3,7 @@
   "_translate": ["title"],
   "name": "consent_type",
   "title": "Consent Type",
+  "is_active": "1",
   "_values": [
     {
       "_lookup": ["name"],

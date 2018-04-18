@@ -91,4 +91,16 @@ class CRM_Gdprx_Terms {
     }
     return $list;
   }
+
+  /**
+   * Get a list ID -> full text
+   */
+  public static function getFullTexts() {
+    $list = array();
+    $record = CRM_Core_DAO::executeQuery("SELECT id AS term_id, text_full FROM civicrm_gdpr_terms;");
+    while ($record->fetch()) {
+      $list[$record->term_id] = $record->text_full;
+    }
+    return $list;
+  }
 }

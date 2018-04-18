@@ -64,7 +64,7 @@
       </td>
       {/if}
       {if $gdprx.use_consent_terms}
-      <td>
+      <td title="{$record.record_terms_full}">
         {$record.record_terms_name}
       </td>
       {/if}

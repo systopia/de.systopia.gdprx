@@ -86,6 +86,7 @@
 
 
 <script type="text/javascript">
+var all_terms = {$all_terms};
 {literal}
 cj("#consent_ui_terms_full").change(function() {
   cj("[name=consent_ui_terms]").val('0').change();
@@ -94,8 +95,13 @@ cj("#consent_ui_terms_full").change(function() {
 cj("[name=consent_ui_terms]").change(function() {
   var val = cj("[name=consent_ui_terms]").val();
   if (val != 0) {
-    cj("#consent_ui_terms_full").val('');
+    cj("#consent_ui_terms_full").val(all_terms[val]);
   }
 });
+
+// trigger once
+cj(document).ready(function() {
+  cj("[name=consent_ui_terms]").change();
+})
 {/literal}
 </script>
