@@ -3,8 +3,10 @@
   <item>
     <path>civicrm/admin/gdprx/settings</path>
     <page_callback>CRM_Gdprx_Form_Settings</page_callback>
-    <title>Settings</title>
-    <access_arguments>access CiviCRM</access_arguments>
+    <title>GDPRX Settings</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+    <adminGroup>Communications</adminGroup>
+    <icon>admin/small/rela_type.png</icon>
   </item>
   <item>
     <path>civicrm/gdprx/tab</path>
