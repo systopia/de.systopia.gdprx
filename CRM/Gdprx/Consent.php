@@ -34,6 +34,7 @@ class CRM_Gdprx_Consent {
         'option_group_id' => 'consent_category',
         'option.limit'    => 0,
         'sequential'      => 1,
+        'is_active'       => 1,
         'return'          => 'value,label'));
       foreach ($query['values'] as $option_value) {
         self::$category_list[$option_value['value']] = $option_value['label'];
@@ -52,6 +53,7 @@ class CRM_Gdprx_Consent {
         'option_group_id' => 'consent_source',
         'option.limit'    => 0,
         'sequential'      => 1,
+        'is_active'       => 1,
         'return'          => 'value,label'));
       foreach ($query['values'] as $option_value) {
         self::$sources_list[$option_value['value']] = $option_value['label'];
@@ -70,6 +72,7 @@ class CRM_Gdprx_Consent {
         'option_group_id' => 'consent_type',
         'option.limit'    => 0,
         'sequential'      => 1,
+        'is_active'       => 1,
         'return'          => 'value,label'));
       foreach ($query['values'] as $option_value) {
         self::$types_list[$option_value['value']] = $option_value['label'];
