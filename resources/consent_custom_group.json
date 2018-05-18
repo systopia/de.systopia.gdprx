@@ -134,7 +134,7 @@
       "column_name": "note",
       "label": "Note",
       "text_length": "1024",
-      "data_type": "String",
+      "data_type": "Memo",
       "html_type": "Text",
       "is_required": "0",
       "is_searchable": "1",
