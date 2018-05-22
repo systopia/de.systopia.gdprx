@@ -2,7 +2,7 @@
 <extension key="de.systopia.gdprx" type="module">
   <file>gdprx</file>
   <name>GPDR Extension</name>
-  <description>Helps you implement your GDPR policies</description>
+  <description>Toolkit to help you comply with the GDPR</description>
   <license>AGPL-3.0</license>
   <maintainer>
     <author>SYSTOPIA</author>
@@ -14,8 +14,8 @@
     <url desc="Support">https://github.com/systopia/de.systopia.gdprx/issues</url>
     <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
   </urls>
-  <releaseDate>2018-04-18</releaseDate>
-  <version>0.2.dev</version>
+  <releaseDate>2018-05-22</releaseDate>
+  <version>0.2</version>
   <develStage>dev</develStage>
   <compatibility>
     <ver>4.7</ver>
