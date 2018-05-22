@@ -1,33 +1,62 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GDPR Compliance Extension\n"
-"POT-Creation-Date: \n"
+"POT-Creation-Date: 2018-05-22 13:20+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Bjoern Endres <Bjoern.Endres@didonai.com>\n"
 "Language-Team: SYSTOPIA <info@systopia.de>\n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: German\n"
-"X-Poedit-Country: GERMANY\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
-#: CRM/Gdprx/ConsentUI.php resources/*.json
+#: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
+#: CRM/Gdprx/Form/ConsentTask.php resources/*.json
 msgid "Date"
 msgstr "Datum"
 
-#: CRM/Gdprx/ConsentUI.php
+#: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
+#: CRM/Gdprx/Form/ConsentTask.php templates/CRM/Gdprx/Page/SummaryTab.tpl
+msgid "Expires"
+msgstr "Gültig bis"
+
+#: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
+#: CRM/Gdprx/Form/ConsentTask.php templates/CRM/Gdprx/Page/SummaryTab.tpl
+#: resources/*.json
 msgid "Category"
 msgstr "Kategorie"
 
-#: CRM/Gdprx/ConsentUI.php
+#: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
+#: CRM/Gdprx/Form/ConsentTask.php
 msgid "- please select -"
 msgstr "- bitte wählen -"
 
-#: CRM/Gdprx/ConsentUI.php resources/*.json
+#: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
+#: CRM/Gdprx/Form/ConsentTask.php templates/CRM/Gdprx/Page/SummaryTab.tpl
+#: resources/*.json
 msgid "Source"
 msgstr "Quelle"
 
-#: CRM/Gdprx/ConsentUI.php resources/*.json
+#: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
+#: CRM/Gdprx/Form/ConsentTask.php templates/CRM/Gdprx/Page/SummaryTab.tpl
+#: resources/*.json
+msgid "Type"
+msgstr "Typ"
+
+#: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
+#: CRM/Gdprx/Form/ConsentTask.php templates/CRM/Gdprx/Page/SummaryTab.tpl
+#: resources/*.json
+msgid "Terms"
+msgstr "Bedingungen"
+
+#: CRM/Gdprx/ConsentUI.php
+msgid "- none -"
+msgstr "- keine -"
+
+#: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
+#: CRM/Gdprx/Form/ConsentTask.php templates/CRM/Gdprx/Page/SummaryTab.tpl
+#: resources/*.json
 msgid "Note"
 msgstr "Anmerkung"
 
@@ -43,23 +72,169 @@ msgstr "'Quelle' ist ein Pflichtfeld"
 msgid "Note cannot be more the 1024 characters"
 msgstr "'Anmerkung' maximal 1024 Zeichen betragen"
 
+#: CRM/Gdprx/Form/ConsentEdit.php
+msgid "Edit Consent Record"
+msgstr "Nutzungsberechtigung bearbeiten"
+
+#: CRM/Gdprx/Form/ConsentEdit.php
+msgid "Create Consent Record"
+msgstr "Nutzungsberechtigung hinzufügen"
+
+#: CRM/Gdprx/Form/ConsentEdit.php CRM/Gdprx/Form/ConsentTask.php
+msgid "new"
+msgstr "neu"
+
+#: CRM/Gdprx/Form/ConsentEdit.php CRM/Gdprx/Form/Settings.php
+msgid "Save"
+msgstr "Speichern"
+
+#: CRM/Gdprx/Form/ConsentTask.php gdprx.php
+msgid "Add Consent Records"
+msgstr "Nutzungsberechtigung hinzufügen"
+
+#: CRM/Gdprx/Form/ConsentTask.php
+msgid "Create"
+msgstr "Erstellen"
+
+#: CRM/Gdprx/Form/Settings.php
+msgid "Require GDPR Record"
+msgstr "DSGVO Eintrag erzwingen"
+
+#: CRM/Gdprx/Form/Settings.php templates/CRM/Gdprx/Form/Settings.tpl
+msgid "Default Privacy Settings"
+msgstr "Datenschutz Standardeinstellungen"
+
+#: CRM/Gdprx/Form/Settings.php
+msgid "Do Not Email"
+msgstr "Keine E-Mails senden"
+
+#: CRM/Gdprx/Form/Settings.php
+msgid "Do Not Phone"
+msgstr "Nicht anrufen"
+
+#: CRM/Gdprx/Form/Settings.php
+msgid "Do Not Mail"
+msgstr "Nicht per Post anschreiben"
+
+#: CRM/Gdprx/Form/Settings.php
+msgid "Do Not SMS"
+msgstr "Keine SMS senden"
+
+#: CRM/Gdprx/Form/Settings.php
+msgid "Do Not Trade"
+msgstr "Nicht weitergeben"
+
+#: CRM/Gdprx/Form/Settings.php
+msgid "Is Opt Out"
+msgstr "Keine Massen-E-Mails (User Opt Out)"
+
+#: CRM/Gdprx/Form/Settings.php
+msgid "Use Expiry Date"
+msgstr "\"Gültig bis\"-Feld verwenden"
+
+#: CRM/Gdprx/Form/Settings.php
+msgid "Use Type"
+msgstr "Typfeld verwenden"
+
+#: CRM/Gdprx/Form/Settings.php
+msgid "Use Terms"
+msgstr "Bedingungsfeld verwenden"
+
+#: CRM/Gdprx/Form/Settings.php
+msgid "Use Note"
+msgstr "Anmerkungsfeld verwenden"
+
+#: CRM/Gdprx/Upgrader/Base.php
+msgid "Upgrade %1 to revision %2"
+msgstr ""
+
+#: gdprx.php
+msgid "Consent"
+msgstr "Nutzungsberechtigungen"
+
+#: templates/CRM/Gdprx/Form/Settings.hlp
+msgid ""
+"If you enable this, you will be forced to enter a consent record on the "
+"\"create new contact\" form."
+msgstr ""
+"Diese Option erzwingt die Eingabe einer intialen Nutzungsberechtigung beim "
+"manuellen Erstellen eines neuen Kontakts."
+
+#: templates/CRM/Gdprx/Form/Settings.hlp
+msgid ""
+"You can use this feature to define the default privacy options to be applied "
+"to every newly created contact."
+msgstr ""
+"Hier können Sie die Datenschutz-Standardeinstellungen wählen, die beim "
+"Erstellen eines neuen Kontakts eingetragen werden sollen."
+
+#: templates/CRM/Gdprx/Form/Settings.tpl
+msgid "General Options"
+msgstr "Allgemeine Einstellungen"
+
+#: templates/CRM/Gdprx/Form/Settings.tpl
+msgid "Enforce Record"
+msgstr "Nutzungsberechtigung erzwingen"
+
+#: templates/CRM/Gdprx/Form/Settings.tpl
+msgid "Help"
+msgstr "Hilfe"
+
+#: templates/CRM/Gdprx/Form/Settings.tpl
+msgid "Optional GDPR Fields"
+msgstr "Optionale Felder"
+
+#: templates/CRM/Gdprx/Page/SummaryTab.tpl
+msgid "Add Record"
+msgstr "Eintrag hinzufügen"
+
+#: templates/CRM/Gdprx/Page/SummaryTab.tpl
+msgid "Valid From"
+msgstr "Gültig ab"
+
+#: templates/CRM/Gdprx/Page/SummaryTab.tpl
+msgid "Edit"
+msgstr "Bearbeiten"
+
 #: resources/*.json
 msgid "Consent Category"
-msgstr "Kategorie der Nutzungsberechtigung"
+msgstr "Kategorie"
 
 #: resources/*.json
 msgid "Contact Consent"
-msgstr "Kontaktherkunft"
+msgstr "Herkunft"
 
 #: resources/*.json
 msgid "Consent Source"
-msgstr "Quelle der Nutzungsberechtigung"
+msgstr "Quelle"
+
+#: resources/*.json
+msgid "Consent Type"
+msgstr "Typ"
 
 #: resources/*.json
 msgid "Default"
 msgstr "Standard"
 
 #: resources/*.json
-msgid "Catgeory"
-msgstr ""
+msgid "Expiry Date"
+msgstr "Gültig bis"
 
+#: resources/*.json
+msgid "None"
+msgstr "ohne"
+
+#: resources/*.json
+msgid "Opt-In"
+msgstr "Opt-In"
+
+#: resources/*.json
+msgid "Opt-Out"
+msgstr "Opt-Out"
+
+#: resources/*.json
+msgid "Soft Opt-In"
+msgstr "Soft Opt-In"
+
+#~ msgid "Recorded"
+#~ msgstr "Gültig ab"

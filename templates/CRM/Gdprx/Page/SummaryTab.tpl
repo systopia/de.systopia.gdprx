@@ -14,14 +14,14 @@
 +-------------------------------------------------------*}
 
 <div class="action-link">
-  <a accesskey="N" href="{crmURL p='civicrm/gdprx/consent/edit' q="id=new&cid=$contact_id&reset=1&action=update"}" class="button crm-popup"><span><div class="icon ui-icon-circle-plus"></div>{ts}Add Record{/ts}</span></a>
+  <a accesskey="N" href="{crmURL p='civicrm/gdprx/consent/edit' q="id=new&cid=$contact_id&reset=1&action=update"}" class="button crm-popup"><span><div class="icon ui-icon-circle-plus"></div>{ts domain="de.systopia.gdprx"}Add Record{/ts}</span></a>
   <br><br>
 </div>
 
 <table class='gdprx gdprx-tab'>
   <thead>
     <tr>
-      <th>{ts domain="de.systopia.gdprx"}Recorded{/ts}</th>
+      <th>{ts domain="de.systopia.gdprx"}Valid From{/ts}</th>
       {if $gdprx.use_consent_expiry_date}
       <th>{ts domain="de.systopia.gdprx"}Expires{/ts}</th>
       {/if}
@@ -75,7 +75,7 @@
       {/if}
       <td>
         {assign value=$record.record_id var=record_id}
-        <span><a href="{crmURL p='civicrm/gdprx/consent/edit' q="id=$record_id&cid=$contact_id&reset=1"}" class="action-item crm-hover-button crm-popup" title="{ts}Edit{/ts}">{ts}Edit{/ts}</a></span>
+        <span><a href="{crmURL p='civicrm/gdprx/consent/edit' q="id=$record_id&cid=$contact_id&reset=1"}" class="action-item crm-hover-button crm-popup" title="{ts domain="de.systopia.gdprx"}Edit{/ts}">{ts domain="de.systopia.gdprx"}Edit{/ts}</a></span>
       </td>
     </tr>
     {/foreach}
