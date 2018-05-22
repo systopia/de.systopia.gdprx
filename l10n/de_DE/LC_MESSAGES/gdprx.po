@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GDPR Compliance Extension\n"
-"POT-Creation-Date: 2018-05-22 13:20+0200\n"
+"POT-Creation-Date: 2018-05-22 13:23+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Bjoern Endres <Bjoern.Endres@didonai.com>\n"
 "Language-Team: SYSTOPIA <info@systopia.de>\n"
