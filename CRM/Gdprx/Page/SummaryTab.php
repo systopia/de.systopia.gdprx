@@ -46,6 +46,7 @@ class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
       LEFT JOIN civicrm_option_value  source     ON source.value   = record.source   AND source.option_group_id = %3
       LEFT JOIN civicrm_option_value  type       ON type.value     = record.type     AND type.option_group_id = %4
       WHERE entity_id = %1
+      GROUP BY record.id
       ORDER BY record.date DESC;", array(
         1 => array($contact_id,        'Integer'),
         2 => array($groups['consent_category']['id'], 'Integer'),
