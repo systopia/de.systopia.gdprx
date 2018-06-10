@@ -85,7 +85,7 @@ class CRM_Gdprx_Consent {
    * add a new user consent entry for the contact
    */
   public static function createConsentRecord($contact_id, $category, $source, $date = 'now', $note = '', $type = NULL, $terms_id = NULL, $expiry_date = NULL) {
-    self::updateConsentRecord('-1', $contact_id, $category, $source, $date, $note, $type, $terms_id, $expiry_date);
+    return self::updateConsentRecord('-1', $contact_id, $category, $source, $date, $note, $type, $terms_id, $expiry_date);
   }
 
   /**
