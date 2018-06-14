@@ -193,10 +193,11 @@ class CRM_Gdprx_Consent {
     GROUP BY contact.id;";
     $query = CRM_Core_DAO::executeQuery($query_sql);
     $query->fetch();
-    error_log("{$query->last_positive_consent}  {$query->last_negative_consent}");
     if ($query->last_positive_consent) {
       if ($query->last_negative_consent) {
-        if ($query->last_positive_consent > $query->last_negative_consent) {
+        // negative wins if the date is the same
+        if ($query->last_positive_consent > $query->last_negative_consent
+            || (!$positive && $query->last_positive_consent == $query->last_negative_consent)) {
           return $query->last_positive_consent;
         } else {
           return NULL;
