@@ -69,7 +69,7 @@ function _civicrm_api3_consent_record_create_spec(&$params) {
     'api.required' => 1,
     'type'         => CRM_Utils_Type::T_INT,
     'title'        => 'Contact ID',
-    'description'  => 'Looks up bPK for the given contact (for testing)',
+    'description'  => 'Contact to record the consent for',
     );
   $params['category'] = array(
     'name'         => 'category',

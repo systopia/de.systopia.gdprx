@@ -23,7 +23,6 @@ class CRM_Gdprx_Consent {
   private static $sources_list  = NULL;
   private static $types_list  = NULL;
 
-
   /**
    * Get a list id -> label for the categories
    */
@@ -150,6 +149,65 @@ class CRM_Gdprx_Consent {
     }
 
     return civicrm_api3('CustomValue', 'create', $request);
+  }
+
+  /**
+   * Get a valid consent record.
+   *
+   * @param $contact_id
+   * @param $category
+   * @param $date
+   * @param array $positive_types
+   * @param array $negative_types
+   *
+   * @return the date of the given consent, or NULL if no currently valid consent recorded
+   */
+  public static function hasConsent($contact_id, $category, $positive = TRUE, $date = 'now', $positive_types = array(2,4,5), $negative_types = array(3)) {
+    // if we're looking for negative consent, swap the search patterns
+    if (!$positive) {
+      $tmp = $positive_types;
+      $positive_types = $negative_types;
+      $negative_types = $tmp;
+    }
+    $contact_id = (int) $contact_id;
+    $category = (int) $category;
+    $date = date('YmdHis', strtotime($date));
+
+    // build query
+    $positive_types_list = implode(',', $positive_types);
+    $negative_types_list = implode(',', $negative_types);
+    $query_sql = "
+    SELECT
+      MAX(positive.date) last_positive_consent, 
+      MAX(negative.date) last_negative_consent 
+    FROM civicrm_contact contact
+    LEFT JOIN civicrm_value_gdpr_consent positive ON positive.entity_id = contact.id 
+                                                  AND positive.type IN ({$positive_types_list})
+                                                  AND positive.category = {$category}
+                                                  AND positive.date <= '{$date}'
+    LEFT JOIN civicrm_value_gdpr_consent negative ON negative.entity_id = contact.id 
+                                                  AND negative.type IN ({$negative_types_list})
+                                                  AND negative.category = {$category}
+                                                  AND negative.date <= '{$date}'
+    WHERE contact.id = {$contact_id}
+    GROUP BY contact.id;";
+    $query = CRM_Core_DAO::executeQuery($query_sql);
+    $query->fetch();
+    if ($query->last_positive_consent) {
+      if ($query->last_negative_consent) {
+        // negative wins if the date is the same
+        if ($query->last_positive_consent > $query->last_negative_consent
+            || (!$positive && $query->last_positive_consent == $query->last_negative_consent)) {
+          return $query->last_positive_consent;
+        } else {
+          return NULL;
+        }
+      } else {
+        return $query->last_positive_consent;
+      }
+    } else {
+      return NULL;
+    }
   }
 
   /**
