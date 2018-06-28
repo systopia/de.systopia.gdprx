@@ -43,22 +43,14 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
     $this->assign('civi_version', $currentVer);
     if (version_compare($currentVer, '4.7') < 0) {
       // this is 4.6
-      $this->addDate(
-        'consent_ui_date',
-        E::ts("Date"),
-        TRUE,
-        array('dateFormat' => 'dateformatFull', 'class' => '', 'time' => FALSE));
+      $this->addDateTime('consent_ui_date', ts('Date'), TRUE);
+      list($date_defaults['consent_ui_date'], $date_defaults['consent_ui_date_time']) = CRM_Utils_Date::setDateDefaults(date('Y-m-d H:i:s'), 'activityDateTime');
+      $this->setDefaults($date_defaults);
       $this->assign('needs_calendar_include', 1);
-      $this->setDefaults(array('consent_ui_date' => date('m/d/Y')));
 
       if ($config->getSetting('use_consent_expiry_date')) {
-        $this->addDate(
-          'consent_ui_expiry_date',
-          E::ts("Expires"),
-          FALSE,
-          array('dateFormat' => 'dateformatFull', 'class' => '', 'time' => FALSE));
+        $this->addDateTime('consent_ui_expiry_date', ts('Date'), TRUE);
       }
-
     } else {
       // add date, prefilled with current date
       $this->add(
@@ -151,23 +143,20 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
 
     // set default values
     if ($this->record_id > 0) {
-      // there is alread a record
+      // there is already a record
       $data = CRM_Gdprx_Consent::getRecord($this->record_id);
+      list($date_values['consent_ui_date'], $date_values['consent_ui_date_time']) = CRM_Utils_Date::setDateDefaults(date('Y-m-d H:i:s', strtotime($data['consent_date'])), 'activityDateTime');
+      list($date_values['consent_ui_expiry_date'], $date_values['consent_ui_expiry_date_time']) = CRM_Utils_Date::setDateDefaults(date('Y-m-d H:i:s', strtotime($data['consent_ui_expiry_date'])), 'activityDateTime');
+
       $this->setDefaults(array(
-        'consent_ui_date'        => date('m/d/Y', strtotime($data['consent_date'])),
         'consent_ui_category'    => $data['consent_category'],
         'consent_ui_source'      => $data['consent_source'],
         'consent_ui_type'        => $data['consent_type'],
         'consent_ui_note'        => $data['consent_note'],
         'consent_ui_terms'       => $data['consent_terms'],
-      ));
-      if (!empty($data['consent_expiry_date'])) {
-        $this->setDefaults(array(
-          'consent_ui_expiry_date' => date('m/d/Y', strtotime($data['consent_expiry_date'])),
-        ));
-      }
+      ) + $date_values);
     } else {
-      // set default values
+      // set default values? dates have been set above...
       // TODO:
     }
 
@@ -207,11 +196,11 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
         $values['contact_id'],
         $values['consent_ui_category'],
         $values['consent_ui_source'],
-        date('YmdHis', strtotime($values['consent_ui_date'])),
+        date('YmdHis', strtotime(CRM_Utils_Date::processDate($values['consent_ui_date'], $values['consent_ui_date_time']))),
         CRM_Utils_Array::value('consent_ui_note', $values, NULL),
         CRM_Utils_Array::value('consent_ui_type', $values, NULL),
         $terms_id,
-        $expiry_date ? date('YmdHis', strtotime($expiry_date)) : NULL);
+        $expiry_date ? date('YmdHis', strtotime(CRM_Utils_Date::processDate($values['consent_ui_expiry_date'], $values['consent_ui_expiry_date_time']))) : NULL);
     } else {
       // update
       CRM_Gdprx_Consent::updateConsentRecord(
@@ -219,11 +208,11 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
         $values['contact_id'],
         $values['consent_ui_category'],
         $values['consent_ui_source'],
-        date('YmdHis', strtotime($values['consent_ui_date'])),
+        date('YmdHis', strtotime(CRM_Utils_Date::processDate($values['consent_ui_date'], $values['consent_ui_date_time']))),
         CRM_Utils_Array::value('consent_ui_note', $values, NULL),
         CRM_Utils_Array::value('consent_ui_type', $values, NULL),
         $terms_id,
-        $expiry_date ? date('YmdHis', strtotime($expiry_date)) : NULL);
+       $expiry_date ? date('YmdHis', strtotime(CRM_Utils_Date::processDate($values['consent_ui_expiry_date'], $values['consent_ui_expiry_date_time']))) : NULL);
     }
 
     parent::postProcess();
