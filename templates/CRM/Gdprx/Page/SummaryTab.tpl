@@ -15,6 +15,7 @@
 
 <div class="action-link">
   <a accesskey="N" href="{crmURL p='civicrm/gdprx/consent/edit' q="id=new&cid=$contact_id&reset=1&action=update"}" class="button crm-popup"><span><div class="icon ui-icon-circle-plus"></div>{ts domain="de.systopia.gdprx"}Add Record{/ts}</span></a>
+  <a accesskey="M" href="{crmURL p='civicrm/gdprx/consent/edit' q="id=new&cid=$contact_id&reset=1&action=update&multi=1"}" class="button crm-popup"><span><div class="icon ui-icon-circle-plus"></div>{ts domain="de.systopia.gdprx"}Add Multi-Record{/ts}</span></a>
   <br><br>
 </div>
 
