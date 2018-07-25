@@ -118,7 +118,6 @@ class CRM_Gdprx_Consent {
       'consent.consent_date'     => date('YmdHis', strtotime($date)),
       'consent.consent_category' => $category,
       'consent.consent_source'   => $source,
-      'consent.consent_note'     => $note,
     );
 
     if (!empty($expiry_date)) {
@@ -137,6 +136,10 @@ class CRM_Gdprx_Consent {
       $data['consent.consent_terms'] = $terms_id;
     } else {
       $data['consent.consent_terms'] = '';
+    }
+
+    if ($note !== null) {
+      $data['consent.consent_note'] = $note;
     }
 
     // resolve custom fields
