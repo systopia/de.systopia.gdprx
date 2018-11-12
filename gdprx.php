@@ -211,6 +211,14 @@ function gdprx_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Contact_Form_Contact') {
     CRM_Gdprx_ConsentUI::buildForm($formName, $form);
   }
+
+  if (  $formName == 'CRM_Contact_Form_Inline_CommunicationPreferences'
+     || $formName == 'CRM_Contact_Form_Contact') {
+    $config = CRM_Gdprx_Configuration::getSingleton();
+    if ($config->getSetting('disable_privacy_edit')) {
+      CRM_Core_Resources::singleton()->addScriptFile('de.systopia.gdprx', 'js/DisablePrivacyEditing.js');
+    }
+  }
 }
 
 /**
