@@ -20,7 +20,6 @@
   <div class="clear"></div>
 </div>
 
-
 <h3>{ts domain="de.systopia.gdprx"}Optional GDPR Fields{/ts}</h3>
 <div class="crm-section">
   <div class="label">{$form.use_consent_expiry_date.label}</div>
@@ -47,7 +46,13 @@
 </div>
 
 
-<h3>{ts domain="de.systopia.gdprx"}Default Privacy Settings{/ts}</h3>
+<h3>{ts domain="de.systopia.gdprx"}Privacy Settings{/ts}</h3>
+<div class="crm-section">
+  <div class="label">{$form.disable_privacy_edit.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.gdprx"}Disable Editing of Privacy Settings{/ts}", {literal}{"id":"id-gdprx-disable-privacy-edit","file":"CRM\/Gdprx\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.gdprx"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+  <div class="content">{$form.disable_privacy_edit.html}</div>
+  <div class="clear"></div>
+</div>
+
 <div class="crm-section">
   <div class="label">{$form.default_privacy_settings_enabled.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.gdprx"}Default Privacy Settings{/ts}", {literal}{"id":"id-gdprx-default-privacy","file":"CRM\/Gdprx\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.gdprx"}Help{/ts}" class="helpicon">&nbsp;</a></div>
   <div class="content">{$form.default_privacy_settings_enabled.html}</div>
