@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GDPR Compliance Extension\n"
-"POT-Creation-Date: 2018-05-22 13:23+0200\n"
+"POT-Creation-Date: 2018-11-13 08:45+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Bjoern Endres <Bjoern.Endres@didonai.com>\n"
 "Language-Team: SYSTOPIA <info@systopia.de>\n"
@@ -80,6 +80,10 @@ msgstr "Nutzungsberechtigung bearbeiten"
 msgid "Create Consent Record"
 msgstr "Nutzungsberechtigung hinzufügen"
 
+#: CRM/Gdprx/Form/ConsentEdit.php
+msgid "Categories"
+msgstr "Kategorien"
+
 #: CRM/Gdprx/Form/ConsentEdit.php CRM/Gdprx/Form/ConsentTask.php
 msgid "new"
 msgstr "neu"
@@ -99,6 +103,10 @@ msgstr "Erstellen"
 #: CRM/Gdprx/Form/Settings.php
 msgid "Require GDPR Record"
 msgstr "DSGVO Eintrag erzwingen"
+
+#: CRM/Gdprx/Form/Settings.php templates/CRM/Gdprx/Form/Settings.tpl
+msgid "Disable Editing of Privacy Settings"
+msgstr "Datenschutzeinstellungen schützen"
 
 #: CRM/Gdprx/Form/Settings.php templates/CRM/Gdprx/Form/Settings.tpl
 msgid "Default Privacy Settings"
@@ -152,6 +160,14 @@ msgstr ""
 msgid "Consent"
 msgstr "Nutzungsberechtigungen"
 
+#: gdprx.php
+msgid ""
+"These settings cannot be edited directly any more. Please use then consent "
+"tab."
+msgstr ""
+"Diese Einstellungen können nicht mehr direkt bearbeitet werden. Bitte neue "
+"Nutzungsberechtigungs-Einträge anlegen, um diese Werte zu beeinflussen."
+
 #: templates/CRM/Gdprx/Form/Settings.hlp
 msgid ""
 "If you enable this, you will be forced to enter a consent record on the "
@@ -167,6 +183,17 @@ msgid ""
 msgstr ""
 "Hier können Sie die Datenschutz-Standardeinstellungen wählen, die beim "
 "Erstellen eines neuen Kontakts eingetragen werden sollen."
+
+#: templates/CRM/Gdprx/Form/Settings.hlp
+msgid ""
+"If you want to derive the contacts' privacy settings from the consent "
+"records, you might want to check this to prevent users from editing the "
+"privacy settings directly. Those changes would be overwritten anyway"
+msgstr ""
+"Falls sie die Datenschutzeinstellungen von den Nutzungsberechtigungen "
+"ableiten möchten, sollten diese Option aktivieren. Dann können Benutzer die "
+"Datenschutzeinstellungen nicht mehr direkt bearbeiten, denn diese Änderungen "
+"würden ja ohnehin wieder überschrieben werden."
 
 #: templates/CRM/Gdprx/Form/Settings.tpl
 msgid "General Options"
@@ -184,9 +211,17 @@ msgstr "Hilfe"
 msgid "Optional GDPR Fields"
 msgstr "Optionale Felder"
 
+#: templates/CRM/Gdprx/Form/Settings.tpl
+msgid "Privacy Settings"
+msgstr "Datenschutzeinstellungen"
+
 #: templates/CRM/Gdprx/Page/SummaryTab.tpl
 msgid "Add Record"
 msgstr "Eintrag hinzufügen"
+
+#: templates/CRM/Gdprx/Page/SummaryTab.tpl
+msgid "Add Multi-Record"
+msgstr "Mehrfacheintrag hinzufügen"
 
 #: templates/CRM/Gdprx/Page/SummaryTab.tpl
 msgid "Valid From"
@@ -235,6 +270,10 @@ msgstr "Opt-Out"
 #: resources/*.json
 msgid "Soft Opt-In"
 msgstr "Soft Opt-In"
+
+#: resources/*.json
+msgid "Double Opt-In"
+msgstr "Double Opt-In"
 
 #~ msgid "Recorded"
 #~ msgstr "Gültig ab"

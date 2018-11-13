@@ -20,3 +20,7 @@
 {htxt id="id-gdprx-default-privacy"}
   <p>{ts domain="de.systopia.gdprx"}You can use this feature to define the default privacy options to be applied to every newly created contact.{/ts}</p>
 {/htxt}
+
+{htxt id="id-gdprx-disable-privacy-edit"}
+  <p>{ts domain="de.systopia.gdprx"}If you want to derive the contacts' privacy settings from the consent records, you might want to check this to prevent users from editing the privacy settings directly. Those changes would be overwritten anyway{/ts}</p>
+{/htxt}
