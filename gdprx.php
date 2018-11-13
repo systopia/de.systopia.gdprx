@@ -216,6 +216,8 @@ function gdprx_civicrm_buildForm($formName, &$form) {
      || $formName == 'CRM_Contact_Form_Contact') {
     $config = CRM_Gdprx_Configuration::getSingleton();
     if ($config->getSetting('disable_privacy_edit')) {
+      CRM_Core_Resources::singleton()->addVars('gdprx', [
+          'privacy_help' => E::ts("These settings cannot be edited directly any more. Please use then consent tab.")]);
       CRM_Core_Resources::singleton()->addScriptFile('de.systopia.gdprx', 'js/DisablePrivacyEditing.js');
     }
   }

@@ -38,6 +38,6 @@ cj(document).ready(function() {
     }
 
     // add notes
-    cj("#privacy_do_not_email").parent().attr("title", "Don't edit directly, please use consent tab.");
-    cj("#is_opt_out").parent().attr("title", "Don't edit directly, please use consent tab.");
+    cj("#privacy_do_not_email").parent().attr("title", CRM.vars.gdprx.privacy_help);
+    cj("#is_opt_out").parent().attr("title", CRM.vars.gdprx.privacy_help);
 });
