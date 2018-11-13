@@ -92,7 +92,9 @@ class CRM_Gdprx_Consent {
    * update existing consent record
    */
   public static function updateConsentRecord($record_id, $contact_id, $category, $source, $date = 'now', $note = '', $type = NULL, $terms_id = NULL, $expiry_date = NULL) {
-    CRM_Core_Error::debug_log_message("create/update consent record: {$contact_id}, {$category}, {$source}, {$date}, {$note} {$type} {$terms_id} {$expiry_date}");
+    if (GDPRX_DEBUG_LOGGING) {
+      CRM_Core_Error::debug_log_message("create/update consent record: {$contact_id}, {$category}, {$source}, {$date}, {$note} {$type} {$terms_id} {$expiry_date}");
+    }
 
     // look up SOURCE
     $original_source = $source;
@@ -100,7 +102,9 @@ class CRM_Gdprx_Consent {
       $source = CRM_Core_OptionGroup::getValue('consent_source', $source, 'label');
     }
     if (empty($source)) {
-      CRM_Core_Error::debug_log_message("Couldn't map source '{$original_source}'");
+      if (GDPRX_DEBUG_LOGGING) {
+        CRM_Core_Error::debug_log_message("Couldn't map source '{$original_source}'");
+      }
       return;
     }
 
@@ -110,7 +114,9 @@ class CRM_Gdprx_Consent {
       $category = CRM_Core_OptionGroup::getValue('consent_category', $category, 'label');
     }
     if (empty($category)) {
-      CRM_Core_Error::debug_log_message("Couldn't map category '{$original_category}'");
+      if (GDPRX_DEBUG_LOGGING) {
+        CRM_Core_Error::debug_log_message("Couldn't map category '{$original_category}'");
+      }
       return;
     }
 

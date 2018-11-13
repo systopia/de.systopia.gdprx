@@ -17,6 +17,8 @@
 require_once 'gdprx.civix.php';
 use CRM_Gdprx_ExtensionUtil as E;
 
+define('GDPRX_DEBUG_LOGGING', FALSE);
+
 /**
  * Add a task to create multiple records
  */
