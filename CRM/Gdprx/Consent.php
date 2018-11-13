@@ -21,7 +21,8 @@ class CRM_Gdprx_Consent {
 
   private static $category_list = NULL;
   private static $sources_list  = NULL;
-  private static $types_list  = NULL;
+  private static $types_list    = NULL;
+  private static $null          = NULL;
 
   /**
    * Get a list id -> label for the categories
@@ -143,6 +144,7 @@ class CRM_Gdprx_Consent {
     }
 
     // resolve custom fields
+    $symbolised_data = $data;
     CRM_Gdprx_CustomData::resolveCustomFields($data, array('consent'));
 
     // since this is a multi-entry group, we need to clarify the index (-1 = new entry)
@@ -151,7 +153,15 @@ class CRM_Gdprx_Consent {
       $request[$key . ':'. $record_id] = $value;
     }
 
-    return civicrm_api3('CustomValue', 'create', $request);
+    $record = civicrm_api3('CustomValue', 'create', $request);
+
+    if ($record_id == '-1') {
+      self::callConsentHook('create', $contact_id, NULL, $symbolised_data);
+    } else {
+      self::callConsentHook('update', $contact_id, $record_id, $symbolised_data);
+    }
+
+    return $record;
   }
 
   /**
@@ -163,7 +173,7 @@ class CRM_Gdprx_Consent {
    * @param array $positive_types
    * @param array $negative_types
    *
-   * @return the date of the given consent, or NULL if no currently valid consent recorded
+   * @return string the date of the given consent, or NULL if no currently valid consent recorded
    */
   public static function hasConsent($contact_id, $category, $positive = TRUE, $date = 'now', $positive_types = array(2,4,5), $negative_types = array(3)) {
     // if we're looking for negative consent, swap the search patterns
@@ -233,5 +243,22 @@ class CRM_Gdprx_Consent {
     } else {
       return NULL;
     }
+  }
+
+  /**
+   * This hook is called after a consent record has been created or updated
+   *
+   * You can implement this hook e.g. to update the contact's privacy settings
+   *  based on the recorded consents
+   *
+   * @param $mode       string 'create' if new record or 'update'
+   * @param $contact_id int    contact this record belongs to
+   * @param $record_id  int    record ID if this is an 'update', NULL otherwise
+   * @param $data       array  the content of the record written
+   *
+   * @return mixed
+   */
+  public static function callConsentHook($mode, $contact_id, $record_id, $data) {
+    return CRM_Utils_Hook::singleton()->invoke(4, $mode, $contact_id, $record_id, $data, self::$null, self::$null, 'civicrm_gdprx_postConsent');
   }
 }
