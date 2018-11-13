@@ -102,6 +102,9 @@ cj("[name=consent_ui_terms]").change(function() {
 // trigger once
 cj(document).ready(function() {
   cj("[name=consent_ui_terms]").change();
+
+  // prevent date for popping up
+  setTimeout(function() {cj("#ui-datepicker-div").hide();}, 10);
 });
 
 // trigger reload after 'save'
