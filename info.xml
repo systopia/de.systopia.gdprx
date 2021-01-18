@@ -20,6 +20,9 @@
   <compatibility>
     <ver>5.29</ver>
   </compatibility>
+  <classloader>
+    <psr4 prefix="Civi\" path="Civi" />
+  </classloader>
   <comments>See https://en.wikipedia.org/wiki/General_Data_Protection_Regulation</comments>
   <civix>
     <namespace>CRM/Gdprx</namespace>
