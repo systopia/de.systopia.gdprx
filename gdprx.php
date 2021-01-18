@@ -26,9 +26,9 @@ define('GDPRX_DEBUG_LOGGING', FALSE);
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_container/
  */
-function xcm_civicrm_container(ContainerBuilder $container) {
-  if (class_exists('Civi\Gpdrx\ContainerSpecs')) {
-    $container->addCompilerPass(new Civi\Gpdrx\ContainerSpecs());
+function gdprx_civicrm_container(ContainerBuilder $container) {
+  if (class_exists('Civi\Gdprx\ContainerSpecs')) {
+    $container->addCompilerPass(new Civi\Gdprx\ContainerSpecs());
   }
 }
 

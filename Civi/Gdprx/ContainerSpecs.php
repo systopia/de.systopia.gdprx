@@ -1,8 +1,9 @@
 <?php
 /*-------------------------------------------------------+
-| Extended Contact Matcher XCM                           |
-| Copyright (C) 2020 SYSTOPIA                            |
+| SYSTOPIA GDPR Compliance Extension                     |
+| Copyright (C) 2021 SYSTOPIA                            |
 | Author: B. Endres (endres@systopia.de)                 |
+| http://www.systopia.de/                                |
 +--------------------------------------------------------+
 | This program is released as free software under the    |
 | Affero GPL license. You can redistribute it and/or     |
@@ -15,7 +16,7 @@
 
 namespace Civi\Gdprx;
 
-use CRM_Xcm_ExtensionUtil as E;
+use CRM_Gdprx_ExtensionUtil as E;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -30,7 +31,7 @@ class ContainerSpecs implements CompilerPassInterface {
       return;
     }
     $typeFactoryDefinition = $container->getDefinition('action_provider');
-    $typeFactoryDefinition->addMethodCall('addAction', ['GdprxAddConsentRecord', 'Civi\Gdpr\ActionProvider\Action\AddConsentRecord', E::ts('Add Consent Record'), [
+    $typeFactoryDefinition->addMethodCall('addAction', ['GdprxAddConsentRecord', 'Civi\Gdprx\ActionProvider\Action\AddConsentRecord', E::ts('GDPR-X: Add Consent Record'), [
         \Civi\ActionProvider\Action\AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ]]);
   }

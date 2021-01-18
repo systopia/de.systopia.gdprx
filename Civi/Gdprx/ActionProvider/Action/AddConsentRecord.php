@@ -1,8 +1,9 @@
 <?php
 /*-------------------------------------------------------+
-| Extended Contact Matcher XCM                           |
-| Copyright (C) 2020 SYSTOPIA                            |
+| SYSTOPIA GDPR Compliance Extension                     |
+| Copyright (C) 2021 SYSTOPIA                            |
 | Author: B. Endres (endres@systopia.de)                 |
+| http://www.systopia.de/                                |
 +--------------------------------------------------------+
 | This program is released as free software under the    |
 | Affero GPL license. You can redistribute it and/or     |
@@ -13,16 +14,14 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
-namespace Civi\Xcm\ActionProvider\Action;
+namespace Civi\Gdprx\ActionProvider\Action;
 
-use CRM_Xcm_ExtensionUtil as E;
-use CRM_Xcm_Form_Settings;
+use CRM_Gdprx_ExtensionUtil as E;
 
 use \Civi\ActionProvider\Action\AbstractAction;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
-use \Civi\ActionProvider\Utils\CustomField;
 
 class AddConsentRecord extends AbstractAction {
 
@@ -51,7 +50,7 @@ class AddConsentRecord extends AbstractAction {
             null,
             null,
             \CRM_Gdprx_Consent::getSourceList(),
-            false,
+            false
         ),
         new Specification(
             'type',
@@ -61,7 +60,7 @@ class AddConsentRecord extends AbstractAction {
             null,
             null,
             \CRM_Gdprx_Consent::getTypeList(),
-            false,
+            false
         ),
     ]);
   }
@@ -74,7 +73,7 @@ class AddConsentRecord extends AbstractAction {
   public function getParameterSpecification() {
     // add contact specs
     return new SpecificationBag([
-        new Specification('id', 'Integer', E::ts('Contact ID'), true, null, null, null, false),
+        new Specification('contact_id', 'Integer', E::ts('Contact ID'), true, null, null, null, false),
         new Specification('category', 'String', E::ts('Category'), false, null, null, null, false),
         new Specification('source', 'String', E::ts('Source'), false, null, null, null, false),
         new Specification('type', 'String', E::ts('Type'), false, null, null, null, false),
