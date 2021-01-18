@@ -14,11 +14,11 @@
     <url desc="Support">https://github.com/systopia/de.systopia.gdprx/issues</url>
     <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
   </urls>
-  <releaseDate>2018-11-13</releaseDate>
-  <version>0.4</version>
-  <develStage>stable</develStage>
+  <releaseDate></releaseDate>
+  <version>0.5-dev</version>
+  <develStage>dev</develStage>
   <compatibility>
-    <ver>4.7</ver>
+    <ver>5.29</ver>
   </compatibility>
   <comments>See https://en.wikipedia.org/wiki/General_Data_Protection_Regulation</comments>
   <civix>
