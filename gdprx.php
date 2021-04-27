@@ -15,9 +15,22 @@
 +--------------------------------------------------------*/
 
 require_once 'gdprx.civix.php';
+
 use CRM_Gdprx_ExtensionUtil as E;
+use \Symfony\Component\DependencyInjection\ContainerBuilder;
 
 define('GDPRX_DEBUG_LOGGING', FALSE);
+
+/**
+ * Implements hook_civicrm_container()
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_container/
+ */
+function gdprx_civicrm_container(ContainerBuilder $container) {
+  if (class_exists('Civi\Gdprx\ContainerSpecs')) {
+    $container->addCompilerPass(new Civi\Gdprx\ContainerSpecs());
+  }
+}
 
 /**
  * Add a task to create multiple records
