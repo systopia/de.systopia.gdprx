@@ -40,40 +40,23 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
     $this->add('hidden', 'contact_id', $this->contact_id);
 
     // add date, prefilled with current date
-    $currentVer = CRM_Core_BAO_Domain::version();
-    $this->assign('civi_version', $currentVer);
-    if (version_compare($currentVer, '4.7') < 0) {
-      // this is 4.6
-      $this->addDateTime('consent_ui_date', ts('Date'), TRUE);
-      list($date_defaults['consent_ui_date'], $date_defaults['consent_ui_date_time']) = CRM_Utils_Date::setDateDefaults(date('Y-m-d H:i:s'), 'activityDateTime');
-      $this->setDefaults($date_defaults);
-      $this->assign('needs_calendar_include', 1);
-
-      if ($config->getSetting('use_consent_expiry_date')) {
-        $this->addDateTime('consent_ui_expiry_date', ts('Date'), TRUE);
-      }
-    } else {
-      // add date, prefilled with current date
-      $this->add(
+    $this->add(
         'datepicker',
         'consent_ui_date',
-        E::ts("Date"),
-        array('class' => ''),
-        TRUE,
-        array('time' => FALSE)
-      );
-      $this->setDefaults(array('consent_ui_date' => date('Y-m-d')));
+        E::ts('Date'),
+        ['formatType' => 'activityDateTime'],
+        true
+    );
+    $this->setDefaults(['consent_ui_date' => date('Y-m-d H:i:s')]);
 
-      if ($config->getSetting('use_consent_expiry_date')) {
-        $this->add(
+    if ($config->getSetting('use_consent_expiry_date')) {
+      $this->add(
           'datepicker',
           'consent_ui_expiry_date',
-          E::ts("Expires"),
-          array('class' => ''),
-          FALSE,
-          array('time' => FALSE)
-        );
-      }
+          E::ts('Expires'),
+          ['formatType' => 'activityDateTime'],
+          true
+      );
     }
 
     // add category dropdown from option group
