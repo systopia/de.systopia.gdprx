@@ -35,7 +35,7 @@ class CRM_Gdprx_Configuration {
 
   private function __construct() {
     // load current config
-    $this->config = CRM_Core_BAO_Setting::getItem('de.systopia.gdprx', 'gdprx_settings');
+    $this->config = Civi::settings()->get('gdprx_settings');
     if (empty($this->config)) {
       // TODO: default values?
       $this->config = array();
@@ -70,7 +70,7 @@ class CRM_Gdprx_Configuration {
    * Write the current settings to DB
    */
   public function writeSettings() {
-    CRM_Core_BAO_Setting::setItem($this->config, 'de.systopia.gdprx', 'gdprx_settings');
+    Civi::settings()->set('gdprx_settings', $this->config);
   }
 
   /**
