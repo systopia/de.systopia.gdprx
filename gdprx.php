@@ -71,26 +71,27 @@ function gdprx_civicrm_pre($op, $objectName, $id, &$params) {
 *
 * Will inject a custom gdprx tab
 */
-
-function gdprx_civicrm_tabset($tabsetName, &$tabs, $context){
- if ($tabsetName == 'civicrm/contact/view') {
- // remove the default table
- $group_id = CRM_Gdprx_CustomData::getGroupID('consent');
- $tab_key = "custom_{$group_id}";
- for ($i=0; $i < count($tabs); $i++) {
-   if ($tabs[$i]['id'] == $tab_key) {
-     unset($tabs[$i]);
-     break;
-   }
- }
- $contactID = $context['contact_id'];
- // add our own tab
- $tabs[] = array( 'id'     => 'gdprx',
-                  'url'    => CRM_Utils_System::url('civicrm/gdprx/tab', "reset=1&snippet=1&force=1&cid={$contactID}"),
-                  'title'  => E::ts('Consent'),
-                  'count'  => CRM_Gdprx_Page_SummaryTab::getRecordCount($contactID),
-                  'weight' => 400);
- }
+function gdprx_civicrm_tabset($tabsetName, &$tabs, $context) {
+  if ($tabsetName == 'civicrm/contact/view') {
+    // remove the default table
+    $group_id = CRM_Gdprx_CustomData::getGroupID('consent');
+    $tab_key  = "custom_{$group_id}";
+    for ($i = 0; $i < count($tabs); $i++) {
+      if ($tabs[$i]['id'] == $tab_key) {
+        unset($tabs[$i]);
+        break;
+      }
+    }
+    $contactID = $context['contact_id'];
+    // add our own tab
+    $tabs[] = [
+        'id'     => 'gdprx',
+        'url'    => CRM_Utils_System::url('civicrm/gdprx/tab', "reset=1&snippet=1&force=1&cid={$contactID}"),
+        'title'  => E::ts('Consent'),
+        'count'  => CRM_Gdprx_Page_SummaryTab::getRecordCount($contactID),
+        'weight' => 400
+    ];
+  }
 }
 
 
