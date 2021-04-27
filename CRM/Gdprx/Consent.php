@@ -265,6 +265,7 @@ class CRM_Gdprx_Consent {
    * @return mixed
    */
   public static function callConsentHook($mode, $contact_id, $record_id, $data) {
-    return CRM_Utils_Hook::singleton()->invoke(4, $mode, $contact_id, $record_id, $data, self::$null, self::$null, 'civicrm_gdprx_postConsent');
+    $names = ['mode', 'contact_id', 'record_id', 'data'];
+    return CRM_Utils_Hook::singleton()->invoke($names, $mode, $contact_id, $record_id, $data, self::$null, self::$null, 'civicrm_gdprx_postConsent');
   }
 }
