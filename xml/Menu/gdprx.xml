@@ -4,6 +4,7 @@
     <path>civicrm/admin/gdprx/settings</path>
     <page_callback>CRM_Gdprx_Form_Settings</page_callback>
     <title>GDPRX Settings</title>
+    <desc>Settings for the consent management tool</desc>
     <access_arguments>administer CiviCRM</access_arguments>
     <adminGroup>Communications</adminGroup>
     <icon>admin/small/rela_type.png</icon>
