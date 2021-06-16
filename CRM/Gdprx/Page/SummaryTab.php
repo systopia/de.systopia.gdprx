@@ -28,6 +28,7 @@ class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
     $groups = $config->getOptionGroups();
 
     // query the DB
+    CRM_Core_DAO::disableFullGroupByMode();
     $data = CRM_Core_DAO::executeQuery("
       SELECT
         record.id       AS record_id,
@@ -53,6 +54,8 @@ class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
         3 => array($groups['consent_source']['id'],   'Integer'),
         4 => array($groups['consent_type']['id'],     'Integer'),
       ));
+    CRM_Core_DAO::reenableFullGroupByMode();
+
     while ($data->fetch()) {
       $records[] = array(
         'record_id'          => $data->record_id,
