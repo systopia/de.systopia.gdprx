@@ -1,6 +1,6 @@
 # SYSTOPIA's GDPRX Extension
 
-This extension aims to be a toolkit to help you to comply with the GDPR.
+This extension aims to be a toolkit to help you comply with the GDPR.
 
 ## What does it do?
 
