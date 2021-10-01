@@ -153,7 +153,10 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
       ) + $date_values);
     } else {
       // set default values? dates have been set above...
-      // TODO:
+      $this->setDefaults([
+//        'consent_ui_category'    => CRM_Gdprx_Consent::getCategoryDefault(),
+        'consent_ui_source'      => CRM_Gdprx_Consent::getSourceDefault(),
+      ]);
     }
 
     $this->addButtons(array(
