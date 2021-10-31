@@ -33,7 +33,7 @@ class CRM_Gdprx_Consent {
       $query = civicrm_api3('OptionValue', 'get', array(
         'option_group_id' => 'consent_category',
         'option.limit'    => 0,
-        'option.sort'     => 'weight desc',
+        'option.sort'     => 'weight asc',
         'sequential'      => 1,
         'is_active'       => 1,
         'return'          => 'value,label'));
@@ -53,7 +53,7 @@ class CRM_Gdprx_Consent {
       $query = civicrm_api3('OptionValue', 'get', array(
         'option_group_id' => 'consent_source',
         'option.limit'    => 0,
-        'option.sort'     => 'weight desc',
+        'option.sort'     => 'weight asc',
         'sequential'      => 1,
         'is_active'       => 1,
         'return'          => 'value,label'));
@@ -73,7 +73,7 @@ class CRM_Gdprx_Consent {
       $query = civicrm_api3('OptionValue', 'get', array(
         'option_group_id' => 'consent_type',
         'option.limit'    => 0,
-        'option.sort'     => 'weight desc',
+        'option.sort'     => 'weight asc',
         'sequential'      => 1,
         'is_active'       => 1,
         'return'          => 'value,label'));
