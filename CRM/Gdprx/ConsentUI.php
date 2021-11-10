@@ -138,7 +138,6 @@ class CRM_Gdprx_ConsentUI {
     CRM_Core_Region::instance('page-body')->add(array(
       'template' => "CRM/Gdprx/ConsentForm.tpl"
     ));
-    Civi::resources()->addStyleUrl(E::url('css/consent_ui.css'));
   }
 
 

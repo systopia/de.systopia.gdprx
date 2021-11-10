@@ -14,7 +14,7 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*}
 
-<table class="consent-ui">
+<table class="consent-ui" style="border-radius: 4px 4px 4px 4px; border: solid 1px black; padding: 2px;"> {* can't use css file b/c it's overwritten *}
     <tr>
         <td>
             <div id="user-clearance-date">
