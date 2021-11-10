@@ -65,7 +65,7 @@ class CRM_Gdprx_ConsentUI {
         TRUE,
         array('time' => FALSE)
       );
-      $form->setDefaults(array('consent_ui_date' => date('Y-m-d')));
+      $form->setDefaults(['consent_ui_date' => date('Y-m-d')]);
 
       if ($config->getSetting('use_consent_expiry_date')) {
         $form->add(
@@ -129,10 +129,10 @@ class CRM_Gdprx_ConsentUI {
     }
 
     // set default values
-    $form->setDefaults(array(
-      'consent_ui_category'   => '0',
-      'consent_ui_source'     => '0',
-    ));
+    $form->setDefaults([
+      'consent_ui_category'   => '0', // CRM_Gdprx_Consent::getCategoryDefault()
+      'consent_ui_source'     => CRM_Gdprx_Consent::getSourceDefault(),
+    ]);
 
     // add template path for these fields
     CRM_Core_Region::instance('page-body')->add(array(
