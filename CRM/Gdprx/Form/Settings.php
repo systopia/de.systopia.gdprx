@@ -29,6 +29,14 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
                       "enforce_record_for_new_contacts",
                       E::ts("Require GDPR Record"));
 
+    $this->add('select',
+               "consent_source_default",
+               E::ts("Default Source"),
+               ['' => E::ts("- no default -")] + CRM_Gdprx_Consent::getSourceList(),
+               false,
+               ['class' => 'user-source']
+    );
+    $this->setDefaults(['consent_source_default' => CRM_Gdprx_Consent::getSourceDefault()]);
 
     // add privacy defaults
     $this->addElement('checkbox',
@@ -99,6 +107,11 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
     $config->setSetting("disable_privacy_edit", CRM_Utils_Array::value("disable_privacy_edit", $values, FALSE));
 
     $config->writeSettings();
+
+    // write out now default
+    self::setDefaultOptionGroupValue('consent_source', $values['consent_source_default']);
+
+
     parent::postProcess();
   }
 
@@ -122,4 +135,51 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
     );
   }
 
+  /**
+   * Set the new default value of the option group
+   *
+   * @param $option_group_id integer|string
+   *
+   * @param $new_value string
+   */
+  public static function setDefaultOptionGroupValue($option_group_id, $new_value)
+  {
+    $is_default_already = false;
+
+    // unset all (except the new default)
+    $current_defaults = civicrm_api3('OptionValue', 'get', [
+        'option_group_id' => $option_group_id,
+        'is_default'      => 1,
+        'option.limit'    => 0,
+        'sequential'      => 0,
+        'return'          => 'id,value,is_default'
+    ]);
+    foreach ($current_defaults['values'] as $current_default) {
+      if ($current_default['value'] == $new_value) {
+        $is_default_already = true;
+      } else {
+        civicrm_api3('OptionValue', 'create', ['id' => $current_default['id'], 'is_default' => 0]);
+      }
+    }
+
+    // finally, mark the new value as default, if that's not teh case already
+    if (!$is_default_already && !empty($new_value)) {
+      try {
+        $new_default_id = civicrm_api3('OptionValue', 'getvalue', [
+            'option_group_id' => $option_group_id,
+            'value'           => $new_value,
+            'return'          => 'id'
+        ]);
+        civicrm_api3('OptionValue', 'create', [
+            'id'         => $new_default_id,
+            'is_default' => 1]);
+      } catch (CiviCRM_API3_Exception $ex) {
+        CRM_Core_Session::setStatus(
+            E::ts("Couldn't set default value. Error was: %1", [1 => $ex->getMessage()]),
+            E::ts("Set Default Failed"),
+            "error"
+        );
+      }
+    }
+  }
 }

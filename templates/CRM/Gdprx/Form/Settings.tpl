@@ -19,6 +19,11 @@
   <div class="content">{$form.enforce_record_for_new_contacts.html}</div>
   <div class="clear"></div>
 </div>
+<div class="crm-section">
+  <div class="label">{$form.consent_source_default.label}&nbsp;<a onclick='CRM.help("{ts domain="de.systopia.gdprx"}Default Source{/ts}", {literal}{"id":"id-gdprx-default-source","file":"CRM\/Gdprx\/Form\/Settings"}{/literal}); return false;' href="#" title="{ts domain="de.systopia.gdprx"}Help{/ts}" class="helpicon">&nbsp;</a></div>
+  <div class="content">{$form.consent_source_default.html}</div>
+  <div class="clear"></div>
+</div>
 
 <h3>{ts domain="de.systopia.gdprx"}Optional GDPR Fields{/ts}</h3>
 <div class="crm-section">

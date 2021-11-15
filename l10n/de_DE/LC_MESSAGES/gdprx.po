@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GDPR Compliance Extension\n"
-"POT-Creation-Date: 2018-11-13 08:45+0100\n"
+"POT-Creation-Date: 2021-10-02 09:15+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Bjoern Endres <Bjoern.Endres@didonai.com>\n"
 "Language-Team: SYSTOPIA <info@systopia.de>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
 #: CRM/Gdprx/Form/ConsentTask.php resources/*.json
@@ -22,8 +22,9 @@ msgid "Expires"
 msgstr "Gültig bis"
 
 #: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
-#: CRM/Gdprx/Form/ConsentTask.php templates/CRM/Gdprx/Page/SummaryTab.tpl
-#: resources/*.json
+#: CRM/Gdprx/Form/ConsentTask.php
+#: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php
+#: templates/CRM/Gdprx/Page/SummaryTab.tpl resources/*.json
 msgid "Category"
 msgstr "Kategorie"
 
@@ -33,14 +34,16 @@ msgid "- please select -"
 msgstr "- bitte wählen -"
 
 #: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
-#: CRM/Gdprx/Form/ConsentTask.php templates/CRM/Gdprx/Page/SummaryTab.tpl
-#: resources/*.json
+#: CRM/Gdprx/Form/ConsentTask.php
+#: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php
+#: templates/CRM/Gdprx/Page/SummaryTab.tpl resources/*.json
 msgid "Source"
 msgstr "Quelle"
 
 #: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
-#: CRM/Gdprx/Form/ConsentTask.php templates/CRM/Gdprx/Page/SummaryTab.tpl
-#: resources/*.json
+#: CRM/Gdprx/Form/ConsentTask.php
+#: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php
+#: templates/CRM/Gdprx/Page/SummaryTab.tpl resources/*.json
 msgid "Type"
 msgstr "Typ"
 
@@ -55,8 +58,9 @@ msgid "- none -"
 msgstr "- keine -"
 
 #: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
-#: CRM/Gdprx/Form/ConsentTask.php templates/CRM/Gdprx/Page/SummaryTab.tpl
-#: resources/*.json
+#: CRM/Gdprx/Form/ConsentTask.php
+#: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php
+#: templates/CRM/Gdprx/Page/SummaryTab.tpl resources/*.json
 msgid "Note"
 msgstr "Anmerkung"
 
@@ -103,6 +107,16 @@ msgstr "Erstellen"
 #: CRM/Gdprx/Form/Settings.php
 msgid "Require GDPR Record"
 msgstr "DSGVO Eintrag erzwingen"
+
+#: CRM/Gdprx/Form/Settings.php
+#: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php
+#: templates/CRM/Gdprx/Form/Settings.tpl
+msgid "Default Source"
+msgstr "Vorauswahl Quelle"
+
+#: CRM/Gdprx/Form/Settings.php
+msgid "- no default -"
+msgstr "- keine  Vorauswahl -"
 
 #: CRM/Gdprx/Form/Settings.php templates/CRM/Gdprx/Form/Settings.tpl
 msgid "Disable Editing of Privacy Settings"
@@ -152,9 +166,47 @@ msgstr "Bedingungsfeld verwenden"
 msgid "Use Note"
 msgstr "Anmerkungsfeld verwenden"
 
+#: CRM/Gdprx/Form/Settings.php
+msgid "Couldn't set default value. Error was: %1"
+msgstr "Vorauswahl konnte nicht gespeichert werden. Der Fehler ist: %1"
+
+#: CRM/Gdprx/Form/Settings.php
+msgid "Set Default Failed"
+msgstr "Speichern der Voreinstellung fehlgeschlagen"
+
 #: CRM/Gdprx/Upgrader/Base.php
 msgid "Upgrade %1 to revision %2"
 msgstr ""
+
+#: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php
+msgid "Default Category"
+msgstr "Kategorie (Default)"
+
+#: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php
+msgid "Default Type"
+msgstr "Typ (Default)"
+
+#: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php
+msgid "Contact ID"
+msgstr "Kontakt ID"
+
+#: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php
+#, fuzzy
+#| msgid "Recorded"
+msgid "Record Date"
+msgstr "Gültig ab"
+
+#: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php resources/*.json
+msgid "Expiry Date"
+msgstr "Gültig bis"
+
+#: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php
+msgid "Terms and Conditions"
+msgstr "Nutzungsbedingungen"
+
+#: Civi/Gdprx/ContainerSpecs.php
+msgid "GDPR-X: Add Consent Record"
+msgstr "GDPR-X: Nutzungsberechtigung hinzufügen"
 
 #: gdprx.php
 msgid "Consent"
@@ -194,6 +246,12 @@ msgstr ""
 "ableiten möchten, sollten diese Option aktivieren. Dann können Benutzer die "
 "Datenschutzeinstellungen nicht mehr direkt bearbeiten, denn diese Änderungen "
 "würden ja ohnehin wieder überschrieben werden."
+
+#: templates/CRM/Gdprx/Form/Settings.hlp
+msgid ""
+"You can select a source here, that is pre-selected in all backend forms."
+msgstr ""
+"Die hier ausgewählte Quelle wird in allen Backend-Formularen vorausgewählt."
 
 #: templates/CRM/Gdprx/Form/Settings.tpl
 msgid "General Options"
@@ -252,10 +310,6 @@ msgid "Default"
 msgstr "Standard"
 
 #: resources/*.json
-msgid "Expiry Date"
-msgstr "Gültig bis"
-
-#: resources/*.json
 msgid "None"
 msgstr "ohne"
 
@@ -274,6 +328,3 @@ msgstr "Soft Opt-In"
 #: resources/*.json
 msgid "Double Opt-In"
 msgstr "Double Opt-In"
-
-#~ msgid "Recorded"
-#~ msgstr "Gültig ab"

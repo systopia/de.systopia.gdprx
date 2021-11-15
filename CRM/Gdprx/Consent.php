@@ -65,6 +65,56 @@ class CRM_Gdprx_Consent {
   }
 
   /**
+   * Get the default value for source, or null if there is none
+   *
+   * @return string|null
+   */
+  public static function getSourceDefault() {
+    static $source_default = null;
+    if ($source_default === null) {
+      $source_default = '';
+      try {
+        $source_default = civicrm_api3('OptionValue', 'getvalue', [
+            'option_group_id' => 'consent_source',
+            'option.limit'    => 1,
+            'option.sort'     => 'weight desc',
+            'is_active'       => 1,
+            'is_default'      => 1,
+            'return'          => 'value'
+        ]);
+      } catch (CiviCRM_API3_Exception $ex) {
+        // probably not found...
+      }
+    }
+    return $source_default;
+  }
+
+  /**
+   * Get the default value for source, or null if there is none
+   *
+   * @return string|null
+   */
+  public static function getCategoryDefault() {
+    static $category_default = null;
+    if ($category_default === null) {
+      $category_default = '';
+      try {
+        $category_default = civicrm_api3('OptionValue', 'getvalue', [
+            'option_group_id' => 'consent_category',
+            'option.limit'    => 1,
+            'option.sort'     => 'weight desc',
+            'is_active'       => 1,
+            'is_default'      => 1,
+            'return'          => 'value'
+        ]);
+      } catch (CiviCRM_API3_Exception $ex) {
+        // probably not found...
+      }
+    }
+    return $category_default;
+  }
+
+  /**
    * Get a list id -> label for the sources
    */
   public static function getTypeList() {

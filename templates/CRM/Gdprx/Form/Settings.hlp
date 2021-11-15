@@ -24,3 +24,7 @@
 {htxt id="id-gdprx-disable-privacy-edit"}
   <p>{ts domain="de.systopia.gdprx"}If you want to derive the contacts' privacy settings from the consent records, you might want to check this to prevent users from editing the privacy settings directly. Those changes would be overwritten anyway{/ts}</p>
 {/htxt}
+
+{htxt id="id-gdprx-default-source"}
+  <p>{ts domain="de.systopia.gdprx"}You can select a source here, that is pre-selected in all backend forms.{/ts}</p>
+{/htxt}
