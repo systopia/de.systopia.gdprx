@@ -22,7 +22,7 @@ In addition, there are also some optional fields for each consent record:
 * terms and conditions. (the full text of the TOC that the user agreed to*)
 * note (in case you want to add a remark) 
 
-*) it has a clever mechanism so that it doesn't store the 
+(*) it has a clever mechanism so that it doesn't store the 
 same TOC text over and over.
 
 ## How do I use this?
