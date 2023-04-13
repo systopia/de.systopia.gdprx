@@ -51,4 +51,4 @@ specific to the individual organisation, this will never be "plug&play" solution
 Feel free to [raise ticket](https://github.com/systopia/de.systopia.gdprx/issues) if you have a question.
 
 ## Documentation
-https://docs.civicrm.org/gdprx/en/latest/
+https://docs.civicrm.org/gdprx/en/latest (automatic publishing)
