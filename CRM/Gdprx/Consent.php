@@ -152,7 +152,7 @@ class CRM_Gdprx_Consent {
     // look up SOURCE
     $original_source = $source;
     if (!is_numeric($source)) {
-      $source = CRM_Core_OptionGroup::getValue('consent_source', $source, 'label');
+      $source = CRM_Legacycode_OptionGroup::getValue('consent_source', $source, 'label');
     }
     if (empty($source)) {
       if (GDPRX_DEBUG_LOGGING) {
@@ -164,7 +164,7 @@ class CRM_Gdprx_Consent {
     // look up CATEGORY
     $original_category = $category;
     if (!is_numeric($category)) {
-      $category = CRM_Core_OptionGroup::getValue('consent_category', $category, 'label');
+      $category = CRM_Legacycode_OptionGroup::getValue('consent_category', $category, 'label');
     }
     if (empty($category)) {
       if (GDPRX_DEBUG_LOGGING) {
