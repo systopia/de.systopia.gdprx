@@ -146,17 +146,17 @@ class CRM_Gdprx_Consent {
    */
   public static function updateConsentRecord($record_id, $contact_id, $category, $source, $date = 'now', $note = '', $type = NULL, $terms_id = NULL, $expiry_date = NULL) {
     if (GDPRX_DEBUG_LOGGING) {
-      CRM_Core_Error::debug_log_message("create/update consent record: {$contact_id}, {$category}, {$source}, {$date}, {$note} {$type} {$terms_id} {$expiry_date}");
+      Civi::log()->debug("create/update consent record: {$contact_id}, {$category}, {$source}, {$date}, {$note} {$type} {$terms_id} {$expiry_date}");
     }
 
     // look up SOURCE
     $original_source = $source;
     if (!is_numeric($source)) {
-      $source = CRM_Core_OptionGroup::getValue('consent_source', $source, 'label');
+      $source = CRM_Legacycode_OptionGroup::getValue('consent_source', $source, 'label');
     }
     if (empty($source)) {
       if (GDPRX_DEBUG_LOGGING) {
-        CRM_Core_Error::debug_log_message("Couldn't map source '{$original_source}'");
+        Civi::log()->debug("Couldn't map source '{$original_source}'");
       }
       return;
     }
@@ -164,11 +164,11 @@ class CRM_Gdprx_Consent {
     // look up CATEGORY
     $original_category = $category;
     if (!is_numeric($category)) {
-      $category = CRM_Core_OptionGroup::getValue('consent_category', $category, 'label');
+      $category = CRM_Legacycode_OptionGroup::getValue('consent_category', $category, 'label');
     }
     if (empty($category)) {
       if (GDPRX_DEBUG_LOGGING) {
-        CRM_Core_Error::debug_log_message("Couldn't map category '{$original_category}'");
+        Civi::log()->debug("Couldn't map category '{$original_category}'");
       }
       return;
     }
