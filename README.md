@@ -42,10 +42,6 @@ a developer:
 2. There is a fully functioning API
 3. It defines a custom hook to be triggered if the consent records are modified for a contact. This way you can add code update the contact's permissions/subscripts/whatever right away.
 
-Remarks
-===
-This extension now requires the [``legacycode``](https://github.com/systopia/legacycode) extension to be installed as well. Unfortunately it was not accepted by the core team to be listed in the CiviCRM extension directory, or approved for automatic distribution, so there is currently no other way to tell the user, and we have to hope they read the this README.
-
 ## What's next?
 
 We'll keep on extending the built-in functionality of this extension, while aiming to keep it compatible 
