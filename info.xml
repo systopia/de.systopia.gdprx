@@ -20,9 +20,7 @@
   <compatibility>
     <ver>5.29</ver>
   </compatibility>
-  <requires>
-    <ext>legacycode</ext>
-  </requires>
+  <requires/>
   <comments>See https://en.wikipedia.org/wiki/General_Data_Protection_Regulation</comments>
   <classloader>
     <psr4 prefix="Civi\" path="Civi" />
