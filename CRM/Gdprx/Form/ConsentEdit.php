@@ -141,8 +141,8 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
     if ($this->record_id > 0) {
       // there is already a record
       $data = CRM_Gdprx_Consent::getRecord($this->record_id);
-      list($date_values['consent_ui_date'], $date_values['consent_ui_date_time']) = CRM_Utils_Date::setDateDefaults(date('Y-m-d H:i:s', strtotime($data['consent_date'])), 'activityDateTime');
-      list($date_values['consent_ui_expiry_date'], $date_values['consent_ui_expiry_date_time']) = CRM_Utils_Date::setDateDefaults(date('Y-m-d H:i:s', strtotime($data['consent_ui_expiry_date'])), 'activityDateTime');
+      $date_values['consent_ui_date'] = date('Y-m-d H:i:s', strtotime($data['consent_date']));
+      $date_values['consent_ui_expiry_date'] = date('Y-m-d H:i:s', strtotime($data['consent_expiry_date']));
 
       $this->setDefaults(array(
         'consent_ui_category'    => $data['consent_category'],
