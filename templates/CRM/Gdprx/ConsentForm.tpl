@@ -20,9 +20,6 @@
             <div id="user-clearance-date">
                 {$form.consent_ui_date.label}
                 {$form.consent_ui_date.html}
-                {if $needs_calendar_include}
-                    {include file="CRM/common/jcalendar.tpl" elementName=consent_ui_date}
-                {/if}
             </div>
         </td>
         <td>
@@ -50,9 +47,6 @@
             <div id="user-clearance-expiry-date">
                 {$form.consent_ui_expiry_date.label}
                 {$form.consent_ui_expiry_date.html}
-                {if $needs_calendar_include}
-                    {include file="CRM/common/jcalendar.tpl" elementName=consent_ui_expiry_date}
-                {/if}
             </div>
         </td>
         {/if}
