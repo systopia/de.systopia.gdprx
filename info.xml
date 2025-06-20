@@ -18,14 +18,21 @@
   <version>0.7.0</version>
   <develStage>beta</develStage>
   <compatibility>
-    <ver>5.29</ver>
+    <ver>5.38</ver>
   </compatibility>
   <requires/>
   <comments>See https://en.wikipedia.org/wiki/General_Data_Protection_Regulation</comments>
   <classloader>
-    <psr4 prefix="Civi\" path="Civi" />
+    <psr4 prefix="Civi\" path="Civi"/>
+    <psr0 prefix="CRM_" path="."/>
   </classloader>
   <civix>
     <namespace>CRM/Gdprx</namespace>
+    <format>25.01.1</format>
   </civix>
+  <mixins>
+    <mixin>menu-xml@1.0.0</mixin>
+    <mixin>smarty-v2@1.0.3</mixin>
+  </mixins>
+  <upgrader>CiviMix\Schema\Gdprx\AutomaticUpgrader</upgrader>
 </extension>
