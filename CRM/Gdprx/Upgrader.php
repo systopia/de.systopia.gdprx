@@ -19,7 +19,7 @@ use CRM_Gdprx_ExtensionUtil as E;
 /**
  * Collection of upgrade steps.
  */
-class CRM_Gdprx_Upgrader extends CRM_Gdprx_Upgrader_Base {
+class CRM_Gdprx_Upgrader extends CRM_Extension_Upgrader_Base {
 
   /**
    * Installer
