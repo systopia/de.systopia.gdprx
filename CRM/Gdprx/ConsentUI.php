@@ -36,47 +36,26 @@ class CRM_Gdprx_ConsentUI {
     // add date, prefilled with current date
     $currentVer = CRM_Core_BAO_Domain::version();
     $form->assign('civi_version', $currentVer);
-    if (version_compare($currentVer, '4.7') < 0) {
-      // this is 4.6
-      $form->addDate(
-        'consent_ui_date',
-        E::ts("Date"),
-        TRUE,
-        array('dateFormat' => 'dateformatFull', 'class' => '', 'time' => FALSE));
-      $form->assign('needs_calendar_include', 1);
-      $form->setDefaults(array('consent_ui_date' => date('m/d/Y')));
+    // add date, prefilled with current date
+    $form->add(
+      'datepicker',
+      'consent_ui_date',
+      E::ts("Date"),
+      ['class' => ''],
+      TRUE,
+      ['time' => FALSE]
+    );
+    $form->setDefaults(['consent_ui_date' => date('Y-m-d')]);
 
-      if ($config->getSetting('use_consent_expiry_date')) {
-        $form->addDate(
-          'consent_ui_expiry_date',
-          E::ts("Expires"),
-          FALSE,
-          array('dateFormat' => 'dateformatFull', 'class' => '', 'time' => FALSE));
-        $form->assign('needs_calendar_include', 1);
-      }
-
-    } else {
-      // add date, prefilled with current date
+    if ($config->getSetting('use_consent_expiry_date')) {
       $form->add(
         'datepicker',
-        'consent_ui_date',
-        E::ts("Date"),
-        array('class' => ''),
-        TRUE,
-        array('time' => FALSE)
+        'consent_ui_expiry_date',
+        E::ts("Expires"),
+        ['class' => ''],
+        FALSE,
+        ['time' => FALSE]
       );
-      $form->setDefaults(['consent_ui_date' => date('Y-m-d')]);
-
-      if ($config->getSetting('use_consent_expiry_date')) {
-        $form->add(
-          'datepicker',
-          'consent_ui_expiry_date',
-          E::ts("Expires"),
-          array('class' => ''),
-          FALSE,
-          array('time' => FALSE)
-        );
-      }
     }
 
     // add category dropdown from option group
