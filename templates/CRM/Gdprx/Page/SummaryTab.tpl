@@ -76,7 +76,7 @@
       {/if}
       <td>
         {assign value=$record.record_id var=record_id}
-        <span><a href="{crmURL p='civicrm/gdprx/consent/edit' q="id=$record_id&cid=$contact_id&reset=1"}" class="action-item crm-hover-button crm-popup" title="{ts domain="de.systopia.gdprx"}Edit{/ts}">{ts domain="de.systopia.gdprx"}Edit{/ts}</a></span>
+        <span><a href="{crmURL p='civicrm/gdprx/consent/edit' q="id=$record_id&cid=$contact_id&reset=1"}" class="action-item crm-hover-button crm-popup" title="{ts escape='htmlattribute' domain="de.systopia.gdprx"}Edit{/ts}">{ts domain="de.systopia.gdprx"}Edit{/ts}</a></span>
       </td>
     </tr>
     {/foreach}
