@@ -187,7 +187,7 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
 
 
     // get expiry date
-    $expiry_date = CRM_Utils_Array::value('consent_ui_expiry_date', $values);
+    $expiry_date = $values['consent_ui_expiry_date'] ?? NULL;
 
     if (empty($values['record_id'])) {
       $categories = is_array($values['consent_ui_category']) ? $values['consent_ui_category'] : array($values['consent_ui_category']);
@@ -198,8 +198,8 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
             $category,
             $values['consent_ui_source'],
             date('YmdHis', strtotime(CRM_Utils_Date::processDate($values['consent_ui_date'], $values['consent_ui_date_time']))),
-            CRM_Utils_Array::value('consent_ui_note', $values, NULL),
-            CRM_Utils_Array::value('consent_ui_type', $values, NULL),
+            $values['consent_ui_note'] ?? NULL,
+            $values['consent_ui_type'] ?? NULL,
             $terms_id,
             $expiry_date ? date('YmdHis', strtotime(CRM_Utils_Date::processDate($values['consent_ui_expiry_date'], $values['consent_ui_expiry_date_time']))) : NULL);
       }
@@ -211,8 +211,8 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
         $values['consent_ui_category'],
         $values['consent_ui_source'],
         date('YmdHis', strtotime(CRM_Utils_Date::processDate($values['consent_ui_date'], $values['consent_ui_date_time']))),
-        CRM_Utils_Array::value('consent_ui_note', $values, NULL),
-        CRM_Utils_Array::value('consent_ui_type', $values, NULL),
+        $values['consent_ui_note'] ?? NULL,
+        $values['consent_ui_type'] ?? NULL,
         $terms_id,
        $expiry_date ? date('YmdHis', strtotime(CRM_Utils_Date::processDate($values['consent_ui_expiry_date'], $values['consent_ui_expiry_date_time']))) : NULL);
     }

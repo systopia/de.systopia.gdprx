@@ -135,17 +135,17 @@ class CRM_Gdprx_ConsentUI {
       return;
     }
 
-    $category = CRM_Utils_Array::value( 'consent_ui_category', $fields );
+    $category = $fields ['consent_ui_category'] ?? NULL;
     if (!$category || $category == '0') {
       $errors['consent_ui_category'] = E::ts('Category is mandatory');
     }
 
-    $source = CRM_Utils_Array::value( 'consent_ui_source', $fields );
+    $source = $fields ['consent_ui_source'] ?? NULL;
     if (!$source || $source == '0') {
       $errors['consent_ui_source'] = E::ts('Source is mandatory');
     }
 
-    $contact_origin = CRM_Utils_Array::value( 'consent_ui_note', $fields );
+    $contact_origin = $fields ['consent_ui_note'] ?? NULL;
     if (strlen($contact_origin) > 1024) {
       $errors['consent_ui_note'] = E::ts('Note cannot be more the 1024 characters');
     }
@@ -172,10 +172,10 @@ class CRM_Gdprx_ConsentUI {
                                              $values['consent_ui_category'],
                                              $values['consent_ui_source'],
                                              $values['consent_ui_date'],
-                                             CRM_Utils_Array::value('consent_ui_note', $values),
-                                             CRM_Utils_Array::value('consent_ui_type', $values),
-                                             CRM_Utils_Array::value('consent_ui_terms', $values),
-                                             CRM_Utils_Array::value('consent_ui_expiry_date', $values));
+                                             $values['consent_ui_note'] ?? NULL,
+                                             $values['consent_ui_type'] ?? NULL,
+                                             $values['consent_ui_terms'] ?? NULL,
+                                             $values['consent_ui_expiry_date'] ?? NULL);
     }
   }
 }
