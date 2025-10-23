@@ -173,7 +173,7 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
         civicrm_api3('OptionValue', 'create', [
             'id'         => $new_default_id,
             'is_default' => 1]);
-      } catch (CiviCRM_API3_Exception $ex) {
+      } catch (CRM_Core_Exception $ex) {
         CRM_Core_Session::setStatus(
             E::ts("Couldn't set default value. Error was: %1", [1 => $ex->getMessage()]),
             E::ts("Set Default Failed"),

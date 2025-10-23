@@ -82,7 +82,7 @@ class CRM_Gdprx_Consent {
             'is_default'      => 1,
             'return'          => 'value'
         ]);
-      } catch (CiviCRM_API3_Exception $ex) {
+      } catch (CRM_Core_Exception $ex) {
         // probably not found...
       }
     }
@@ -107,7 +107,7 @@ class CRM_Gdprx_Consent {
             'is_default'      => 1,
             'return'          => 'value'
         ]);
-      } catch (CiviCRM_API3_Exception $ex) {
+      } catch (CRM_Core_Exception $ex) {
         // probably not found...
       }
     }
