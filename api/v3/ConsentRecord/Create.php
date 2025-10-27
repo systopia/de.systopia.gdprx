@@ -53,8 +53,8 @@ function civicrm_api3_consent_record_create($params) {
     $params['category'],
     $params['source'],
     $date,
-    CRM_Utils_Array::value('note', $params, NULL),
-    CRM_Utils_Array::value('type', $params, NULL),
+    $params['note'] ?? NULL,
+    $params['type'] ?? NULL,
     $terms ? $terms->getID() : NULL,
     $expiry_date);
 }

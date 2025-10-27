@@ -147,7 +147,7 @@ class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
 
 
     // get expiry date
-    $expiry_date = CRM_Utils_Array::value('consent_ui_expiry_date', $values);
+    $expiry_date = $values['consent_ui_expiry_date'] ?? NULL;
 
     // create a new records
     foreach ($this->_contactIds as $contact_id) {
@@ -156,8 +156,8 @@ class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
         $values['consent_ui_category'],
         $values['consent_ui_source'],
         date('YmdHis', strtotime($values['consent_ui_date'])),
-        CRM_Utils_Array::value('consent_ui_note', $values, NULL),
-        CRM_Utils_Array::value('consent_ui_type', $values, NULL),
+        $values['consent_ui_note'] ?? NULL,
+        $values['consent_ui_type'] ?? NULL,
         $terms_id,
         $expiry_date ? date('YmdHis', strtotime($expiry_date)) : NULL);
     }
