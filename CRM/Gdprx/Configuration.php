@@ -38,7 +38,7 @@ class CRM_Gdprx_Configuration {
   private function __construct() {
     // load current config
     $this->config = Civi::settings()->get('gdprx_settings');
-    if (empty($this->config)) {
+    if (!is_array($this->config) || $this->config === []) {
       // TODO: default values?
       $this->config = [];
     }
@@ -48,7 +48,7 @@ class CRM_Gdprx_Configuration {
    * Get the given setting value
    */
   public function getSetting($name, $default = NULL) {
-    return CRM_Utils_Array::value($name, $this->config, $default);
+    return $this->config[$name] ?? $default;
   }
 
   /**

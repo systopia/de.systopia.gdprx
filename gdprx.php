@@ -41,7 +41,7 @@ function gdprx_civicrm_container(ContainerBuilder $container) {
  * Add a task to create multiple records
  */
 function gdprx_civicrm_searchTasks($objectType, &$tasks) {
-  if ($objectType == 'contact') {
+  if ($objectType === 'contact') {
     $tasks['create_gdprx'] = [
       'title'  => E::ts('Add Consent Records'),
       'class'  => 'CRM_Gdprx_Form_ConsentTask',
@@ -58,11 +58,11 @@ function gdprx_civicrm_searchTasks($objectType, &$tasks) {
  */
 function gdprx_civicrm_pre($op, $objectName, $id, &$params) {
   // see if we should apply the default privacy settings
-  if ($objectName == 'Individual' || $objectName == 'Organization' || $objectName == 'Household') {
-    if (empty($id)) {
+  if ($objectName === 'Individual' || $objectName === 'Organization' || $objectName === 'Household') {
+    if ($id === NULL) {
       // only apply if it's a new contact (no ID)
       $config = CRM_Gdprx_Configuration::getSingleton();
-      if (!empty($params['privacy']) && is_array($params['privacy'])) {
+      if (isset($params['privacy']) && is_array($params['privacy']) && $params['privacy'] !== []) {
         $config->addDefaultPrivacySettings($params['privacy']);
       }
       else {
@@ -78,12 +78,12 @@ function gdprx_civicrm_pre($op, $objectName, $id, &$params) {
  * Will inject a custom gdprx tab (updated from the former hook_civicrm_tabs).
  */
 function gdprx_civicrm_tabset($tabsetName, &$tabs, $context) {
-  if ($tabsetName == 'civicrm/contact/view') {
+  if ($tabsetName === 'civicrm/contact/view') {
     // remove the default table
     $group_id = CRM_Gdprx_CustomData::getGroupID('consent');
     $tab_key  = "custom_{$group_id}";
     foreach ($tabs as $i => $tab) {
-      if ($tab['id'] == $tab_key) {
+      if ($tab['id'] === $tab_key) {
         unset($tabs[$i]);
         break;
       }
@@ -139,12 +139,12 @@ function gdprx_civicrm_enable() {
  * Implements hook_civicrm_buildForm().
  */
 function gdprx_civicrm_buildForm($formName, &$form) {
-  if ($formName == 'CRM_Contact_Form_Contact') {
+  if ($formName === 'CRM_Contact_Form_Contact') {
     CRM_Gdprx_ConsentUI::buildForm($formName, $form);
   }
 
-  if ($formName == 'CRM_Contact_Form_Inline_CommunicationPreferences'
-     || $formName == 'CRM_Contact_Form_Contact') {
+  if ($formName === 'CRM_Contact_Form_Inline_CommunicationPreferences'
+     || $formName === 'CRM_Contact_Form_Contact') {
     $config = CRM_Gdprx_Configuration::getSingleton();
     if ($config->getSetting('disable_privacy_edit')) {
       CRM_Core_Resources::singleton()->addVars('gdprx', [
@@ -159,7 +159,7 @@ function gdprx_civicrm_buildForm($formName, &$form) {
  * Implements hook_civicrm_validateForm().
  */
 function gdprx_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
-  if ($formName == 'CRM_Contact_Form_Contact') {
+  if ($formName === 'CRM_Contact_Form_Contact') {
     CRM_Gdprx_ConsentUI::validateForm($formName, $fields, $files, $form, $errors);
   }
 }
@@ -168,7 +168,7 @@ function gdprx_civicrm_validateForm($formName, &$fields, &$files, &$form, &$erro
  * Implements hook_civicrm_postProcess().
  */
 function gdprx_civicrm_postProcess($formName, &$form) {
-  if ($formName == 'CRM_Contact_Form_Contact') {
+  if ($formName === 'CRM_Contact_Form_Contact') {
     CRM_Gdprx_ConsentUI::postProcess($formName, $form);
   }
 }

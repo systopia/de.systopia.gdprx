@@ -138,12 +138,12 @@ class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
 
     // get terms_id
     $terms_id = NULL;
-    if (!empty($values['consent_ui_terms'])) {
+    if ((string) ($values['consent_ui_terms'] ?? '0') !== '0') {
 
       // an ID was set
       $terms_id = (int) $values['consent_ui_terms'];
     }
-    elseif (!empty($values['consent_ui_terms_full'])) {
+    elseif (isset($values['consent_ui_terms_full']) && $values['consent_ui_terms_full'] !== '') {
       $terms = CRM_Gdprx_Terms::getOrCreate($values['consent_ui_terms_full']);
       $terms_id = $terms->getID();
     }

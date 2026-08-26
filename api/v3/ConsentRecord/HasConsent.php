@@ -22,10 +22,11 @@ declare(strict_types = 1);
 // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
 function civicrm_api3_consent_record_has_consent($params) {
   // prepare date
-  $date = date('YmdHis', strtotime($params['date']));
-  if (empty($date)) {
+  $timestamp = strtotime($params['date']);
+  if ($timestamp === FALSE) {
     return civicrm_api3_create_error('Invalid date given!');
   }
+  $date = date('YmdHis', $timestamp);
 
   // prepare positive types
   if (!is_array($params['positive_types'])) {
@@ -38,7 +39,7 @@ function civicrm_api3_consent_record_has_consent($params) {
       $positive_types[] = $positive_type;
     }
   }
-  if (empty($positive_types)) {
+  if ($positive_types === []) {
     return civicrm_api3_create_error('Invalid positive_types given!');
   }
 
@@ -53,7 +54,7 @@ function civicrm_api3_consent_record_has_consent($params) {
       $negative_types[] = $negative_type;
     }
   }
-  if (empty($negative_types)) {
+  if ($negative_types === []) {
     return civicrm_api3_create_error('Invalid negative_types given!');
   }
 

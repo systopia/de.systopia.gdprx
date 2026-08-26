@@ -88,7 +88,7 @@ class CRM_Gdprx_Consent {
         ]);
       }
       catch (CRM_Core_Exception $ex) {
-        // probably not found...
+        // @ignoreException - getvalue throws when no default is configured; '' is the correct fallback
       }
     }
     return $source_default;
@@ -114,7 +114,7 @@ class CRM_Gdprx_Consent {
         ]);
       }
       catch (CRM_Core_Exception $ex) {
-        // probably not found...
+        // @ignoreException - getvalue throws when no default is configured; '' is the correct fallback
       }
     }
     return $category_default;
@@ -166,9 +166,9 @@ class CRM_Gdprx_Consent {
     // look up SOURCE
     $original_source = $source;
     if (!is_numeric($source)) {
-      $source = CRM_Gdprx_CustomData::getOptionValue('consent_source', $source, 'label');
+      $source = (string) CRM_Gdprx_CustomData::getOptionValue('consent_source', $source, 'label');
     }
-    if (empty($source)) {
+    if ($source === '') {
       if (GDPRX_DEBUG_LOGGING) {
         Civi::log()->debug("Couldn't map source '{$original_source}'");
       }
@@ -178,9 +178,9 @@ class CRM_Gdprx_Consent {
     // look up CATEGORY
     $original_category = $category;
     if (!is_numeric($category)) {
-      $category = CRM_Gdprx_CustomData::getOptionValue('consent_category', $category, 'label');
+      $category = (string) CRM_Gdprx_CustomData::getOptionValue('consent_category', $category, 'label');
     }
-    if (empty($category)) {
+    if ($category === '') {
       if (GDPRX_DEBUG_LOGGING) {
         Civi::log()->debug("Couldn't map category '{$original_category}'");
       }
@@ -194,21 +194,21 @@ class CRM_Gdprx_Consent {
       'consent.consent_source'   => $source,
     ];
 
-    if (!empty($expiry_date)) {
+    if ($expiry_date !== NULL && $expiry_date !== '') {
       $data['consent.consent_expiry_date'] = date('YmdHis', strtotime($expiry_date));
     }
     else {
       $data['consent.consent_expiry_date'] = '';
     }
 
-    if (!empty($type)) {
+    if ($type !== NULL && $type !== '') {
       $data['consent.consent_type'] = $type;
     }
     else {
       $data['consent.consent_type'] = '';
     }
 
-    if (!empty($terms_id)) {
+    if ($terms_id !== NULL && $terms_id !== 0 && $terms_id !== '') {
       $data['consent.consent_terms'] = $terms_id;
     }
     else {
@@ -231,7 +231,7 @@ class CRM_Gdprx_Consent {
 
     $record = civicrm_api3('CustomValue', 'create', $request);
 
-    if ($record_id == '-1') {
+    if ((string) $record_id === '-1') {
       self::callConsentHook('create', $contact_id, NULL, $symbolised_data);
     }
     else {
@@ -288,7 +288,7 @@ class CRM_Gdprx_Consent {
       if ($query->last_negative_consent) {
         // negative wins if the date is the same
         if ($query->last_positive_consent > $query->last_negative_consent
-            || (!$positive && $query->last_positive_consent == $query->last_negative_consent)) {
+            || (!$positive && $query->last_positive_consent === $query->last_negative_consent)) {
           return $query->last_positive_consent;
         }
         else {

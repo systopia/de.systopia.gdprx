@@ -91,30 +91,21 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
     $values = $this->exportValues();
 
     // store default privacy settings
-    $config->setSetting(
-      'default_privacy_settings_enabled',
-      CRM_Utils_Array::value('default_privacy_settings_enabled', $values, FALSE)
-    );
+    $config->setSetting('default_privacy_settings_enabled', $values['default_privacy_settings_enabled'] ?? FALSE);
 
     $fields = self::getPrivacyFields();
     foreach ($fields as $setting => $label) {
-      $config->setSetting(
-        "default_privacy_{$setting}",
-        CRM_Utils_Array::value("default_privacy_{$setting}", $values, FALSE)
-      );
+      $config->setSetting("default_privacy_{$setting}", $values["default_privacy_{$setting}"] ?? FALSE);
     }
 
     $fields = self::getOptionalConsentFields();
     foreach ($fields as $setting => $label) {
-      $config->setSetting("use_{$setting}", CRM_Utils_Array::value("use_{$setting}", $values, FALSE));
+      $config->setSetting("use_{$setting}", $values["use_{$setting}"] ?? FALSE);
     }
 
     // store general options
-    $config->setSetting(
-      'enforce_record_for_new_contacts',
-      CRM_Utils_Array::value('enforce_record_for_new_contacts', $values, FALSE)
-    );
-    $config->setSetting('disable_privacy_edit', CRM_Utils_Array::value('disable_privacy_edit', $values, FALSE));
+    $config->setSetting('enforce_record_for_new_contacts', $values['enforce_record_for_new_contacts'] ?? FALSE);
+    $config->setSetting('disable_privacy_edit', $values['disable_privacy_edit'] ?? FALSE);
 
     $config->writeSettings();
 
@@ -163,7 +154,7 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
       'return'          => 'id,value,is_default',
     ]);
     foreach ($current_defaults['values'] as $current_default) {
-      if ($current_default['value'] == $new_value) {
+      if ((string) $current_default['value'] === (string) $new_value) {
         $is_default_already = TRUE;
       }
       else {
@@ -172,7 +163,7 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
     }
 
     // finally, mark the new value as default, if that's not teh case already
-    if (!$is_default_already && !empty($new_value)) {
+    if (!$is_default_already && !in_array($new_value, [NULL, '', '0', 0], TRUE)) {
       try {
         $new_default_id = civicrm_api3('OptionValue', 'getvalue', [
           'option_group_id' => $option_group_id,

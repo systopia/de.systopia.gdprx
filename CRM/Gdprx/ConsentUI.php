@@ -24,7 +24,7 @@ class CRM_Gdprx_ConsentUI {
    * handles the build form hook action
    */
   public static function buildForm($formName, &$form) {
-    if (!empty($form->_contactId)) {
+    if (isset($form->_contactId) && (int) $form->_contactId > 0) {
       // we are in edit mode, nothing to do here!
       return;
     }
@@ -126,7 +126,7 @@ class CRM_Gdprx_ConsentUI {
    * handles the validate form hook action
    */
   public static function validateForm($formName, &$fields, &$files, &$form, &$errors) {
-    if (!empty($form->_contactId)) {
+    if (isset($form->_contactId) && (int) $form->_contactId > 0) {
       // we are in edit mode, nothing to do here!
       return;
     }
@@ -138,12 +138,12 @@ class CRM_Gdprx_ConsentUI {
     }
 
     $category = $fields['consent_ui_category'] ?? NULL;
-    if (!$category || $category == '0') {
+    if (in_array($category, [NULL, '', '0'], TRUE)) {
       $errors['consent_ui_category'] = E::ts('Category is mandatory');
     }
 
     $source = $fields['consent_ui_source'] ?? NULL;
-    if (!$source || $source == '0') {
+    if (in_array($source, [NULL, '', '0'], TRUE)) {
       $errors['consent_ui_source'] = E::ts('Source is mandatory');
     }
 
@@ -157,7 +157,7 @@ class CRM_Gdprx_ConsentUI {
    * handles the post process hook action
    */
   public static function postProcess($formName, &$form) {
-    if (empty($form->_contactId)) {
+    if (!isset($form->_contactId) || (int) $form->_contactId === 0) {
       // contact doesn't exist yet
       return;
     }
@@ -169,7 +169,7 @@ class CRM_Gdprx_ConsentUI {
     }
 
     $values = $form->exportValues();
-    if (!empty($values['consent_ui_category'])) {
+    if ((string) ($values['consent_ui_category'] ?? '0') !== '0') {
       CRM_Gdprx_Consent::createConsentRecord($form->_contactId,
                                              $values['consent_ui_category'],
                                              $values['consent_ui_source'],

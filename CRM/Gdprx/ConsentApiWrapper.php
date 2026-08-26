@@ -78,14 +78,14 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
    *   modified $result
    */
   public function toApiOutput($apiRequest, $result) {
-    if ($apiRequest['entity'] == $this->entity && $apiRequest['action'] == $this->action) {
+    if ($apiRequest['entity'] === $this->entity && $apiRequest['action'] === $this->action) {
 
       // check if the call was successfull
-      if (empty($result['is_error'])) {
+      if (!isset($result['is_error']) || (int) $result['is_error'] === 0) {
 
         // check if the contact is there
         $contact_id = $this->getDataValue($this->contact_source, $apiRequest, $result);
-        if (!empty($contact_id)) {
+        if ((int) $contact_id > 0) {
 
           // all good: create GDPR consent record
           CRM_Gdprx_Consent::createConsentRecord(
@@ -110,7 +110,7 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
       return NULL;
 
     }
-    elseif (substr($data_spec, 0, 9) == 'request::') {
+    elseif (substr($data_spec, 0, 9) === 'request::') {
       // parameter should be taken from request parameters
       $attribute = substr($data_spec, 9);
       if (isset($request['params'][$attribute])) {
@@ -121,10 +121,10 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
       }
 
     }
-    elseif (substr($data_spec, 0, 7) == 'reply::') {
+    elseif (substr($data_spec, 0, 7) === 'reply::') {
       // parameter should be taken from reply data
       $attribute = substr($data_spec, 7);
-      return CRM_Utils_Array::value($attribute, $reply, '');
+      return $reply[$attribute] ?? '';
 
     }
     else {

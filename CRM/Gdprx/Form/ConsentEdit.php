@@ -26,21 +26,21 @@ use CRM_Gdprx_ExtensionUtil as E;
 class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
 
   public function buildQuickForm() {
-    $this->record_id  = (int) CRM_Utils_Request::retrieve('id', 'String');
-    $this->contact_id = CRM_Utils_Request::retrieve('cid', 'Integer');
-    $this->multi      = CRM_Utils_Request::retrieve('multi', 'Integer');
+    $record_id  = (int) CRM_Utils_Request::retrieve('id', 'String');
+    $contact_id = CRM_Utils_Request::retrieve('cid', 'Integer');
+    $multi      = (bool) CRM_Utils_Request::retrieve('multi', 'Integer');
     $config = CRM_Gdprx_Configuration::getSingleton();
 
-    if ($this->record_id > 0) {
+    if ($record_id > 0) {
       CRM_Utils_System::setTitle(E::ts('Edit Consent Record'));
-      $this->add('hidden', 'record_id', $this->record_id);
+      $this->add('hidden', 'record_id', $record_id);
     }
     else {
       CRM_Utils_System::setTitle(E::ts('Create Consent Record'));
       $this->add('hidden', 'record_id', 0);
     }
 
-    $this->add('hidden', 'contact_id', $this->contact_id);
+    $this->add('hidden', 'contact_id', $contact_id);
 
     // add date, prefilled with current date
     $this->add(
@@ -63,7 +63,7 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
     }
 
     // add category dropdown from option group
-    if ($this->multi && !$this->record_id) {
+    if ($multi && $record_id === 0) {
       $category_list = CRM_Gdprx_Consent::getCategoryList();
       $this->add('select',
           'consent_ui_category',
@@ -133,8 +133,8 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
 
     // assign config and data
     $this->assign('config', $config->getSettings());
-    $this->assign('contact_id', $this->contact_id);
-    $this->assign('record_id', $this->record_id);
+    $this->assign('contact_id', $contact_id);
+    $this->assign('record_id', $record_id);
 
     // add all term texts
     // TODO: use AJAX call instead
@@ -142,9 +142,10 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
     $this->assign('all_terms', json_encode($all_terms));
 
     // set default values
-    if ($this->record_id > 0) {
+    if ($record_id > 0) {
       // there is already a record
-      $data = CRM_Gdprx_Consent::getRecord($this->record_id);
+      $data = CRM_Gdprx_Consent::getRecord($record_id);
+      $date_values = [];
       $date_values['consent_ui_date'] = date('Y-m-d H:i:s', strtotime($data['consent_date']));
       $date_values['consent_ui_expiry_date'] = date('Y-m-d H:i:s', strtotime($data['consent_expiry_date']));
 
@@ -182,12 +183,12 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
 
     // get terms_id
     $terms_id = NULL;
-    if (!empty($values['consent_ui_terms'])) {
+    if ((string) ($values['consent_ui_terms'] ?? '0') !== '0') {
 
       // an ID was set
       $terms_id = (int) $values['consent_ui_terms'];
     }
-    elseif (!empty($values['consent_ui_terms_full'])) {
+    elseif (isset($values['consent_ui_terms_full']) && $values['consent_ui_terms_full'] !== '') {
       $terms = CRM_Gdprx_Terms::getOrCreate($values['consent_ui_terms_full']);
       $terms_id = $terms->getID();
     }
@@ -206,7 +207,7 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
       ));
     }
 
-    if (empty($values['record_id'])) {
+    if (!isset($values['record_id']) || (int) $values['record_id'] === 0) {
       $categories = is_array($values['consent_ui_category'])
         ? $values['consent_ui_category']
         : [$values['consent_ui_category']];

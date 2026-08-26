@@ -111,35 +111,35 @@ class AddConsentRecord extends AbstractAction {
     $contact_id = $parameters->getParameter('contact_id');
 
     $category = $parameters->getParameter('category');
-    if (empty($category)) {
+    if ($category === NULL || $category === '') {
       $category = $this->configuration->getParameter('category');
     }
 
     $source = $parameters->getParameter('source');
-    if (empty($source)) {
+    if ($source === NULL || $source === '') {
       $source = $this->configuration->getParameter('source');
     }
 
     $type = $parameters->getParameter('type');
-    if (empty($type)) {
+    if ($type === NULL || $type === '') {
       $type = $this->configuration->getParameter('type');
     }
-    if (empty($type)) {
+    if ($type === NULL || $type === '') {
       $type = NULL;
     }
 
     $date = $parameters->getParameter('date');
-    if (empty($date)) {
+    if ($date === NULL || $date === '') {
       $date = 'now';
     }
 
     $note = $parameters->getParameter('note');
-    if (empty($note)) {
+    if ($note === NULL || $note === '') {
       $note = '';
     }
 
     $terms_id = $parameters->getParameter('gtac');
-    if (empty($terms_id)) {
+    if ($terms_id === NULL || $terms_id === '') {
       $terms_id = NULL;
     }
     else {
@@ -148,7 +148,7 @@ class AddConsentRecord extends AbstractAction {
     }
 
     $expiry_date = $parameters->getParameter('expiry_date');
-    if (empty($expiry_date)) {
+    if ($expiry_date === NULL || $expiry_date === '') {
       $expiry_date = NULL;
     }
 

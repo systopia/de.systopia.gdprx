@@ -20,21 +20,21 @@ declare(strict_types = 1);
  * BPK Lookup
  */
 function civicrm_api3_consent_record_create($params) {
-  if (empty($params['date'])) {
+  if (!isset($params['date']) || $params['date'] === '') {
     $date = date('YmdHis');
   }
   else {
     $date = date('YmdHis', strtotime($params['date']));
   }
 
-  if (empty($params['expiry_date'])) {
+  if (!isset($params['expiry_date']) || $params['expiry_date'] === '') {
     $expiry_date = date('YmdHis');
   }
   else {
     $expiry_date = date('YmdHis', strtotime($params['expiry_date']));
   }
 
-  if (empty($params['note'])) {
+  if (!isset($params['note']) || $params['note'] === '') {
     $note = NULL;
   }
   else {
@@ -42,13 +42,13 @@ function civicrm_api3_consent_record_create($params) {
   }
 
   // check the terms
-  if (!empty($params['terms'])) {
+  if (isset($params['terms']) && $params['terms'] !== '') {
     $terms = CRM_Gdprx_Terms::getOrCreate($params['terms']);
   }
-  elseif (!empty($params['terms_hash'])) {
+  elseif (isset($params['terms_hash']) && $params['terms_hash'] !== '') {
     $terms = CRM_Gdprx_Terms::findByHash($params['terms_hash']);
     if (!$terms) {
-      throw new Exception("Terms '{$params['terms_hash']}' are not on record.");
+      throw new CRM_Core_Exception("Terms '{$params['terms_hash']}' are not on record.");
     }
   }
   else {
