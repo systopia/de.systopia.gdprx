@@ -250,7 +250,7 @@ class CRM_Gdprx_Consent {
    * @param array $positive_types
    * @param array $negative_types
    *
-   * @return string the date of the given consent, or NULL if no currently valid consent recorded
+   * @return string|null the date of the given consent, or NULL if no currently valid consent recorded
    */
   // phpcs:ignore Generic.Files.LineLength.TooLong
   public static function hasConsent($contact_id, $category, $positive = TRUE, $date = 'now', $positive_types = [2, 4, 5], $negative_types = [3]) {

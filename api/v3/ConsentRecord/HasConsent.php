@@ -35,7 +35,7 @@ function civicrm_api3_consent_record_has_consent($params) {
   $positive_types = [];
   foreach ($params['positive_types'] as $positive_type) {
     $positive_type = (int) $positive_type;
-    if ($positive_type) {
+    if ($positive_type !== 0) {
       $positive_types[] = $positive_type;
     }
   }
@@ -50,7 +50,7 @@ function civicrm_api3_consent_record_has_consent($params) {
   $negative_types = [];
   foreach ($params['negative_types'] as $negative_type) {
     $negative_type = (int) $negative_type;
-    if ($negative_type) {
+    if ($negative_type !== 0) {
       $negative_types[] = $negative_type;
     }
   }
@@ -68,7 +68,7 @@ function civicrm_api3_consent_record_has_consent($params) {
       $negative_types);
 
   $null = NULL;
-  if ($consent_date) {
+  if ($consent_date !== NULL) {
     return civicrm_api3_create_success(1, $params, 'ConsentRecord', 'has_consent', $null, [
       'has_consent'  => 1,
       'consent_date' => $consent_date,

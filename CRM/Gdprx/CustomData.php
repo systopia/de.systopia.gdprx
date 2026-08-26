@@ -157,7 +157,7 @@ class CRM_Gdprx_CustomData {
           if (!is_numeric($activity_type)) {
             $activity_type = self::getOptionValue('activity_type', $activity_type, 'name');
           }
-          if ($activity_type) {
+          if (!in_array($activity_type, ['', '0', 0, 0.0], TRUE)) {
             $extends_list[] = $activity_type;
           }
         }
