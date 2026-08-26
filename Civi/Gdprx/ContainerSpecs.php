@@ -32,7 +32,9 @@ class ContainerSpecs implements CompilerPassInterface {
     }
     $typeFactoryDefinition = $container->getDefinition('action_provider');
     $typeFactoryDefinition->addMethodCall('addAction', ['GdprxAddConsentRecord', 'Civi\Gdprx\ActionProvider\Action\AddConsentRecord', E::ts('GDPR-X: Add Consent Record'), [
-        \Civi\ActionProvider\Action\AbstractAction::SINGLE_CONTACT_ACTION_TAG
-    ]]);
+      \Civi\ActionProvider\Action\AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+    ],
+    ]);
   }
+
 }

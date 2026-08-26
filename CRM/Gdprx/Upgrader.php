@@ -61,4 +61,5 @@ class CRM_Gdprx_Upgrader extends CRM_Extension_Upgrader_Base {
 
     return TRUE;
   }
+
 }

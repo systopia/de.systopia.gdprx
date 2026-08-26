@@ -26,26 +26,26 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
   public function buildQuickForm() {
     // add general settings
     $this->addElement('checkbox',
-                      "enforce_record_for_new_contacts",
-                      E::ts("Require GDPR Record"));
+                      'enforce_record_for_new_contacts',
+                      E::ts('Require GDPR Record'));
 
     $this->add('select',
-               "consent_source_default",
-               E::ts("Default Source"),
-               ['' => E::ts("- no default -")] + CRM_Gdprx_Consent::getSourceList(),
-               false,
+               'consent_source_default',
+               E::ts('Default Source'),
+               ['' => E::ts('- no default -')] + CRM_Gdprx_Consent::getSourceList(),
+               FALSE,
                ['class' => 'user-source']
     );
     $this->setDefaults(['consent_source_default' => CRM_Gdprx_Consent::getSourceDefault()]);
 
     // add privacy defaults
     $this->addElement('checkbox',
-                      "disable_privacy_edit",
-                      E::ts("Disable Editing of Privacy Settings"));
+                      'disable_privacy_edit',
+                      E::ts('Disable Editing of Privacy Settings'));
 
     $this->addElement('checkbox',
-                      "default_privacy_settings_enabled",
-                      E::ts("Default Privacy Settings"));
+                      'default_privacy_settings_enabled',
+                      E::ts('Default Privacy Settings'));
     $fields = self::getPrivacyFields();
     foreach ($fields as $setting => $label) {
       $this->addElement('checkbox',
@@ -61,13 +61,13 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
                         $label);
     }
 
-    $this->addButtons(array(
-      array(
+    $this->addButtons([
+      [
         'type' => 'submit',
         'name' => E::ts('Save'),
         'isDefault' => TRUE,
-      ),
-    ));
+      ],
+    ]);
 
     // export form elements
     parent::buildQuickForm();
@@ -80,7 +80,6 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
     $config = CRM_Gdprx_Configuration::getSingleton();
     return $config->getSettings();
   }
-
 
   /**
    * Process and store changed settings
@@ -103,36 +102,35 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
     }
 
     // store general options
-    $config->setSetting("enforce_record_for_new_contacts", CRM_Utils_Array::value("enforce_record_for_new_contacts", $values, FALSE));
-    $config->setSetting("disable_privacy_edit", CRM_Utils_Array::value("disable_privacy_edit", $values, FALSE));
+    $config->setSetting('enforce_record_for_new_contacts', CRM_Utils_Array::value('enforce_record_for_new_contacts', $values, FALSE));
+    $config->setSetting('disable_privacy_edit', CRM_Utils_Array::value('disable_privacy_edit', $values, FALSE));
 
     $config->writeSettings();
 
     // write out now default
     self::setDefaultOptionGroupValue('consent_source', $values['consent_source_default']);
 
-
     parent::postProcess();
   }
 
-
   public static function getPrivacyFields() {
-    return array(
-      'do_not_email'  => ts("Do Not Email"),
-      'do_not_phone'  => ts("Do Not Phone"),
-      'do_not_mail'   => ts("Do Not Mail"),
-      'do_not_sms'    => ts("Do Not SMS"),
-      'do_not_trade'  => ts("Do Not Trade"),
-      'is_opt_out'    => ts("Is Opt Out"));
+    return [
+      'do_not_email'  => ts('Do Not Email'),
+      'do_not_phone'  => ts('Do Not Phone'),
+      'do_not_mail'   => ts('Do Not Mail'),
+      'do_not_sms'    => ts('Do Not SMS'),
+      'do_not_trade'  => ts('Do Not Trade'),
+      'is_opt_out'    => ts('Is Opt Out'),
+    ];
   }
 
   public static function getOptionalConsentFields() {
-    return array(
-      'consent_expiry_date' => E::ts("Use Expiry Date"),
-      'consent_type'        => E::ts("Use Type"),
-      'consent_terms'       => E::ts("Use Terms"),
-      'consent_note'        => E::ts("Use Note"),
-    );
+    return [
+      'consent_expiry_date' => E::ts('Use Expiry Date'),
+      'consent_type'        => E::ts('Use Type'),
+      'consent_terms'       => E::ts('Use Terms'),
+      'consent_note'        => E::ts('Use Note'),
+    ];
   }
 
   /**
@@ -142,22 +140,22 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
    *
    * @param $new_value string
    */
-  public static function setDefaultOptionGroupValue($option_group_id, $new_value)
-  {
-    $is_default_already = false;
+  public static function setDefaultOptionGroupValue($option_group_id, $new_value) {
+    $is_default_already = FALSE;
 
     // unset all (except the new default)
     $current_defaults = civicrm_api3('OptionValue', 'get', [
-        'option_group_id' => $option_group_id,
-        'is_default'      => 1,
-        'option.limit'    => 0,
-        'sequential'      => 0,
-        'return'          => 'id,value,is_default'
+      'option_group_id' => $option_group_id,
+      'is_default'      => 1,
+      'option.limit'    => 0,
+      'sequential'      => 0,
+      'return'          => 'id,value,is_default',
     ]);
     foreach ($current_defaults['values'] as $current_default) {
       if ($current_default['value'] == $new_value) {
-        $is_default_already = true;
-      } else {
+        $is_default_already = TRUE;
+      }
+      else {
         civicrm_api3('OptionValue', 'create', ['id' => $current_default['id'], 'is_default' => 0]);
       }
     }
@@ -166,20 +164,23 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
     if (!$is_default_already && !empty($new_value)) {
       try {
         $new_default_id = civicrm_api3('OptionValue', 'getvalue', [
-            'option_group_id' => $option_group_id,
-            'value'           => $new_value,
-            'return'          => 'id'
+          'option_group_id' => $option_group_id,
+          'value'           => $new_value,
+          'return'          => 'id',
         ]);
         civicrm_api3('OptionValue', 'create', [
-            'id'         => $new_default_id,
-            'is_default' => 1]);
-      } catch (CRM_Core_Exception $ex) {
+          'id'         => $new_default_id,
+          'is_default' => 1,
+        ]);
+      }
+      catch (CRM_Core_Exception $ex) {
         CRM_Core_Session::setStatus(
             E::ts("Couldn't set default value. Error was: %1", [1 => $ex->getMessage()]),
-            E::ts("Set Default Failed"),
-            "error"
-        );
+            E::ts('Set Default Failed'),
+            'error'
+              );
       }
     }
   }
+
 }

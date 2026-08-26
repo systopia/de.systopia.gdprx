@@ -17,19 +17,20 @@
 use CRM_Gdprx_ExtensionUtil as E;
 
 class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
+
   public function run() {
     // build a consent table
     $contact_id  = CRM_Utils_Request::retrieve('cid', 'Integer');
     $config      = CRM_Gdprx_Configuration::getSingleton();
     $civi_config = CRM_Core_Config::singleton();
-    $records     = array();
+    $records     = [];
 
     // load option group IDs
     $groups = $config->getOptionGroups();
 
     // query the DB
     CRM_Core_DAO::disableFullGroupByMode();
-    $data = CRM_Core_DAO::executeQuery("
+    $data = CRM_Core_DAO::executeQuery('
       SELECT
         record.id       AS record_id,
         record.date     AS record_date,
@@ -48,16 +49,16 @@ class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
       LEFT JOIN civicrm_option_value  type       ON type.value     = record.type     AND type.option_group_id = %4
       WHERE entity_id = %1
       GROUP BY record.id
-      ORDER BY record.date DESC;", array(
-        1 => array($contact_id,        'Integer'),
-        2 => array($groups['consent_category']['id'], 'Integer'),
-        3 => array($groups['consent_source']['id'],   'Integer'),
-        4 => array($groups['consent_type']['id'],     'Integer'),
-      ));
+      ORDER BY record.date DESC;', [
+        1 => [$contact_id, 'Integer'],
+        2 => [$groups['consent_category']['id'], 'Integer'],
+        3 => [$groups['consent_source']['id'], 'Integer'],
+        4 => [$groups['consent_type']['id'], 'Integer'],
+      ]);
     CRM_Core_DAO::reenableFullGroupByMode();
 
     while ($data->fetch()) {
-      $records[] = array(
+      $records[] = [
         'record_id'          => $data->record_id,
         'record_date'        => CRM_Utils_Date::customFormat($data->record_date, $civi_config->dateformatFull),
         'record_date_full'   => CRM_Utils_Date::customFormat($data->record_date, $civi_config->dateformatDatetime),
@@ -71,11 +72,11 @@ class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
         'record_terms_id'    => $data->record_terms_id,
         'record_note_short'  => mb_strlen($data->record_note) > 16 ? (substr($data->record_note, 0, 13) . '...') : $data->record_note,
         'record_note'        => htmlspecialchars($data->record_note),
-      );
+      ];
     }
 
     $this->assign('records', $records);
-    $this->assign('gdprx',   $config->getSettings());
+    $this->assign('gdprx', $config->getSettings());
     $this->assign('contact_id', $contact_id);
     parent::run();
   }
@@ -84,7 +85,8 @@ class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
    * Get the record count
    */
   public static function getRecordCount($contact_id) {
-    return CRM_Core_DAO::singleValueQuery("SELECT COUNT(id) FROM civicrm_value_gdpr_consent WHERE entity_id = %1",
-              array(1 => array($contact_id, 'Integer')));
+    return CRM_Core_DAO::singleValueQuery('SELECT COUNT(id) FROM civicrm_value_gdpr_consent WHERE entity_id = %1',
+              [1 => [$contact_id, 'Integer']]);
   }
+
 }

@@ -40,7 +40,7 @@ class CRM_Gdprx_ConsentUI {
     $form->add(
       'datepicker',
       'consent_ui_date',
-      E::ts("Date"),
+      E::ts('Date'),
       ['class' => ''],
       TRUE,
       ['time' => FALSE]
@@ -51,7 +51,7 @@ class CRM_Gdprx_ConsentUI {
       $form->add(
         'datepicker',
         'consent_ui_expiry_date',
-        E::ts("Expires"),
+        E::ts('Expires'),
         ['class' => ''],
         FALSE,
         ['time' => FALSE]
@@ -60,41 +60,41 @@ class CRM_Gdprx_ConsentUI {
 
     // add category dropdown from option group
     $form->add('select',
-      "consent_ui_category",
-      E::ts("Category"),
-      array('0' => E::ts("- please select -")) + CRM_Gdprx_Consent::getCategoryList(),
+      'consent_ui_category',
+      E::ts('Category'),
+      ['0' => E::ts('- please select -')] + CRM_Gdprx_Consent::getCategoryList(),
       TRUE,
-      array('class' => 'user-category')
+      ['class' => 'user-category']
     );
 
     // add source category
     $form->add('select',
-      "consent_ui_source",
-      E::ts("Source"),
-      array('0' => E::ts("- please select -")) + CRM_Gdprx_Consent::getSourceList(),
+      'consent_ui_source',
+      E::ts('Source'),
+      ['0' => E::ts('- please select -')] + CRM_Gdprx_Consent::getSourceList(),
       TRUE,
-      array('class' => 'user-source')
+      ['class' => 'user-source']
     );
 
     // add type dropdown from option group
     if ($config->getSetting('use_consent_type')) {
       $form->add('select',
-        "consent_ui_type",
-        E::ts("Type"),
+        'consent_ui_type',
+        E::ts('Type'),
         CRM_Gdprx_Consent::getTypeList(),
         FALSE,
-        array('class' => 'user-type')
+        ['class' => 'user-type']
       );
     }
 
     // terms
     if ($config->getSetting('use_consent_terms')) {
       $form->add('select',
-        "consent_ui_terms",
-        E::ts("Terms"),
-        array('0' => E::ts("- none -")) + CRM_Gdprx_Terms::getList(),
+        'consent_ui_terms',
+        E::ts('Terms'),
+        ['0' => E::ts('- none -')] + CRM_Gdprx_Terms::getList(),
         FALSE,
-        array('class' => 'user-type')
+        ['class' => 'user-type']
       );
     }
 
@@ -102,23 +102,23 @@ class CRM_Gdprx_ConsentUI {
     if ($config->getSetting('use_consent_note')) {
       $form->add(
         'text',
-        "consent_ui_note",
-        E::ts("Note")
+        'consent_ui_note',
+        E::ts('Note')
       );
     }
 
     // set default values
     $form->setDefaults([
-      'consent_ui_category'   => '0', // CRM_Gdprx_Consent::getCategoryDefault()
+    // CRM_Gdprx_Consent::getCategoryDefault()
+      'consent_ui_category'   => '0',
       'consent_ui_source'     => CRM_Gdprx_Consent::getSourceDefault(),
     ]);
 
     // add template path for these fields
-    CRM_Core_Region::instance('page-body')->add(array(
-      'template' => "CRM/Gdprx/ConsentForm.tpl"
-    ));
+    CRM_Core_Region::instance('page-body')->add([
+      'template' => 'CRM/Gdprx/ConsentForm.tpl',
+    ]);
   }
-
 
   /**
    * handles the validate form hook action
@@ -135,17 +135,17 @@ class CRM_Gdprx_ConsentUI {
       return;
     }
 
-    $category = $fields ['consent_ui_category'] ?? NULL;
+    $category = $fields['consent_ui_category'] ?? NULL;
     if (!$category || $category == '0') {
       $errors['consent_ui_category'] = E::ts('Category is mandatory');
     }
 
-    $source = $fields ['consent_ui_source'] ?? NULL;
+    $source = $fields['consent_ui_source'] ?? NULL;
     if (!$source || $source == '0') {
       $errors['consent_ui_source'] = E::ts('Source is mandatory');
     }
 
-    $contact_origin = $fields ['consent_ui_note'] ?? NULL;
+    $contact_origin = $fields['consent_ui_note'] ?? NULL;
     if (strlen($contact_origin) > 1024) {
       $errors['consent_ui_note'] = E::ts('Note cannot be more the 1024 characters');
     }
@@ -178,4 +178,5 @@ class CRM_Gdprx_ConsentUI {
                                              $values['consent_ui_expiry_date'] ?? NULL);
     }
   }
+
 }

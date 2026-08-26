@@ -1,19 +1,20 @@
 <?php
-/*-------------------------------------------------------+
-| SYSTOPIA GDPR Compliance Extension                     |
-| Copyright (C) 2017 SYSTOPIA                            |
-| Author: B. Endres (endres@systopia.de)                 |
-| http://www.systopia.de/                                |
-+--------------------------------------------------------+
-| This program is released as free software under the    |
-| Affero GPL license. You can redistribute it and/or     |
-| modify it under the terms of this license which you    |
-| can read by viewing the included agpl.txt or online    |
-| at www.gnu.org/licenses/agpl.html. Removal of this     |
-| copyright header is strictly prohibited without        |
-| written permission from the original author(s).        |
-+--------------------------------------------------------*/
-
+/**
+ * -------------------------------------------------------+
+ * | SYSTOPIA GDPR Compliance Extension                     |
+ * | Copyright (C) 2017 SYSTOPIA                            |
+ * | Author: B. Endres (endres@systopia.de)                 |
+ * | http://www.systopia.de/                                |
+ * +--------------------------------------------------------+
+ * | This program is released as free software under the    |
+ * | Affero GPL license. You can redistribute it and/or     |
+ * | modify it under the terms of this license which you    |
+ * | can read by viewing the included agpl.txt or online    |
+ * | at www.gnu.org/licenses/agpl.html. Removal of this     |
+ * | copyright header is strictly prohibited without        |
+ * | written permission from the original author(s).        |
+ * +--------------------------------------------------------
+ */
 class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
 
   protected $entity;
@@ -104,23 +105,28 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
     if ($data_spec === NULL || $data_spec === '') {
       return NULL;
 
-    } elseif (substr($data_spec, 0, 9) == 'request::') {
+    }
+    elseif (substr($data_spec, 0, 9) == 'request::') {
       // parameter should be taken from request parameters
       $attribute = substr($data_spec, 9);
       if (isset($request['params'][$attribute])) {
         return $request['params'][$attribute];
-      } else {
+      }
+      else {
         return '';
       }
 
-    } elseif (substr($data_spec, 0, 7) == 'reply::') {
+    }
+    elseif (substr($data_spec, 0, 7) == 'reply::') {
       // parameter should be taken from reply data
       $attribute = substr($data_spec, 7);
       return CRM_Utils_Array::value($attribute, $reply, '');
 
-    } else {
+    }
+    else {
       // if nothing else fits, it's just a string.
       return $data_spec;
     }
   }
+
 }

@@ -18,7 +18,7 @@
   <version>1.1.0-dev</version>
   <develStage>dev</develStage>
   <compatibility>
-    <ver>5.65</ver>
+    <ver>5.76</ver>
   </compatibility>
   <requires/>
   <comments>See https://en.wikipedia.org/wiki/General_Data_Protection_Regulation</comments>

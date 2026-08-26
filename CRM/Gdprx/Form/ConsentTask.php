@@ -24,7 +24,7 @@ use CRM_Gdprx_ExtensionUtil as E;
 class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
 
   public function buildQuickForm() {
-    CRM_Utils_System::setTitle(E::ts("Add Consent Records"));
+    CRM_Utils_System::setTitle(E::ts('Add Consent Records'));
     $config = CRM_Gdprx_Configuration::getSingleton();
 
     // add date, prefilled with current date
@@ -34,7 +34,7 @@ class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
     $this->add(
       'datepicker',
       'consent_ui_date',
-      E::ts("Date"),
+      E::ts('Date'),
       ['class' => ''],
       TRUE,
       ['time' => FALSE]
@@ -45,7 +45,7 @@ class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
       $this->add(
         'datepicker',
         'consent_ui_expiry_date',
-        E::ts("Expires"),
+        E::ts('Expires'),
         ['class' => ''],
         FALSE,
         ['time' => FALSE]
@@ -54,47 +54,47 @@ class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
 
     // add category dropdown from option group
     $this->add('select',
-      "consent_ui_category",
-      E::ts("Category"),
-      array('0' => E::ts("- please select -")) + CRM_Gdprx_Consent::getCategoryList(),
+      'consent_ui_category',
+      E::ts('Category'),
+      ['0' => E::ts('- please select -')] + CRM_Gdprx_Consent::getCategoryList(),
       TRUE,
-      array('class' => 'user-category')
+      ['class' => 'user-category']
     );
 
     // add source category
     $this->add('select',
-      "consent_ui_source",
-      E::ts("Source"),
-      array('0' => E::ts("- please select -")) + CRM_Gdprx_Consent::getSourceList(),
+      'consent_ui_source',
+      E::ts('Source'),
+      ['0' => E::ts('- please select -')] + CRM_Gdprx_Consent::getSourceList(),
       TRUE,
-      array('class' => 'user-source')
+      ['class' => 'user-source']
     );
 
     // add type dropdown from option group
     if ($config->getSetting('use_consent_type')) {
       $this->add('select',
-        "consent_ui_type",
-        E::ts("Type"),
+        'consent_ui_type',
+        E::ts('Type'),
         CRM_Gdprx_Consent::getTypeList(),
         FALSE,
-        array('class' => 'user-type')
+        ['class' => 'user-type']
       );
     }
 
     // terms
     if ($config->getSetting('use_consent_terms')) {
       $this->add('select',
-        "consent_ui_terms",
-        E::ts("Terms"),
-        array('0' => E::ts("new")) + CRM_Gdprx_Terms::getList(),
+        'consent_ui_terms',
+        E::ts('Terms'),
+        ['0' => E::ts('new')] + CRM_Gdprx_Terms::getList(),
         FALSE,
-        array('class' => 'user-type huge')
+        ['class' => 'user-type huge']
       );
       $this->add(
         'textarea',
-        "consent_ui_terms_full",
-        E::ts("Terms"),
-        array('class' => 'big')
+        'consent_ui_terms_full',
+        E::ts('Terms'),
+        ['class' => 'big']
       );
     }
 
@@ -102,14 +102,14 @@ class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
     if ($config->getSetting('use_consent_note')) {
       $this->add(
         'textarea',
-        "consent_ui_note",
-        E::ts("Note"),
-        array('class' => 'big')
+        'consent_ui_note',
+        E::ts('Note'),
+        ['class' => 'big']
       );
     }
 
     // assign config and data
-    $this->assign('config',     $config->getSettings());
+    $this->assign('config', $config->getSettings());
 
     // add all term texts
     // TODO: use AJAX call instead
@@ -119,13 +119,13 @@ class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
     // set default values
     // TODO:
 
-    $this->addButtons(array(
-      array(
+    $this->addButtons([
+      [
         'type' => 'submit',
         'name' => E::ts('Create'),
         'isDefault' => TRUE,
-      ),
-    ));
+      ],
+    ]);
 
     // export form elements
     parent::buildQuickForm();
@@ -140,11 +140,11 @@ class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
 
       // an ID was set
       $terms_id = (int) $values['consent_ui_terms'];
-    } elseif (!empty($values['consent_ui_terms_full'])) {
+    }
+    elseif (!empty($values['consent_ui_terms_full'])) {
       $terms = CRM_Gdprx_Terms::getOrCreate($values['consent_ui_terms_full']);
       $terms_id = $terms->getID();
     }
-
 
     // get expiry date
     $expiry_date = $values['consent_ui_expiry_date'] ?? NULL;
@@ -171,4 +171,5 @@ class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
   public function getTemplateFileName() {
     return 'CRM/Gdprx/Form/ConsentEdit.tpl';
   }
+
 }

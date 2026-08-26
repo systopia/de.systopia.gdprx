@@ -38,7 +38,7 @@ class CRM_Gdprx_Configuration {
     $this->config = Civi::settings()->get('gdprx_settings');
     if (empty($this->config)) {
       // TODO: default values?
-      $this->config = array();
+      $this->config = [];
     }
   }
 
@@ -93,14 +93,15 @@ class CRM_Gdprx_Configuration {
    */
   public function getOptionGroups() {
     if ($this->option_groups === NULL) {
-      $this->option_groups = array();
-      $query = civicrm_api3('OptionGroup', 'get', array(
-        'name' => array('IN' => array('consent_category','consent_source','consent_type'))
-      ));
+      $this->option_groups = [];
+      $query = civicrm_api3('OptionGroup', 'get', [
+        'name' => ['IN' => ['consent_category', 'consent_source', 'consent_type']],
+      ]);
       foreach ($query['values'] as $entity) {
         $this->option_groups[$entity['name']] = $entity;
       }
     }
     return $this->option_groups;
   }
+
 }

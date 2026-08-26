@@ -17,7 +17,7 @@
 require_once 'gdprx.civix.php';
 
 use CRM_Gdprx_ExtensionUtil as E;
-use \Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 define('GDPRX_DEBUG_LOGGING', FALSE);
 
@@ -37,10 +37,11 @@ function gdprx_civicrm_container(ContainerBuilder $container) {
  */
 function gdprx_civicrm_searchTasks($objectType, &$tasks) {
   if ($objectType == 'contact') {
-    $tasks['create_gdprx'] = array(
-        'title'  => E::ts("Add Consent Records"),
-        'class'  => 'CRM_Gdprx_Form_ConsentTask',
-        'result' => false);
+    $tasks['create_gdprx'] = [
+      'title'  => E::ts('Add Consent Records'),
+      'class'  => 'CRM_Gdprx_Form_ConsentTask',
+      'result' => FALSE,
+    ];
   }
 }
 
@@ -58,7 +59,8 @@ function gdprx_civicrm_pre($op, $objectName, $id, &$params) {
       $config = CRM_Gdprx_Configuration::getSingleton();
       if (!empty($params['privacy']) && is_array($params['privacy'])) {
         $config->addDefaultPrivacySettings($params['privacy']);
-      } else {
+      }
+      else {
         $config->addDefaultPrivacySettings($params['privacy']);
       }
     }
@@ -66,10 +68,10 @@ function gdprx_civicrm_pre($op, $objectName, $id, &$params) {
 }
 
 /**
-* Implements hook_civicrm_tabset() (updated from hook_civicrm_tabs)
-*
-* Will inject a custom gdprx tab
-*/
+ * Implements hook_civicrm_tabset() (updated from hook_civicrm_tabs)
+ *
+ * Will inject a custom gdprx tab
+ */
 function gdprx_civicrm_tabset($tabsetName, &$tabs, $context) {
   if ($tabsetName == 'civicrm/contact/view') {
     // remove the default table
@@ -84,11 +86,11 @@ function gdprx_civicrm_tabset($tabsetName, &$tabs, $context) {
     $contactID = $context['contact_id'];
     // add our own tab
     $tabs[] = [
-        'id'     => 'gdprx',
-        'url'    => CRM_Utils_System::url('civicrm/gdprx/tab', "reset=1&snippet=1&force=1&cid={$contactID}"),
-        'title'  => E::ts('Consent'),
-        'count'  => CRM_Gdprx_Page_SummaryTab::getRecordCount($contactID),
-        'weight' => 400
+      'id'     => 'gdprx',
+      'url'    => CRM_Utils_System::url('civicrm/gdprx/tab', "reset=1&snippet=1&force=1&cid={$contactID}"),
+      'title'  => E::ts('Consent'),
+      'count'  => CRM_Gdprx_Page_SummaryTab::getRecordCount($contactID),
+      'weight' => 400,
     ];
   }
 }
@@ -136,12 +138,13 @@ function gdprx_civicrm_buildForm($formName, &$form) {
     CRM_Gdprx_ConsentUI::buildForm($formName, $form);
   }
 
-  if (  $formName == 'CRM_Contact_Form_Inline_CommunicationPreferences'
+  if ($formName == 'CRM_Contact_Form_Inline_CommunicationPreferences'
      || $formName == 'CRM_Contact_Form_Contact') {
     $config = CRM_Gdprx_Configuration::getSingleton();
     if ($config->getSetting('disable_privacy_edit')) {
       CRM_Core_Resources::singleton()->addVars('gdprx', [
-          'privacy_help' => E::ts("These settings cannot be edited directly any more. Please use then consent tab.")]);
+        'privacy_help' => E::ts('These settings cannot be edited directly any more. Please use then consent tab.'),
+      ]);
       CRM_Core_Resources::singleton()->addScriptFile('de.systopia.gdprx', 'js/DisablePrivacyEditing.js');
     }
   }

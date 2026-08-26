@@ -18,69 +18,69 @@ namespace Civi\Gdprx\ActionProvider\Action;
 
 use CRM_Gdprx_ExtensionUtil as E;
 
-use \Civi\ActionProvider\Action\AbstractAction;
-use \Civi\ActionProvider\Parameter\ParameterBagInterface;
-use \Civi\ActionProvider\Parameter\Specification;
-use \Civi\ActionProvider\Parameter\SpecificationBag;
+use Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Parameter\ParameterBagInterface;
+use Civi\ActionProvider\Parameter\Specification;
+use Civi\ActionProvider\Parameter\SpecificationBag;
 
 class AddConsentRecord extends AbstractAction {
 
   /**
    * Returns the specification of the configuration options for the actual action.
    *
-   * @return SpecificationBag specs
+   * @return \Civi\ActionProvider\Parameter\SpecificationBag specs
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag([
-        new Specification(
+      new Specification(
             'category',
             'String',
             E::ts('Default Category'),
-            true,
-            null,
-            null,
+            TRUE,
+            NULL,
+            NULL,
             \CRM_Gdprx_Consent::getCategoryList(),
-            false
-        ),
-        new Specification(
+            FALSE
+      ),
+      new Specification(
             'source',
             'String',
             E::ts('Default Source'),
-            true,
-            null,
-            null,
+            TRUE,
+            NULL,
+            NULL,
             \CRM_Gdprx_Consent::getSourceList(),
-            false
-        ),
-        new Specification(
+            FALSE
+      ),
+      new Specification(
             'type',
             'String',
             E::ts('Default Type'),
-            true,
-            null,
-            null,
+            TRUE,
+            NULL,
+            NULL,
             \CRM_Gdprx_Consent::getTypeList(),
-            false
-        ),
+            FALSE
+      ),
     ]);
   }
 
   /**
    * Returns the specification of the parameters of the actual action.
    *
-   * @return SpecificationBag specs
+   * @return \Civi\ActionProvider\Parameter\SpecificationBag specs
    */
   public function getParameterSpecification() {
     // add contact specs
     return new SpecificationBag([
-        new Specification('contact_id', 'Integer', E::ts('Contact ID'), true, null, null, null, false),
-        new Specification('category', 'String', E::ts('Category'), false, null, null, null, false),
-        new Specification('source', 'String', E::ts('Source'), false, null, null, null, false),
-        new Specification('type', 'String', E::ts('Type'), false, null, null, null, false),
-        new Specification('date', 'Timestamp', E::ts('Record Date'), false, null, null, null, false),
-        new Specification('note', 'Text', E::ts('Note'), false, null, null, null, false),
-        new Specification('expiry_date', 'Timestamp', E::ts('Expiry Date'), false, null, null, null, false),
-        new Specification('gtac', 'Text', E::ts('Terms and Conditions'), false, null, null, null, false),
+      new Specification('contact_id', 'Integer', E::ts('Contact ID'), TRUE, NULL, NULL, NULL, FALSE),
+      new Specification('category', 'String', E::ts('Category'), FALSE, NULL, NULL, NULL, FALSE),
+      new Specification('source', 'String', E::ts('Source'), FALSE, NULL, NULL, NULL, FALSE),
+      new Specification('type', 'String', E::ts('Type'), FALSE, NULL, NULL, NULL, FALSE),
+      new Specification('date', 'Timestamp', E::ts('Record Date'), FALSE, NULL, NULL, NULL, FALSE),
+      new Specification('note', 'Text', E::ts('Note'), FALSE, NULL, NULL, NULL, FALSE),
+      new Specification('expiry_date', 'Timestamp', E::ts('Expiry Date'), FALSE, NULL, NULL, NULL, FALSE),
+      new Specification('gtac', 'Text', E::ts('Terms and Conditions'), FALSE, NULL, NULL, NULL, FALSE),
     ]);
   }
 
@@ -89,7 +89,7 @@ class AddConsentRecord extends AbstractAction {
    *
    * This function could be overridden by child classes.
    *
-   * @return SpecificationBag specs
+   * @return \Civi\ActionProvider\Parameter\SpecificationBag specs
    */
   public function getOutputSpecification() {
     return new SpecificationBag([]);
@@ -98,10 +98,10 @@ class AddConsentRecord extends AbstractAction {
   /**
    * Run the action
    *
-   * @param ParameterBagInterface $parameters
+   * @param \Civi\ActionProvider\Parameter\ParameterBagInterface $parameters
    *   The parameters to this action.
-   * @param ParameterBagInterface $output
-   * 	 The parameters this action can send back
+   * @param \Civi\ActionProvider\Parameter\ParameterBagInterface $output
+   *      The parameters this action can send back
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
@@ -123,7 +123,7 @@ class AddConsentRecord extends AbstractAction {
       $type = $this->configuration->getParameter('type');
     }
     if (empty($type)) {
-      $type = null;
+      $type = NULL;
     }
 
     $date = $parameters->getParameter('date');
@@ -138,18 +138,20 @@ class AddConsentRecord extends AbstractAction {
 
     $terms_id = $parameters->getParameter('gtac');
     if (empty($terms_id)) {
-      $terms_id = null;
-    } else {
+      $terms_id = NULL;
+    }
+    else {
       $terms = \CRM_Gdprx_Terms::getOrCreate($terms_id);
       $terms_id = $terms->getID();
     }
 
     $expiry_date = $parameters->getParameter('expiry_date');
     if (empty($expiry_date)) {
-      $expiry_date = null;
+      $expiry_date = NULL;
     }
 
     // execute
     \CRM_Gdprx_Consent::createConsentRecord($contact_id, $category, $source, $date, $note, $type, $terms_id, $expiry_date);
   }
+
 }

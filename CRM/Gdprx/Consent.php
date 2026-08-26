@@ -29,14 +29,15 @@ class CRM_Gdprx_Consent {
    */
   public static function getCategoryList() {
     if (self::$category_list === NULL) {
-      self::$category_list = array();
-      $query = civicrm_api3('OptionValue', 'get', array(
+      self::$category_list = [];
+      $query = civicrm_api3('OptionValue', 'get', [
         'option_group_id' => 'consent_category',
         'option.limit'    => 0,
         'option.sort'     => 'weight asc',
         'sequential'      => 1,
         'is_active'       => 1,
-        'return'          => 'value,label'));
+        'return'          => 'value,label',
+      ]);
       foreach ($query['values'] as $option_value) {
         self::$category_list[$option_value['value']] = $option_value['label'];
       }
@@ -49,14 +50,15 @@ class CRM_Gdprx_Consent {
    */
   public static function getSourceList() {
     if (self::$sources_list === NULL) {
-      self::$sources_list = array();
-      $query = civicrm_api3('OptionValue', 'get', array(
+      self::$sources_list = [];
+      $query = civicrm_api3('OptionValue', 'get', [
         'option_group_id' => 'consent_source',
         'option.limit'    => 0,
         'option.sort'     => 'weight asc',
         'sequential'      => 1,
         'is_active'       => 1,
-        'return'          => 'value,label'));
+        'return'          => 'value,label',
+      ]);
       foreach ($query['values'] as $option_value) {
         self::$sources_list[$option_value['value']] = $option_value['label'];
       }
@@ -70,19 +72,20 @@ class CRM_Gdprx_Consent {
    * @return string|null
    */
   public static function getSourceDefault() {
-    static $source_default = null;
-    if ($source_default === null) {
+    static $source_default = NULL;
+    if ($source_default === NULL) {
       $source_default = '';
       try {
         $source_default = civicrm_api3('OptionValue', 'getvalue', [
-            'option_group_id' => 'consent_source',
-            'option.limit'    => 1,
-            'option.sort'     => 'weight desc',
-            'is_active'       => 1,
-            'is_default'      => 1,
-            'return'          => 'value'
+          'option_group_id' => 'consent_source',
+          'option.limit'    => 1,
+          'option.sort'     => 'weight desc',
+          'is_active'       => 1,
+          'is_default'      => 1,
+          'return'          => 'value',
         ]);
-      } catch (CRM_Core_Exception $ex) {
+      }
+      catch (CRM_Core_Exception $ex) {
         // probably not found...
       }
     }
@@ -95,19 +98,20 @@ class CRM_Gdprx_Consent {
    * @return string|null
    */
   public static function getCategoryDefault() {
-    static $category_default = null;
-    if ($category_default === null) {
+    static $category_default = NULL;
+    if ($category_default === NULL) {
       $category_default = '';
       try {
         $category_default = civicrm_api3('OptionValue', 'getvalue', [
-            'option_group_id' => 'consent_category',
-            'option.limit'    => 1,
-            'option.sort'     => 'weight desc',
-            'is_active'       => 1,
-            'is_default'      => 1,
-            'return'          => 'value'
+          'option_group_id' => 'consent_category',
+          'option.limit'    => 1,
+          'option.sort'     => 'weight desc',
+          'is_active'       => 1,
+          'is_default'      => 1,
+          'return'          => 'value',
         ]);
-      } catch (CRM_Core_Exception $ex) {
+      }
+      catch (CRM_Core_Exception $ex) {
         // probably not found...
       }
     }
@@ -119,14 +123,15 @@ class CRM_Gdprx_Consent {
    */
   public static function getTypeList() {
     if (self::$types_list === NULL) {
-      self::$types_list = array();
-      $query = civicrm_api3('OptionValue', 'get', array(
+      self::$types_list = [];
+      $query = civicrm_api3('OptionValue', 'get', [
         'option_group_id' => 'consent_type',
         'option.limit'    => 0,
         'option.sort'     => 'weight asc',
         'sequential'      => 1,
         'is_active'       => 1,
-        'return'          => 'value,label'));
+        'return'          => 'value,label',
+      ]);
       foreach ($query['values'] as $option_value) {
         self::$types_list[$option_value['value']] = $option_value['label'];
       }
@@ -174,49 +179,53 @@ class CRM_Gdprx_Consent {
     }
 
     // create record
-    $data = array(
+    $data = [
       'consent.consent_date'     => date('YmdHis', strtotime($date)),
       'consent.consent_category' => $category,
       'consent.consent_source'   => $source,
-    );
+    ];
 
     if (!empty($expiry_date)) {
       $data['consent.consent_expiry_date'] = date('YmdHis', strtotime($expiry_date));
-    } else {
+    }
+    else {
       $data['consent.consent_expiry_date'] = '';
     }
 
     if (!empty($type)) {
       $data['consent.consent_type'] = $type;
-    } else {
+    }
+    else {
       $data['consent.consent_type'] = '';
     }
 
     if (!empty($terms_id)) {
       $data['consent.consent_terms'] = $terms_id;
-    } else {
+    }
+    else {
       $data['consent.consent_terms'] = '';
     }
 
-    if ($note !== null) {
+    if ($note !== NULL) {
       $data['consent.consent_note'] = $note;
     }
 
     // resolve custom fields
     $symbolised_data = $data;
-    CRM_Gdprx_CustomData::resolveCustomFields($data, array('consent'));
+    CRM_Gdprx_CustomData::resolveCustomFields($data, ['consent']);
 
     // since this is a multi-entry group, we need to clarify the index (-1 = new entry)
-    $request = array('entity_id' => $contact_id);
+    $request = ['entity_id' => $contact_id];
     foreach ($data as $key => $value) {
-      $request[$key . ':'. $record_id] = $value;
+      $request[$key . ':' . $record_id] = $value;
     }
 
     $record = civicrm_api3('CustomValue', 'create', $request);
 
     if ($record_id == '-1') {
       self::callConsentHook('create', $contact_id, NULL, $symbolised_data);
-    } else {
+    }
+    else {
       self::callConsentHook('update', $contact_id, $record_id, $symbolised_data);
     }
 
@@ -234,7 +243,7 @@ class CRM_Gdprx_Consent {
    *
    * @return string the date of the given consent, or NULL if no currently valid consent recorded
    */
-  public static function hasConsent($contact_id, $category, $positive = TRUE, $date = 'now', $positive_types = array(2,4,5), $negative_types = array(3)) {
+  public static function hasConsent($contact_id, $category, $positive = TRUE, $date = 'now', $positive_types = [2, 4, 5], $negative_types = [3]) {
     // if we're looking for negative consent, swap the search patterns
     if (!$positive) {
       $tmp = $positive_types;
@@ -271,13 +280,16 @@ class CRM_Gdprx_Consent {
         if ($query->last_positive_consent > $query->last_negative_consent
             || (!$positive && $query->last_positive_consent == $query->last_negative_consent)) {
           return $query->last_positive_consent;
-        } else {
+        }
+        else {
           return NULL;
         }
-      } else {
+      }
+      else {
         return $query->last_positive_consent;
       }
-    } else {
+    }
+    else {
       return NULL;
     }
   }
@@ -286,10 +298,10 @@ class CRM_Gdprx_Consent {
    * get a consent record by ID
    */
   public static function getRecord($id) {
-    $data = CRM_Core_DAO::executeQuery("SELECT * FROM civicrm_value_gdpr_consent WHERE id = %1",
-      array(1 => array($id, 'Integer')));
+    $data = CRM_Core_DAO::executeQuery('SELECT * FROM civicrm_value_gdpr_consent WHERE id = %1',
+      [1 => [$id, 'Integer']]);
     if ($data->fetch()) {
-      return array(
+      return [
         'entity_id'           => $data->entity_id,
         'consent_date'        => $data->date,
         'consent_expiry_date' => $data->expiry,
@@ -298,8 +310,9 @@ class CRM_Gdprx_Consent {
         'consent_type'        => $data->type,
         'consent_terms'       => $data->terms_id,
         'consent_note'        => $data->note,
-      );
-    } else {
+      ];
+    }
+    else {
       return NULL;
     }
   }
@@ -321,4 +334,5 @@ class CRM_Gdprx_Consent {
     $names = ['mode', 'contact_id', 'record_id', 'data'];
     return CRM_Utils_Hook::singleton()->invoke($names, $mode, $contact_id, $record_id, $data, self::$null, self::$null, 'civicrm_gdprx_postConsent');
   }
+
 }
