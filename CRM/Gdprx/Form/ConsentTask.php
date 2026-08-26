@@ -100,7 +100,7 @@ class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
       );
     }
 
-    // remark (note)
+    // optional note field
     if ($config->getSetting('use_consent_note')) {
       $this->add(
         'textarea',

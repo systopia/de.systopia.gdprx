@@ -19,11 +19,11 @@
 declare(strict_types = 1);
 
 class CRM_Gdprx_CustomData {
-  const CUSTOM_DATA_HELPER_VERSION   = '0.10';
-  const CUSTOM_DATA_HELPER_LOG_LEVEL = 0;
-  const CUSTOM_DATA_HELPER_LOG_DEBUG = 1;
-  const CUSTOM_DATA_HELPER_LOG_INFO  = 3;
-  const CUSTOM_DATA_HELPER_LOG_ERROR = 5;
+  public const CUSTOM_DATA_HELPER_VERSION   = '0.10';
+  public const CUSTOM_DATA_HELPER_LOG_LEVEL = 0;
+  public const CUSTOM_DATA_HELPER_LOG_DEBUG = 1;
+  public const CUSTOM_DATA_HELPER_LOG_INFO  = 3;
+  public const CUSTOM_DATA_HELPER_LOG_ERROR = 5;
 
   /**
    * caches custom field data, indexed by group name */
@@ -69,7 +69,10 @@ class CRM_Gdprx_CustomData {
       }
       elseif ($entity == 'FAILED') {
         // Couldn't identify:
-        $this->log(self::CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update {$data['entity']}: " . json_encode($entity_data));
+        $this->log(
+          self::CUSTOM_DATA_HELPER_LOG_ERROR,
+          "Couldn't create/update {$data['entity']}: " . json_encode($entity_data)
+        );
       }
       else {
         // update OptionValue
@@ -119,7 +122,10 @@ class CRM_Gdprx_CustomData {
       }
       elseif ($optionValue == 'FAILED') {
         // Couldn't identify:
-        $this->log(self::CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update OptionValue: " . json_encode($optionValueSpec));
+        $this->log(
+          self::CUSTOM_DATA_HELPER_LOG_ERROR,
+          "Couldn't create/update OptionValue: " . json_encode($optionValueSpec)
+        );
       }
       else {
         // update OptionValue
@@ -133,6 +139,7 @@ class CRM_Gdprx_CustomData {
    * CustomGroup/CustomField data in the system with
    * those specs
    */
+  // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
   public function syncCustomGroup($source_file) {
     $force_update = FALSE;
     $data = json_decode(file_get_contents($source_file), TRUE);
@@ -176,7 +183,13 @@ class CRM_Gdprx_CustomData {
     }
     else {
       // update CustomGroup
-      $this->updateEntity('CustomGroup', $data, $customGroup, ['extends', 'style', 'is_active', 'title', 'extends_entity_column_value'], $force_update);
+      $this->updateEntity(
+        'CustomGroup',
+        $data,
+        $customGroup,
+        ['extends', 'style', 'is_active', 'title', 'extends_entity_column_value'],
+        $force_update
+      );
     }
 
     // now run the update for the CustomFields
@@ -188,7 +201,10 @@ class CRM_Gdprx_CustomData {
         // look up custom group id
         $optionGroup = $this->getEntityID('OptionGroup', ['name' => $customFieldSpec['option_group_id']]);
         if ($optionGroup == 'FAILED' || $optionGroup == NULL) {
-          $this->log(self::CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update CustomField, bad option_group: {$customFieldSpec['option_group_id']}");
+          $this->log(
+            self::CUSTOM_DATA_HELPER_LOG_ERROR,
+            "Couldn't create/update CustomField, bad option_group: {$customFieldSpec['option_group_id']}"
+          );
           return;
         }
         $customFieldSpec['option_group_id'] = $optionGroup['id'];
@@ -200,11 +216,19 @@ class CRM_Gdprx_CustomData {
       }
       elseif ($customField == 'FAILED') {
         // Couldn't identify:
-        $this->log(self::CUSTOM_DATA_HELPER_LOG_ERROR, "Couldn't create/update CustomField: " . json_encode($customFieldSpec));
+        $this->log(
+          self::CUSTOM_DATA_HELPER_LOG_ERROR,
+          "Couldn't create/update CustomField: " . json_encode($customFieldSpec)
+        );
       }
       else {
         // update CustomField
-        $this->updateEntity('CustomField', $customFieldSpec, $customField, ['in_selector', 'is_view', 'is_searchable', 'html_type', 'data_type', 'custom_group_id']);
+        $this->updateEntity(
+          'CustomField',
+          $customFieldSpec,
+          $customField,
+          ['in_selector', 'is_view', 'is_searchable', 'html_type', 'data_type', 'custom_group_id']
+        );
       }
     }
   }
@@ -263,7 +287,10 @@ class CRM_Gdprx_CustomData {
 
       default:
         // bad lookup selector
-        $this->log(self::CUSTOM_DATA_HELPER_LOG_ERROR, "Bad {$entity_type} lookup selector: " . json_encode($lookup_query));
+        $this->log(
+          self::CUSTOM_DATA_HELPER_LOG_ERROR,
+          "Bad {$entity_type} lookup selector: " . json_encode($lookup_query)
+        );
         return 'FAILED';
     }
   }
@@ -287,6 +314,7 @@ class CRM_Gdprx_CustomData {
   /**
    * create a new entity
    */
+  // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
   protected function updateEntity($entity_type, $requested_data, $current_data, $required_fields = [], $force = FALSE) {
     $update_query = [];
 
@@ -863,6 +891,7 @@ class CRM_Gdprx_CustomData {
    *
    * @throws Exception
    */
+  // phpcs:ignore Generic.Files.LineLength.TooLong
   public static function getOptionValue($group_name, $label, $label_field = 'label', $label_type = 'String', $value_field = 'value') {
     if (empty($label) || empty($group_name)) {
       return NULL;

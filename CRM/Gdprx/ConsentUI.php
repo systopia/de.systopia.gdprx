@@ -100,7 +100,7 @@ class CRM_Gdprx_ConsentUI {
       );
     }
 
-    // remark (note)
+    // optional note field
     if ($config->getSetting('use_consent_note')) {
       $form->add(
         'text',
@@ -109,9 +109,9 @@ class CRM_Gdprx_ConsentUI {
       );
     }
 
-    // set default values
+    // set default values - category is deliberately not pre-filled (unlike source)
+    // so the user is forced to pick one
     $form->setDefaults([
-    // CRM_Gdprx_Consent::getCategoryDefault()
       'consent_ui_category'   => '0',
       'consent_ui_source'     => CRM_Gdprx_Consent::getSourceDefault(),
     ]);

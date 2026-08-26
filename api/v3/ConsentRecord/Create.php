@@ -127,6 +127,7 @@ function _civicrm_api3_consent_record_create_spec(&$params) {
     'api.required' => 0,
     'type'         => CRM_Utils_Type::T_STRING,
     'title'        => 'Terms (Hash)',
-    'description'  => 'SHA1 hash of the full legal terms of the consent. If the hash is not nown to the system, this will throw an error.',
+    'description'  => 'SHA1 hash of the full legal terms of the consent. '
+    . 'If the hash is not nown to the system, this will throw an error.',
   ];
 }

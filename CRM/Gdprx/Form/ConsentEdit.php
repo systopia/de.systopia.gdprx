@@ -121,7 +121,7 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
       );
     }
 
-    // remark (note)
+    // optional note field
     if ($config->getSetting('use_consent_note')) {
       $this->add(
         'textarea',
@@ -157,9 +157,9 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
       ] + $date_values);
     }
     else {
-      // set default values? dates have been set above...
+      // pre-fill source only (dates have been set above); category is left
+      // for the user to choose
       $this->setDefaults([
-      //        'consent_ui_category'    => CRM_Gdprx_Consent::getCategoryDefault(),
         'consent_ui_source'      => CRM_Gdprx_Consent::getSourceDefault(),
       ]);
     }
@@ -176,6 +176,7 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
     parent::buildQuickForm();
   }
 
+  // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
   public function postProcess() {
     $values = $this->exportValues();
 
@@ -194,19 +195,32 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
     // get expiry date
     $expiry_date = $values['consent_ui_expiry_date'] ?? NULL;
 
+    // resolve the date/time fields entered in the form
+    $consent_date = date('YmdHis', strtotime(
+      CRM_Utils_Date::processDate($values['consent_ui_date'], $values['consent_ui_date_time'])
+    ));
+    $expiry_datetime = NULL;
+    if ($expiry_date) {
+      $expiry_datetime = date('YmdHis', strtotime(
+        CRM_Utils_Date::processDate($values['consent_ui_expiry_date'], $values['consent_ui_expiry_date_time'])
+      ));
+    }
+
     if (empty($values['record_id'])) {
-      $categories = is_array($values['consent_ui_category']) ? $values['consent_ui_category'] : [$values['consent_ui_category']];
-      // create new record(s)
+      $categories = is_array($values['consent_ui_category'])
+        ? $values['consent_ui_category']
+        : [$values['consent_ui_category']];
+      // create one record per selected category
       foreach ($categories as $category) {
         CRM_Gdprx_Consent::createConsentRecord(
             $values['contact_id'],
             $category,
             $values['consent_ui_source'],
-            date('YmdHis', strtotime(CRM_Utils_Date::processDate($values['consent_ui_date'], $values['consent_ui_date_time']))),
+            $consent_date,
             $values['consent_ui_note'] ?? NULL,
             $values['consent_ui_type'] ?? NULL,
             $terms_id,
-            $expiry_date ? date('YmdHis', strtotime(CRM_Utils_Date::processDate($values['consent_ui_expiry_date'], $values['consent_ui_expiry_date_time']))) : NULL);
+            $expiry_datetime);
       }
     }
     else {
@@ -216,11 +230,11 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
         $values['contact_id'],
         $values['consent_ui_category'],
         $values['consent_ui_source'],
-        date('YmdHis', strtotime(CRM_Utils_Date::processDate($values['consent_ui_date'], $values['consent_ui_date_time']))),
+        $consent_date,
         $values['consent_ui_note'] ?? NULL,
         $values['consent_ui_type'] ?? NULL,
         $terms_id,
-       $expiry_date ? date('YmdHis', strtotime(CRM_Utils_Date::processDate($values['consent_ui_expiry_date'], $values['consent_ui_expiry_date_time']))) : NULL);
+        $expiry_datetime);
     }
 
     parent::postProcess();

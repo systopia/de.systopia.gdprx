@@ -45,6 +45,7 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
    *  'reply::<attribute>'   in this case the attribute is taken from the API reply
    *  otherwise              the string is taken literally
    */
+  // phpcs:ignore Generic.Files.LineLength.TooLong
   public function __construct($entity, $action, $category, $source, $note_source = NULL, $date_source = 'now', $contact_source = 'reply::contact_id') {
     $this->entity         = $entity;
     $this->action         = $action;

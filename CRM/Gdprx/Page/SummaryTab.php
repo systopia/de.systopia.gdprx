@@ -60,19 +60,28 @@ class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
     CRM_Core_DAO::reenableFullGroupByMode();
 
     while ($data->fetch()) {
+      $record_expiry = $data->record_expiry
+        ? CRM_Utils_Date::customFormat($data->record_expiry, $civi_config->dateformatFull)
+        : '';
+      $record_expiry_full = $data->record_expiry
+        ? CRM_Utils_Date::customFormat($data->record_expiry, $civi_config->dateformatDatetime)
+        : '';
+      $record_note_short = mb_strlen($data->record_note) > 16
+        ? substr($data->record_note, 0, 13) . '...'
+        : $data->record_note;
       $records[] = [
         'record_id'          => $data->record_id,
         'record_date'        => CRM_Utils_Date::customFormat($data->record_date, $civi_config->dateformatFull),
         'record_date_full'   => CRM_Utils_Date::customFormat($data->record_date, $civi_config->dateformatDatetime),
-        'record_expiry'      => $data->record_expiry ? CRM_Utils_Date::customFormat($data->record_expiry, $civi_config->dateformatFull) : '',
-        'record_expiry_full' => $data->record_expiry ? CRM_Utils_Date::customFormat($data->record_expiry, $civi_config->dateformatDatetime) : '',
+        'record_expiry'      => $record_expiry,
+        'record_expiry_full' => $record_expiry_full,
         'record_category'    => $data->record_category,
         'record_source'      => $data->record_source,
         'record_type'        => $data->record_type,
         'record_terms_name'  => $data->record_terms_name,
         'record_terms_full'  => htmlspecialchars($data->record_terms_full),
         'record_terms_id'    => $data->record_terms_id,
-        'record_note_short'  => mb_strlen($data->record_note) > 16 ? (substr($data->record_note, 0, 13) . '...') : $data->record_note,
+        'record_note_short'  => $record_note_short,
         'record_note'        => htmlspecialchars($data->record_note),
       ];
     }

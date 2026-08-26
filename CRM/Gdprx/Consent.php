@@ -144,16 +144,23 @@ class CRM_Gdprx_Consent {
   /**
    * add a new user consent entry for the contact
    */
+  // phpcs:ignore Generic.Files.LineLength.TooLong
   public static function createConsentRecord($contact_id, $category, $source, $date = 'now', $note = '', $type = NULL, $terms_id = NULL, $expiry_date = NULL) {
-    return self::updateConsentRecord('-1', $contact_id, $category, $source, $date, $note, $type, $terms_id, $expiry_date);
+    return self::updateConsentRecord(
+      '-1', $contact_id, $category, $source, $date, $note, $type, $terms_id, $expiry_date
+    );
   }
 
   /**
    * update existing consent record
    */
+  // phpcs:ignore Generic.Files.LineLength.TooLong, Generic.Metrics.CyclomaticComplexity.TooHigh
   public static function updateConsentRecord($record_id, $contact_id, $category, $source, $date = 'now', $note = '', $type = NULL, $terms_id = NULL, $expiry_date = NULL) {
     if (GDPRX_DEBUG_LOGGING) {
-      Civi::log()->debug("create/update consent record: {$contact_id}, {$category}, {$source}, {$date}, {$note} {$type} {$terms_id} {$expiry_date}");
+      Civi::log()->debug(
+        "create/update consent record: {$contact_id}, {$category}, {$source}, "
+        . "{$date}, {$note} {$type} {$terms_id} {$expiry_date}"
+      );
     }
 
     // look up SOURCE
@@ -245,6 +252,7 @@ class CRM_Gdprx_Consent {
    *
    * @return string the date of the given consent, or NULL if no currently valid consent recorded
    */
+  // phpcs:ignore Generic.Files.LineLength.TooLong
   public static function hasConsent($contact_id, $category, $positive = TRUE, $date = 'now', $positive_types = [2, 4, 5], $negative_types = [3]) {
     // if we're looking for negative consent, swap the search patterns
     if (!$positive) {
@@ -334,7 +342,12 @@ class CRM_Gdprx_Consent {
    */
   public static function callConsentHook($mode, $contact_id, $record_id, $data) {
     $names = ['mode', 'contact_id', 'record_id', 'data'];
-    return CRM_Utils_Hook::singleton()->invoke($names, $mode, $contact_id, $record_id, $data, self::$null, self::$null, 'civicrm_gdprx_postConsent');
+    return CRM_Utils_Hook::singleton()->invoke(
+      $names,
+      $mode, $contact_id, $record_id, $data,
+      self::$null, self::$null,
+      'civicrm_gdprx_postConsent'
+    );
   }
 
 }

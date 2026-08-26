@@ -16,7 +16,10 @@
 
 declare(strict_types = 1);
 
+// The extension main file mixes this require with function definitions by design (civix structure).
+// phpcs:disable PSR1.Files.SideEffects
 require_once 'gdprx.civix.php';
+// phpcs:enable PSR1.Files.SideEffects
 
 use CRM_Gdprx_ExtensionUtil as E;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,7 +27,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 define('GDPRX_DEBUG_LOGGING', FALSE);
 
 /**
- * Implements hook_civicrm_container()
+ * Implements hook_civicrm_container().
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_container/
  */
@@ -70,17 +73,17 @@ function gdprx_civicrm_pre($op, $objectName, $id, &$params) {
 }
 
 /**
- * Implements hook_civicrm_tabset() (updated from hook_civicrm_tabs)
+ * Implements hook_civicrm_tabset().
  *
- * Will inject a custom gdprx tab
+ * Will inject a custom gdprx tab (updated from the former hook_civicrm_tabs).
  */
 function gdprx_civicrm_tabset($tabsetName, &$tabs, $context) {
   if ($tabsetName == 'civicrm/contact/view') {
     // remove the default table
     $group_id = CRM_Gdprx_CustomData::getGroupID('consent');
     $tab_key  = "custom_{$group_id}";
-    for ($i = 0; $i < count($tabs); $i++) {
-      if ($tabs[$i]['id'] == $tab_key) {
+    foreach ($tabs as $i => $tab) {
+      if ($tab['id'] == $tab_key) {
         unset($tabs[$i]);
         break;
       }
@@ -133,7 +136,7 @@ function gdprx_civicrm_enable() {
 }
 
 /**
- * Implements hook_civicrm_buildForm()
+ * Implements hook_civicrm_buildForm().
  */
 function gdprx_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Contact_Form_Contact') {
@@ -153,7 +156,7 @@ function gdprx_civicrm_buildForm($formName, &$form) {
 }
 
 /**
- * Implements hook_civicrm_validateForm()
+ * Implements hook_civicrm_validateForm().
  */
 function gdprx_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
   if ($formName == 'CRM_Contact_Form_Contact') {
@@ -162,7 +165,7 @@ function gdprx_civicrm_validateForm($formName, &$fields, &$files, &$form, &$erro
 }
 
 /**
- * Implements hook_civicrm_postProcess()
+ * Implements hook_civicrm_postProcess().
  */
 function gdprx_civicrm_postProcess($formName, &$form) {
   if ($formName == 'CRM_Contact_Form_Contact') {

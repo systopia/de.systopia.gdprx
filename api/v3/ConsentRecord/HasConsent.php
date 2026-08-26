@@ -19,6 +19,7 @@ declare(strict_types = 1);
 /**
  * See if the contact has given consent (positive or negative) to the given category
  */
+// phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
 function civicrm_api3_consent_record_has_consent($params) {
   // prepare date
   $date = date('YmdHis', strtotime($params['date']));

@@ -91,11 +91,17 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
     $values = $this->exportValues();
 
     // store default privacy settings
-    $config->setSetting('default_privacy_settings_enabled', CRM_Utils_Array::value('default_privacy_settings_enabled', $values, FALSE));
+    $config->setSetting(
+      'default_privacy_settings_enabled',
+      CRM_Utils_Array::value('default_privacy_settings_enabled', $values, FALSE)
+    );
 
     $fields = self::getPrivacyFields();
     foreach ($fields as $setting => $label) {
-      $config->setSetting("default_privacy_{$setting}", CRM_Utils_Array::value("default_privacy_{$setting}", $values, FALSE));
+      $config->setSetting(
+        "default_privacy_{$setting}",
+        CRM_Utils_Array::value("default_privacy_{$setting}", $values, FALSE)
+      );
     }
 
     $fields = self::getOptionalConsentFields();
@@ -104,7 +110,10 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
     }
 
     // store general options
-    $config->setSetting('enforce_record_for_new_contacts', CRM_Utils_Array::value('enforce_record_for_new_contacts', $values, FALSE));
+    $config->setSetting(
+      'enforce_record_for_new_contacts',
+      CRM_Utils_Array::value('enforce_record_for_new_contacts', $values, FALSE)
+    );
     $config->setSetting('disable_privacy_edit', CRM_Utils_Array::value('disable_privacy_edit', $values, FALSE));
 
     $config->writeSettings();

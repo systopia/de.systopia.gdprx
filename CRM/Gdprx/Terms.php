@@ -61,8 +61,10 @@ class CRM_Gdprx_Terms {
    * get an existing terms by the has value
    */
   public static function findByHash($terms_hash) {
-    $record = CRM_Core_DAO::executeQuery('SELECT *, id AS record_id FROM civicrm_gdpr_terms WHERE text_hash = %1 LIMIT 1',
-      [1 => [$terms_hash, 'String']]);
+    $record = CRM_Core_DAO::executeQuery(
+      'SELECT *, id AS record_id FROM civicrm_gdpr_terms WHERE text_hash = %1 LIMIT 1',
+      [1 => [$terms_hash, 'String']]
+    );
     if ($record->fetch()) {
       return new CRM_Gdprx_Terms($record);
     }
@@ -90,7 +92,9 @@ class CRM_Gdprx_Terms {
    */
   public static function getList() {
     $list = [];
-    $record = CRM_Core_DAO::executeQuery('SELECT id AS term_id, name FROM civicrm_gdpr_terms ORDER BY create_date DESC;');
+    $record = CRM_Core_DAO::executeQuery(
+      'SELECT id AS term_id, name FROM civicrm_gdpr_terms ORDER BY create_date DESC;'
+    );
     while ($record->fetch()) {
       $list[$record->term_id] = $record->name;
     }

@@ -153,7 +153,16 @@ class AddConsentRecord extends AbstractAction {
     }
 
     // execute
-    \CRM_Gdprx_Consent::createConsentRecord($contact_id, $category, $source, $date, $note, $type, $terms_id, $expiry_date);
+    \CRM_Gdprx_Consent::createConsentRecord(
+      $contact_id,
+      $category,
+      $source,
+      $date,
+      $note,
+      $type,
+      $terms_id,
+      $expiry_date
+    );
   }
 
 }
