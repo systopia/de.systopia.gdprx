@@ -447,7 +447,7 @@ class CRM_Gdprx_CustomData {
   /**
    * Get the specs/definition of the field
    * @param int $field_id
-   * @return array field specs
+   * @return array|null field specs, or NULL if the field is unknown
    */
   public static function getFieldSpecs($field_id) {
     // just to be on the safe side
@@ -467,7 +467,7 @@ class CRM_Gdprx_CustomData {
    * Get the specs/definition of the group
    *
    * @param int|string $group_id group id or string
-   * @return array group specs
+   * @return array|null group specs, or NULL if the group is unknown
    */
   public static function getGroupSpecs($group_id) {
     // just to be on the safe side
@@ -822,7 +822,7 @@ class CRM_Gdprx_CustomData {
   /**
    * @param $field_id
    * @param $value
-   * @return array
+   * @return array|null
    */
   protected static function generatePreHookCustomDataRecord($field_id, $value) {
     if ($field_id) {
@@ -880,8 +880,8 @@ class CRM_Gdprx_CustomData {
    * @param string $value_field
    *   *ignored*
    *
-   * @return string
-   *   value of the OptionValue entity if found
+   * @return string|null
+   *   value of the OptionValue entity if found, NULL if group/label is empty
    *
    * @throws Exception
    */
