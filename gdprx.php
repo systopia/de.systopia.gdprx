@@ -14,6 +14,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 require_once 'gdprx.civix.php';
 
 use CRM_Gdprx_ExtensionUtil as E;

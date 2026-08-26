@@ -15,6 +15,9 @@
  * | written permission from the original author(s).        |
  * +--------------------------------------------------------
  */
+
+declare(strict_types = 1);
+
 class CRM_Gdprx_CustomData {
   const CUSTOM_DATA_HELPER_VERSION   = '0.10';
   const CUSTOM_DATA_HELPER_LOG_LEVEL = 0;
@@ -320,9 +323,7 @@ class CRM_Gdprx_CustomData {
         elseif (isset($current_data[$required_field])) {
           $update_query[$required_field] = $current_data[$required_field];
         }
-        else {
-          // nothing we can do...
-        }
+        // otherwise there is no value to add
       }
 
       $this->log(self::CUSTOM_DATA_HELPER_LOG_INFO, "UPDATE {$entity_type}: " . json_encode($update_query));
@@ -490,9 +491,7 @@ class CRM_Gdprx_CustomData {
             $data[$custom_key] = $data[$key];
             unset($data[$key]);
           }
-          else {
-            // TODO: unknown data field $match['group_name'] . $match['field_name']
-          }
+          // else: unknown data field, leave $key untouched
         }
       }
     }
@@ -844,7 +843,7 @@ class CRM_Gdprx_CustomData {
    * This function was specifically introduced as 1:1 replacement
    *  for the deprecated CRM_Core_OptionGroup::getValue function
    *
-   * @param string $groupName
+   * @param string $group_name
    *   name of the group
    *
    * @param $label
