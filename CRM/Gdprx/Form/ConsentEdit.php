@@ -33,11 +33,11 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
 
     if ($record_id > 0) {
       CRM_Utils_System::setTitle(E::ts('Edit Consent Record'));
-      $this->add('hidden', 'record_id', $record_id);
+      $this->add('hidden', 'record_id', (string) $record_id);
     }
     else {
       CRM_Utils_System::setTitle(E::ts('Create Consent Record'));
-      $this->add('hidden', 'record_id', 0);
+      $this->add('hidden', 'record_id', '0');
     }
 
     $this->add('hidden', 'contact_id', $contact_id);
