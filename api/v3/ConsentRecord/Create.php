@@ -18,8 +18,12 @@ declare(strict_types = 1);
 
 /**
  * BPK Lookup
+ *
+ * @param array<string, mixed> $params
+ *
+ * @return array<string, mixed>|null
  */
-function civicrm_api3_consent_record_create($params) {
+function civicrm_api3_consent_record_create(array $params): ?array {
   if (!isset($params['date']) || $params['date'] === '') {
     $date = date('YmdHis');
   }
@@ -68,8 +72,10 @@ function civicrm_api3_consent_record_create($params) {
 
 /**
  * BPK.lookup parameters
+ *
+ * @param array<string, mixed> $params
  */
-function _civicrm_api3_consent_record_create_spec(&$params) {
+function _civicrm_api3_consent_record_create_spec(array &$params): void {
   $params['contact_id'] = [
     'name'         => 'contact_id',
     'api.required' => 1,

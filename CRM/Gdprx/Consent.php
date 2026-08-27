@@ -21,10 +21,22 @@ declare(strict_types = 1);
  */
 class CRM_Gdprx_Consent {
 
+  /**
+   * @var array<int|string, string>|null
+   */
   private static $category_list = NULL;
-  private static $sources_list  = NULL;
-  private static $types_list    = NULL;
-  private static $null          = NULL;
+
+  /**
+   * @var array<int|string, string>|null
+   */
+  private static $sources_list = NULL;
+
+  /**
+   * @var array<int|string, string>|null
+   */
+  private static $types_list = NULL;
+
+  private static mixed $null = NULL;
 
   /**
    * Get a list id -> label for the categories

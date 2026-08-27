@@ -21,8 +21,16 @@ declare(strict_types = 1);
  */
 class CRM_Gdprx_Configuration {
 
-  private static $singleton = NULL;
+  private static ?CRM_Gdprx_Configuration $singleton = NULL;
+
+  /**
+   * @var array<string, mixed>
+   */
   private $config;
+
+  /**
+   * @var array<string, mixed>|null
+   */
   private $option_groups = NULL;
 
   /**
@@ -37,11 +45,9 @@ class CRM_Gdprx_Configuration {
 
   private function __construct() {
     // load current config
-    $this->config = Civi::settings()->get('gdprx_settings');
-    if (!is_array($this->config) || $this->config === []) {
-      // TODO: default values?
-      $this->config = [];
-    }
+    // TODO: default values?
+    $settings = Civi::settings()->get('gdprx_settings');
+    $this->config = is_array($settings) ? $settings : [];
   }
 
   /**

@@ -18,9 +18,13 @@ declare(strict_types = 1);
 
 /**
  * See if the contact has given consent (positive or negative) to the given category
+ *
+ * @param array<string, mixed> $params
+ *
+ * @return array<string, mixed>
  */
 // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
-function civicrm_api3_consent_record_has_consent($params) {
+function civicrm_api3_consent_record_has_consent(array $params): array {
   // prepare date
   $timestamp = strtotime($params['date']);
   if ($timestamp === FALSE) {
@@ -83,8 +87,10 @@ function civicrm_api3_consent_record_has_consent($params) {
 
 /**
  * BPK.lookup parameters
+ *
+ * @param array<string, mixed> $params
  */
-function _civicrm_api3_consent_record_has_consent_spec(&$params) {
+function _civicrm_api3_consent_record_has_consent_spec(array &$params): void {
   $params['contact_id'] = [
     'name'         => 'contact_id',
     'api.required' => 1,

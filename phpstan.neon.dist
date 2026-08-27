@@ -8,6 +8,7 @@ parameters:
 	excludePaths:
 		analyse:
 			- CRM/Gdprx/DAO/*
+			- CRM/Gdprx/CustomData.php
 			- tests/phpunit/bootstrap.php
 	scanFiles:
 		- gdprx.civix.php
