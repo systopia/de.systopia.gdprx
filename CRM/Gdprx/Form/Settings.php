@@ -160,7 +160,7 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
       'sequential'      => 0,
       'return'          => 'id,value,is_default',
     ]);
-    foreach ($current_defaults['values'] as $current_default) {
+    foreach ((is_array($current_defaults) ? $current_defaults['values'] : []) as $current_default) {
       if ((string) $current_default['value'] === (string) $new_value) {
         $is_default_already = TRUE;
       }

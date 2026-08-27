@@ -13,6 +13,8 @@ parameters:
 	scanFiles:
 		- gdprx.civix.php
 		- tools/phpunit/vendor/bin/.phpunit/phpunit/src/Framework/TestCase.php
+	stubFiles:
+		- phpstan/stubs/CRM_Core_DAO.stub
 	scanDirectories:
 		- tools/phpunit/vendor/bin/.phpunit/phpunit/src/Framework
 		- mixin

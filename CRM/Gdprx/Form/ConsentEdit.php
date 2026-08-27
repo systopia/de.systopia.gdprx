@@ -197,12 +197,12 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
     $expiry_date = $values['consent_ui_expiry_date'] ?? NULL;
 
     // resolve the date/time fields entered in the form
-    $consent_date = date('YmdHis', strtotime(
+    $consent_date = date('YmdHis', (int) strtotime(
       CRM_Utils_Date::processDate($values['consent_ui_date'], $values['consent_ui_date_time'])
     ));
     $expiry_datetime = NULL;
     if ($expiry_date) {
-      $expiry_datetime = date('YmdHis', strtotime(
+      $expiry_datetime = date('YmdHis', (int) strtotime(
         CRM_Utils_Date::processDate($values['consent_ui_expiry_date'], $values['consent_ui_expiry_date_time'])
       ));
     }

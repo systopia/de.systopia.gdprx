@@ -119,7 +119,7 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
             $contact_id,
             $this->getDataValue($this->category, $apiRequest, $result),
             $this->getDataValue($this->source, $apiRequest, $result),
-            date('YmdHis', strtotime((string) $this->getDataValue($this->date_source, $apiRequest, $result))),
+            date('YmdHis', (int) strtotime((string) $this->getDataValue($this->date_source, $apiRequest, $result))),
             $this->getDataValue($this->note_source, $apiRequest, $result)
           );
         }

@@ -118,7 +118,7 @@ class CRM_Gdprx_Configuration {
       $query = civicrm_api3('OptionGroup', 'get', [
         'name' => ['IN' => ['consent_category', 'consent_source', 'consent_type']],
       ]);
-      foreach ($query['values'] as $entity) {
+      foreach ((is_array($query) ? $query['values'] : []) as $entity) {
         $this->option_groups[$entity['name']] = $entity;
       }
     }

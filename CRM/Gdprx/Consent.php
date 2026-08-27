@@ -54,7 +54,7 @@ class CRM_Gdprx_Consent {
         'is_active'       => 1,
         'return'          => 'value,label',
       ]);
-      foreach ($query['values'] as $option_value) {
+      foreach ((is_array($query) ? $query['values'] : []) as $option_value) {
         self::$category_list[$option_value['value']] = $option_value['label'];
       }
     }
@@ -77,7 +77,7 @@ class CRM_Gdprx_Consent {
         'is_active'       => 1,
         'return'          => 'value,label',
       ]);
-      foreach ($query['values'] as $option_value) {
+      foreach ((is_array($query) ? $query['values'] : []) as $option_value) {
         self::$sources_list[$option_value['value']] = $option_value['label'];
       }
     }
@@ -152,7 +152,7 @@ class CRM_Gdprx_Consent {
         'is_active'       => 1,
         'return'          => 'value,label',
       ]);
-      foreach ($query['values'] as $option_value) {
+      foreach ((is_array($query) ? $query['values'] : []) as $option_value) {
         self::$types_list[$option_value['value']] = $option_value['label'];
       }
     }
@@ -230,13 +230,13 @@ class CRM_Gdprx_Consent {
 
     // create record
     $data = [
-      'consent.consent_date'     => date('YmdHis', strtotime($date)),
+      'consent.consent_date'     => date('YmdHis', (int) strtotime($date)),
       'consent.consent_category' => $category,
       'consent.consent_source'   => $source,
     ];
 
     if ($expiry_date !== NULL && $expiry_date !== '') {
-      $data['consent.consent_expiry_date'] = date('YmdHis', strtotime($expiry_date));
+      $data['consent.consent_expiry_date'] = date('YmdHis', (int) strtotime($expiry_date));
     }
     else {
       $data['consent.consent_expiry_date'] = '';
@@ -276,10 +276,10 @@ class CRM_Gdprx_Consent {
       self::callConsentHook('create', $contact_id, NULL, $symbolised_data);
     }
     else {
-      self::callConsentHook('update', $contact_id, $record_id, $symbolised_data);
+      self::callConsentHook('update', $contact_id, (int) $record_id, $symbolised_data);
     }
 
-    return $record;
+    return is_array($record) ? $record : NULL;
   }
 
   /**
@@ -304,7 +304,7 @@ class CRM_Gdprx_Consent {
     }
     $contact_id = (int) $contact_id;
     $category = (int) $category;
-    $date = date('YmdHis', strtotime($date));
+    $date = date('YmdHis', (int) strtotime($date));
 
     // build query
     $positive_types_list = implode(',', $positive_types);
