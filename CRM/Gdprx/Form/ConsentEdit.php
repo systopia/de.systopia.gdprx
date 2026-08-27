@@ -25,7 +25,7 @@ use CRM_Gdprx_ExtensionUtil as E;
  */
 class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
 
-  public function buildQuickForm() {
+  public function buildQuickForm(): void {
     $record_id  = (int) CRM_Utils_Request::retrieve('id', 'String');
     $contact_id = CRM_Utils_Request::retrieve('cid', 'Integer');
     $multi      = (bool) CRM_Utils_Request::retrieve('multi', 'Integer');
@@ -52,7 +52,7 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
     );
     $this->setDefaults(['consent_ui_date' => date('Y-m-d H:i:s')]);
 
-    if ($config->getSetting('use_consent_expiry_date')) {
+    if ($config->isEnabled('use_consent_expiry_date')) {
       $this->add(
           'datepicker',
           'consent_ui_expiry_date',
@@ -94,7 +94,7 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
     );
 
     // add type dropdown from option group
-    if ($config->getSetting('use_consent_type')) {
+    if ($config->isEnabled('use_consent_type')) {
       $this->add('select',
         'consent_ui_type',
         E::ts('Type'),
@@ -105,7 +105,7 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
     }
 
     // terms
-    if ($config->getSetting('use_consent_terms')) {
+    if ($config->isEnabled('use_consent_terms')) {
       $this->add('select',
         'consent_ui_terms',
         E::ts('Terms'),
@@ -122,7 +122,7 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
     }
 
     // optional note field
-    if ($config->getSetting('use_consent_note')) {
+    if ($config->isEnabled('use_consent_note')) {
       $this->add(
         'textarea',
         'consent_ui_note',
@@ -178,7 +178,7 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
   }
 
   // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
-  public function postProcess() {
+  public function postProcess(): void {
     $values = $this->exportValues();
 
     // get terms_id

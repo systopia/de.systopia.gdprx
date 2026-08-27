@@ -20,7 +20,7 @@ use CRM_Gdprx_ExtensionUtil as E;
 
 class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
 
-  public function run() {
+  public function run(): void {
     // build a consent table
     $contact_id  = CRM_Utils_Request::retrieve('cid', 'Integer');
     $config      = CRM_Gdprx_Configuration::getSingleton();
@@ -94,6 +94,10 @@ class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
 
   /**
    * Get the record count
+   *
+   * @param int $contact_id
+   *
+   * @return string|null
    */
   public static function getRecordCount($contact_id) {
     return CRM_Core_DAO::singleValueQuery('SELECT COUNT(id) FROM civicrm_value_gdpr_consent WHERE entity_id = %1',

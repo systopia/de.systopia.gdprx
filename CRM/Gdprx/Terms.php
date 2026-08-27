@@ -22,14 +22,16 @@ declare(strict_types = 1);
  */
 class CRM_Gdprx_Terms {
 
-  protected $record;
+  protected \CRM_Core_DAO $record;
 
-  protected function __construct($record) {
+  protected function __construct(\CRM_Core_DAO $record) {
     $this->record = $record;
   }
 
   /**
    * get the internal ID of this record
+   *
+   * @return mixed
    */
   public function getID() {
     return $this->record->record_id;
@@ -37,11 +39,13 @@ class CRM_Gdprx_Terms {
 
   /**
    * Get the record
+   *
+   * @param string $terms_full
    */
-  public static function getOrCreate($terms_full) {
+  public static function getOrCreate($terms_full): ?self {
     $hash = sha1($terms_full);
     $terms = self::findByHash($hash);
-    if ($terms) {
+    if ($terms !== NULL) {
       return $terms;
     }
 
@@ -58,9 +62,11 @@ class CRM_Gdprx_Terms {
   }
 
   /**
-   * get an existing terms by the has value
+   * get an existing terms by the hash value
+   *
+   * @param string $terms_hash
    */
-  public static function findByHash($terms_hash) {
+  public static function findByHash($terms_hash): ?self {
     $record = CRM_Core_DAO::executeQuery(
       'SELECT *, id AS record_id FROM civicrm_gdpr_terms WHERE text_hash = %1 LIMIT 1',
       [1 => [$terms_hash, 'String']]
@@ -74,9 +80,11 @@ class CRM_Gdprx_Terms {
   }
 
   /**
-   * get an existing terms by the has value
+   * get an existing terms by its ID
+   *
+   * @param int $id
    */
-  public static function findByID($id) {
+  public static function findByID($id): ?self {
     $record = CRM_Core_DAO::executeQuery('SELECT *, id AS record_id FROM civicrm_gdpr_terms WHERE id = %1',
       [1 => [$id, 'Integer']]);
     if ($record->fetch()) {
@@ -89,8 +97,10 @@ class CRM_Gdprx_Terms {
 
   /**
    * Get a list of all known terms
+   *
+   * @return array<int|string, mixed>
    */
-  public static function getList() {
+  public static function getList(): array {
     $list = [];
     $record = CRM_Core_DAO::executeQuery(
       'SELECT id AS term_id, name FROM civicrm_gdpr_terms ORDER BY create_date DESC;'
@@ -103,8 +113,10 @@ class CRM_Gdprx_Terms {
 
   /**
    * Get a list ID -> full text
+   *
+   * @return array<int|string, mixed>
    */
-  public static function getFullTexts() {
+  public static function getFullTexts(): array {
     $list = [];
     $record = CRM_Core_DAO::executeQuery('SELECT id AS term_id, text_full FROM civicrm_gdpr_terms;');
     while ($record->fetch()) {

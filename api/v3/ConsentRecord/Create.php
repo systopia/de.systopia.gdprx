@@ -51,7 +51,7 @@ function civicrm_api3_consent_record_create(array $params): ?array {
   }
   elseif (isset($params['terms_hash']) && $params['terms_hash'] !== '') {
     $terms = CRM_Gdprx_Terms::findByHash($params['terms_hash']);
-    if (!$terms) {
+    if ($terms === NULL) {
       throw new CRM_Core_Exception("Terms '{$params['terms_hash']}' are not on record.");
     }
   }
@@ -66,7 +66,7 @@ function civicrm_api3_consent_record_create(array $params): ?array {
     $date,
     $params['note'] ?? NULL,
     $params['type'] ?? NULL,
-    $terms ? $terms->getID() : NULL,
+    $terms !== NULL ? $terms->getID() : NULL,
     $expiry_date);
 }
 

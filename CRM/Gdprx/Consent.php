@@ -40,8 +40,10 @@ class CRM_Gdprx_Consent {
 
   /**
    * Get a list id -> label for the categories
+   *
+   * @return array<int|string, string>
    */
-  public static function getCategoryList() {
+  public static function getCategoryList(): array {
     if (self::$category_list === NULL) {
       self::$category_list = [];
       $query = civicrm_api3('OptionValue', 'get', [
@@ -61,8 +63,10 @@ class CRM_Gdprx_Consent {
 
   /**
    * Get a list id -> label for the sources
+   *
+   * @return array<int|string, string>
    */
-  public static function getSourceList() {
+  public static function getSourceList(): array {
     if (self::$sources_list === NULL) {
       self::$sources_list = [];
       $query = civicrm_api3('OptionValue', 'get', [
@@ -133,9 +137,11 @@ class CRM_Gdprx_Consent {
   }
 
   /**
-   * Get a list id -> label for the sources
+   * Get a list id -> label for the types
+   *
+   * @return array<int|string, string>
    */
-  public static function getTypeList() {
+  public static function getTypeList(): array {
     if (self::$types_list === NULL) {
       self::$types_list = [];
       $query = civicrm_api3('OptionValue', 'get', [
@@ -155,6 +161,17 @@ class CRM_Gdprx_Consent {
 
   /**
    * add a new user consent entry for the contact
+   *
+   * @param int $contact_id
+   * @param int|string $category  option value or label of the consent_category option group
+   * @param int|string $source    option value or label of the consent_source option group
+   * @param string $date
+   * @param string|null $note
+   * @param int|string|null $type
+   * @param int|null $terms_id
+   * @param string|null $expiry_date
+   *
+   * @return array<string, mixed>|null
    */
   // phpcs:ignore Generic.Files.LineLength.TooLong
   public static function createConsentRecord($contact_id, $category, $source, $date = 'now', $note = '', $type = NULL, $terms_id = NULL, $expiry_date = NULL) {
@@ -165,6 +182,18 @@ class CRM_Gdprx_Consent {
 
   /**
    * update existing consent record
+   *
+   * @param int|string $record_id  the multi-value row index, or '-1' to create a new entry
+   * @param int $contact_id
+   * @param int|string $category  option value or label of the consent_category option group
+   * @param int|string $source    option value or label of the consent_source option group
+   * @param string $date
+   * @param string|null $note
+   * @param int|string|null $type
+   * @param int|null $terms_id
+   * @param string|null $expiry_date
+   *
+   * @return array<string, mixed>|null
    */
   // phpcs:ignore Generic.Files.LineLength.TooLong, Generic.Metrics.CyclomaticComplexity.TooHigh
   public static function updateConsentRecord($record_id, $contact_id, $category, $source, $date = 'now', $note = '', $type = NULL, $terms_id = NULL, $expiry_date = NULL) {
@@ -186,7 +215,7 @@ class CRM_Gdprx_Consent {
       if (GDPRX_DEBUG_LOGGING) {
         Civi::log()->debug("Couldn't map source '{$original_source}'");
       }
-      return;
+      return NULL;
     }
 
     // look up CATEGORY
@@ -199,7 +228,7 @@ class CRM_Gdprx_Consent {
       if (GDPRX_DEBUG_LOGGING) {
         Civi::log()->debug("Couldn't map category '{$original_category}'");
       }
-      return;
+      return NULL;
     }
 
     // create record
@@ -259,11 +288,12 @@ class CRM_Gdprx_Consent {
   /**
    * Get a valid consent record.
    *
-   * @param $contact_id
-   * @param $category
-   * @param $date
-   * @param array $positive_types
-   * @param array $negative_types
+   * @param int $contact_id
+   * @param int|string $category  option value or label of the consent_category option group
+   * @param bool $positive
+   * @param string $date
+   * @param array<int, int> $positive_types
+   * @param array<int, int> $negative_types
    *
    * @return string|null the date of the given consent, or NULL if no currently valid consent recorded
    */
@@ -321,8 +351,12 @@ class CRM_Gdprx_Consent {
 
   /**
    * get a consent record by ID
+   *
+   * @param int $id
+   *
+   * @return array<string, mixed>|null
    */
-  public static function getRecord($id) {
+  public static function getRecord($id): ?array {
     $data = CRM_Core_DAO::executeQuery('SELECT * FROM civicrm_value_gdpr_consent WHERE id = %1',
       [1 => [$id, 'Integer']]);
     if ($data->fetch()) {
@@ -348,10 +382,10 @@ class CRM_Gdprx_Consent {
    * You can implement this hook e.g. to update the contact's privacy settings
    *  based on the recorded consents
    *
-   * @param $mode       string 'create' if new record or 'update'
-   * @param $contact_id int    contact this record belongs to
-   * @param $record_id  int    record ID if this is an 'update', NULL otherwise
-   * @param $data       array  the content of the record written
+   * @param string $mode        'create' if new record or 'update'
+   * @param int $contact_id     contact this record belongs to
+   * @param int|null $record_id  record ID if this is an 'update', NULL otherwise
+   * @param array<string, mixed> $data  the content of the record written
    *
    * @return mixed
    */

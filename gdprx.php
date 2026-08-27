@@ -146,14 +146,14 @@ function gdprx_civicrm_enable(): void {
  * Implements hook_civicrm_buildForm().
  */
 function gdprx_civicrm_buildForm(string $formName, \CRM_Core_Form &$form): void {
-  if ($formName === 'CRM_Contact_Form_Contact') {
+  if ($form instanceof CRM_Contact_Form_Contact) {
     CRM_Gdprx_ConsentUI::buildForm($formName, $form);
   }
 
   if ($formName === 'CRM_Contact_Form_Inline_CommunicationPreferences'
      || $formName === 'CRM_Contact_Form_Contact') {
     $config = CRM_Gdprx_Configuration::getSingleton();
-    if ($config->getSetting('disable_privacy_edit')) {
+    if ($config->isEnabled('disable_privacy_edit')) {
       CRM_Core_Resources::singleton()->addVars('gdprx', [
         'privacy_help' => E::ts('These settings cannot be edited directly any more. Please use then consent tab.'),
       ]);
@@ -171,7 +171,7 @@ function gdprx_civicrm_buildForm(string $formName, \CRM_Core_Form &$form): void 
  */
 // phpcs:ignore Generic.Files.LineLength.TooLong
 function gdprx_civicrm_validateForm(string $formName, array &$fields, array &$files, \CRM_Core_Form &$form, array &$errors): void {
-  if ($formName === 'CRM_Contact_Form_Contact') {
+  if ($form instanceof CRM_Contact_Form_Contact) {
     CRM_Gdprx_ConsentUI::validateForm($formName, $fields, $files, $form, $errors);
   }
 }
@@ -180,7 +180,7 @@ function gdprx_civicrm_validateForm(string $formName, array &$fields, array &$fi
  * Implements hook_civicrm_postProcess().
  */
 function gdprx_civicrm_postProcess(string $formName, \CRM_Core_Form &$form): void {
-  if ($formName === 'CRM_Contact_Form_Contact') {
+  if ($form instanceof CRM_Contact_Form_Contact) {
     CRM_Gdprx_ConsentUI::postProcess($formName, $form);
   }
 }

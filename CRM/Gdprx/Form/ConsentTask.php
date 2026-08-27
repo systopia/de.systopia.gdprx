@@ -25,7 +25,7 @@ use CRM_Gdprx_ExtensionUtil as E;
  */
 class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
 
-  public function buildQuickForm() {
+  public function buildQuickForm(): void {
     CRM_Utils_System::setTitle(E::ts('Add Consent Records'));
     $config = CRM_Gdprx_Configuration::getSingleton();
 
@@ -43,7 +43,7 @@ class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
     );
     $this->setDefaults(['consent_ui_date' => date('Y-m-d')]);
 
-    if ($config->getSetting('use_consent_expiry_date')) {
+    if ($config->isEnabled('use_consent_expiry_date')) {
       $this->add(
         'datepicker',
         'consent_ui_expiry_date',
@@ -73,7 +73,7 @@ class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
     );
 
     // add type dropdown from option group
-    if ($config->getSetting('use_consent_type')) {
+    if ($config->isEnabled('use_consent_type')) {
       $this->add('select',
         'consent_ui_type',
         E::ts('Type'),
@@ -84,7 +84,7 @@ class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
     }
 
     // terms
-    if ($config->getSetting('use_consent_terms')) {
+    if ($config->isEnabled('use_consent_terms')) {
       $this->add('select',
         'consent_ui_terms',
         E::ts('Terms'),
@@ -101,7 +101,7 @@ class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
     }
 
     // optional note field
-    if ($config->getSetting('use_consent_note')) {
+    if ($config->isEnabled('use_consent_note')) {
       $this->add(
         'textarea',
         'consent_ui_note',
@@ -133,7 +133,7 @@ class CRM_Gdprx_Form_ConsentTask extends CRM_Contact_Form_Task {
     parent::buildQuickForm();
   }
 
-  public function postProcess() {
+  public function postProcess(): void {
     $values = $this->exportValues();
 
     // get terms_id

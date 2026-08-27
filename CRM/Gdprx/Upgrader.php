@@ -25,6 +25,8 @@ class CRM_Gdprx_Upgrader extends CRM_Extension_Upgrader_Base {
 
   /**
    * Installer
+   *
+   * @return bool
    */
   public function install() {
     // create new terms table

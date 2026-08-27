@@ -36,7 +36,7 @@ class CRM_Gdprx_Configuration {
   /**
    * Get the configuration singleton
    */
-  public static function getSingleton() {
+  public static function getSingleton(): CRM_Gdprx_Configuration {
     if (self::$singleton === NULL) {
       self::$singleton = new CRM_Gdprx_Configuration();
     }
@@ -53,21 +53,30 @@ class CRM_Gdprx_Configuration {
   /**
    * Get the given setting value
    */
-  public function getSetting($name, $default = NULL) {
+  public function getSetting(string $name, mixed $default = NULL): mixed {
     return $this->config[$name] ?? $default;
   }
 
   /**
-   * Get all current settings
+   * Is the given (boolean) setting switched on?
    */
-  public function getSettings() {
+  public function isEnabled(string $name): bool {
+    return (bool) $this->getSetting($name);
+  }
+
+  /**
+   * Get all current settings
+   *
+   * @return array<string, mixed>
+   */
+  public function getSettings(): array {
     return $this->config;
   }
 
   /**
    * Set the given setting to value
    */
-  public function setSetting($name, $value, $write = FALSE) {
+  public function setSetting(string $name, mixed $value, bool $write = FALSE): void {
     $this->config[$name] = $value;
     if ($write) {
       $this->writeSettings();
@@ -77,16 +86,18 @@ class CRM_Gdprx_Configuration {
   /**
    * Write the current settings to DB
    */
-  public function writeSettings() {
+  public function writeSettings(): void {
     Civi::settings()->set('gdprx_settings', $this->config);
   }
 
   /**
    * inject the contact's default privacy settings
    *  if enabled
+   *
+   * @param array<string, mixed> $params
    */
-  public function addDefaultPrivacySettings(&$params) {
-    if ($this->getSetting('default_privacy_settings_enabled')) {
+  public function addDefaultPrivacySettings(&$params): void {
+    if ($this->isEnabled('default_privacy_settings_enabled')) {
       $params['do_not_email'] = $this->getSetting('default_privacy_do_not_email');
       $params['do_not_phone'] = $this->getSetting('default_privacy_do_not_phone');
       $params['do_not_mail']  = $this->getSetting('default_privacy_do_not_mail');
@@ -98,8 +109,10 @@ class CRM_Gdprx_Configuration {
 
   /**
    * Get a name => entity list of the option groups involved
+   *
+   * @return array<string, mixed>
    */
-  public function getOptionGroups() {
+  public function getOptionGroups(): array {
     if ($this->option_groups === NULL) {
       $this->option_groups = [];
       $query = civicrm_api3('OptionGroup', 'get', [

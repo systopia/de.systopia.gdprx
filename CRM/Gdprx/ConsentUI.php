@@ -23,15 +23,15 @@ class CRM_Gdprx_ConsentUI {
   /**
    * handles the build form hook action
    */
-  public static function buildForm($formName, &$form) {
-    if (isset($form->_contactId) && (int) $form->_contactId > 0) {
+  public static function buildForm(string $formName, \CRM_Contact_Form_Contact &$form): void {
+    if ((int) $form->_contactId > 0) {
       // we are in edit mode, nothing to do here!
       return;
     }
 
     // check if this is enabled
     $config = CRM_Gdprx_Configuration::getSingleton();
-    if (!$config->getSetting('enforce_record_for_new_contacts')) {
+    if (!$config->isEnabled('enforce_record_for_new_contacts')) {
       return;
     }
 
@@ -49,7 +49,7 @@ class CRM_Gdprx_ConsentUI {
     );
     $form->setDefaults(['consent_ui_date' => date('Y-m-d')]);
 
-    if ($config->getSetting('use_consent_expiry_date')) {
+    if ($config->isEnabled('use_consent_expiry_date')) {
       $form->add(
         'datepicker',
         'consent_ui_expiry_date',
@@ -79,7 +79,7 @@ class CRM_Gdprx_ConsentUI {
     );
 
     // add type dropdown from option group
-    if ($config->getSetting('use_consent_type')) {
+    if ($config->isEnabled('use_consent_type')) {
       $form->add('select',
         'consent_ui_type',
         E::ts('Type'),
@@ -90,7 +90,7 @@ class CRM_Gdprx_ConsentUI {
     }
 
     // terms
-    if ($config->getSetting('use_consent_terms')) {
+    if ($config->isEnabled('use_consent_terms')) {
       $form->add('select',
         'consent_ui_terms',
         E::ts('Terms'),
@@ -101,7 +101,7 @@ class CRM_Gdprx_ConsentUI {
     }
 
     // optional note field
-    if ($config->getSetting('use_consent_note')) {
+    if ($config->isEnabled('use_consent_note')) {
       $form->add(
         'text',
         'consent_ui_note',
@@ -124,16 +124,21 @@ class CRM_Gdprx_ConsentUI {
 
   /**
    * handles the validate form hook action
+   *
+   * @param array<string, mixed> $fields
+   * @param array<string, mixed> $files
+   * @param array<string, mixed> $errors
    */
-  public static function validateForm($formName, &$fields, &$files, &$form, &$errors) {
-    if (isset($form->_contactId) && (int) $form->_contactId > 0) {
+  // phpcs:ignore Generic.Files.LineLength.TooLong
+  public static function validateForm(string $formName, array &$fields, array &$files, \CRM_Contact_Form_Contact &$form, array &$errors): void {
+    if ((int) $form->_contactId > 0) {
       // we are in edit mode, nothing to do here!
       return;
     }
 
     // check if this is enabled
     $config = CRM_Gdprx_Configuration::getSingleton();
-    if (!$config->getSetting('enforce_record_for_new_contacts')) {
+    if (!$config->isEnabled('enforce_record_for_new_contacts')) {
       return;
     }
 
@@ -156,15 +161,15 @@ class CRM_Gdprx_ConsentUI {
   /**
    * handles the post process hook action
    */
-  public static function postProcess($formName, &$form) {
-    if (!isset($form->_contactId) || (int) $form->_contactId === 0) {
+  public static function postProcess(string $formName, \CRM_Contact_Form_Contact &$form): void {
+    if ((int) $form->_contactId === 0) {
       // contact doesn't exist yet
       return;
     }
 
     // check if this is enabled
     $config = CRM_Gdprx_Configuration::getSingleton();
-    if (!$config->getSetting('enforce_record_for_new_contacts')) {
+    if (!$config->isEnabled('enforce_record_for_new_contacts')) {
       return;
     }
 

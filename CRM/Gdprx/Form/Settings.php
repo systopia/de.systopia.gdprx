@@ -25,7 +25,7 @@ use CRM_Gdprx_ExtensionUtil as E;
  */
 class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
 
-  public function buildQuickForm() {
+  public function buildQuickForm(): void {
     // add general settings
     $this->addElement('checkbox',
                       'enforce_record_for_new_contacts',
@@ -77,6 +77,8 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
 
   /**
    * set the default (=current) values in the form
+   *
+   * @return array<string, mixed>
    */
   public function setDefaultValues() {
     $config = CRM_Gdprx_Configuration::getSingleton();
@@ -86,7 +88,7 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
   /**
    * Process and store changed settings
    */
-  public function postProcess() {
+  public function postProcess(): void {
     $config = CRM_Gdprx_Configuration::getSingleton();
     $values = $this->exportValues();
 
@@ -115,7 +117,10 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
     parent::postProcess();
   }
 
-  public static function getPrivacyFields() {
+  /**
+   * @return array<string, string>
+   */
+  public static function getPrivacyFields(): array {
     return [
       'do_not_email'  => ts('Do Not Email'),
       'do_not_phone'  => ts('Do Not Phone'),
@@ -126,7 +131,10 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
     ];
   }
 
-  public static function getOptionalConsentFields() {
+  /**
+   * @return array<string, string>
+   */
+  public static function getOptionalConsentFields(): array {
     return [
       'consent_expiry_date' => E::ts('Use Expiry Date'),
       'consent_type'        => E::ts('Use Type'),
@@ -138,11 +146,10 @@ class CRM_Gdprx_Form_Settings extends CRM_Core_Form {
   /**
    * Set the new default value of the option group
    *
-   * @param $option_group_id integer|string
-   *
-   * @param $new_value string
+   * @param int|string $option_group_id
+   * @param string $new_value
    */
-  public static function setDefaultOptionGroupValue($option_group_id, $new_value) {
+  public static function setDefaultOptionGroupValue($option_group_id, $new_value): void {
     $is_default_already = FALSE;
 
     // unset all (except the new default)
