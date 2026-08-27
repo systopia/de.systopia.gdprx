@@ -24,7 +24,8 @@ require_once 'gdprx.civix.php';
 use CRM_Gdprx_ExtensionUtil as E;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-define('GDPRX_DEBUG_LOGGING', FALSE);
+// Toggle verbose consent-record logging via the GDPRX_DEBUG_LOGGING environment variable.
+define('GDPRX_DEBUG_LOGGING', (bool) getenv('GDPRX_DEBUG_LOGGING'));
 
 /**
  * Implements hook_civicrm_container().

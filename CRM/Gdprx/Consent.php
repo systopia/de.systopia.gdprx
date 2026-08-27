@@ -197,7 +197,6 @@ class CRM_Gdprx_Consent {
    */
   // phpcs:ignore Generic.Files.LineLength.TooLong, Generic.Metrics.CyclomaticComplexity.TooHigh
   public static function updateConsentRecord($record_id, $contact_id, $category, $source, $date = 'now', $note = '', $type = NULL, $terms_id = NULL, $expiry_date = NULL) {
-    // @phpstan-ignore if.alwaysFalse (GDPRX_DEBUG_LOGGING is a manual debug toggle in gdprx.php)
     if (GDPRX_DEBUG_LOGGING) {
       Civi::log()->debug(
         "create/update consent record: {$contact_id}, {$category}, {$source}, "
@@ -211,7 +210,6 @@ class CRM_Gdprx_Consent {
       $source = (string) CRM_Gdprx_CustomData::getOptionValue('consent_source', $source, 'label');
     }
     if ($source === '') {
-      // @phpstan-ignore if.alwaysFalse (GDPRX_DEBUG_LOGGING is a manual debug toggle in gdprx.php)
       if (GDPRX_DEBUG_LOGGING) {
         Civi::log()->debug("Couldn't map source '{$original_source}'");
       }
@@ -224,7 +222,6 @@ class CRM_Gdprx_Consent {
       $category = (string) CRM_Gdprx_CustomData::getOptionValue('consent_category', $category, 'label');
     }
     if ($category === '') {
-      // @phpstan-ignore if.alwaysFalse (GDPRX_DEBUG_LOGGING is a manual debug toggle in gdprx.php)
       if (GDPRX_DEBUG_LOGGING) {
         Civi::log()->debug("Couldn't map category '{$original_category}'");
       }

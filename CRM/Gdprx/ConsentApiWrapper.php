@@ -20,25 +20,52 @@ declare(strict_types = 1);
 
 class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
 
+  /**
+   * @var string
+   */
   protected $entity;
+
+  /**
+   * @var string
+   */
   protected $action;
+
+  /**
+   * @var string
+   */
   protected $category;
+
+  /**
+   * @var string
+   */
   protected $source;
+
+  /**
+   * @var string|null
+   */
   protected $note_source;
+
+  /**
+   * @var string
+   */
   protected $date_source;
+
+  /**
+   * @var string
+   */
   protected $contact_source;
 
   /**
    * Create an API Wrapper to derive GDPR consent records
    * from a successful API call, e.g. a group sign-up
    *
-   * @param $entity          the API entity to process
-   * @param $action          the API action to process
-   * @param $category        data specifier (see below) forlabel or value of the consent_category option group.
-   * @param $source          data specifier (see below) forlabel or value of the consent_source option group.
-   * @param $note_source     data specifier (see below) for the note field, or NULL (default)
-   * @param $date_source     data specifier (see below) for the date entry
-   * @param $contact_source  data specifier (see below) for the contact
+   * @param string $entity          the API entity to process
+   * @param string $action          the API action to process
+   * @param string $category        data specifier (see below) for label or value of the consent_category option group.
+   * @param string $source          data specifier (see below) for label or value of the consent_source option group.
+   * @param string|null $note_source data specifier (see below) for the note field, or NULL (default)
+   * @param string $date_source     data specifier (see below) for the date entry
+   * @param string $contact_source  data specifier (see below) for the contact
    *
    * data specifiers can be either:
    *  'request::<attribute>' in this case the attribute is taken from the API request.params
@@ -59,9 +86,9 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
   /**
    * Interface for interpreting api input.
    *
-   * @param array $apiRequest
+   * @param array<array-key, mixed> $apiRequest
    *
-   * @return array
+   * @return array<string, mixed>
    *   modified $apiRequest
    */
   public function fromApiInput($apiRequest) {
@@ -71,10 +98,10 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
   /**
    * Interface for interpreting api output.
    *
-   * @param array $apiRequest
-   * @param array $result
+   * @param array<array-key, mixed> $apiRequest
+   * @param array<array-key, mixed> $result
    *
-   * @return array
+   * @return array<string, mixed>
    *   modified $result
    */
   public function toApiOutput($apiRequest, $result) {
@@ -92,7 +119,7 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
             $contact_id,
             $this->getDataValue($this->category, $apiRequest, $result),
             $this->getDataValue($this->source, $apiRequest, $result),
-            date('YmdHis', strtotime($this->getDataValue($this->date_source, $apiRequest, $result))),
+            date('YmdHis', strtotime((string) $this->getDataValue($this->date_source, $apiRequest, $result))),
             $this->getDataValue($this->note_source, $apiRequest, $result)
           );
         }
@@ -104,8 +131,13 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
 
   /**
    * Extract the speficied value, see constructor definition
+   *
+   * @param array<string, mixed> $request
+   * @param array<string, mixed> $reply
+   *
+   * @return mixed
    */
-  protected function getDataValue($data_spec, $request, $reply) {
+  protected function getDataValue(?string $data_spec, array $request, array $reply) {
     if ($data_spec === NULL || $data_spec === '') {
       return NULL;
 
