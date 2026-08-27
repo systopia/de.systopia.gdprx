@@ -152,7 +152,7 @@ class CRM_Gdprx_ConsentUI {
       $errors['consent_ui_source'] = E::ts('Source is mandatory');
     }
 
-    $contact_origin = $fields['consent_ui_note'] ?? NULL;
+    $contact_origin = _gdprx_str($fields['consent_ui_note'] ?? '');
     if (strlen($contact_origin) > 1024) {
       $errors['consent_ui_note'] = E::ts('Note cannot be more the 1024 characters');
     }

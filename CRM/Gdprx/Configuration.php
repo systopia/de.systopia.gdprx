@@ -29,7 +29,7 @@ class CRM_Gdprx_Configuration {
   private $config;
 
   /**
-   * @var array<string, mixed>|null
+   * @var array<string, array<string, mixed>>|null
    */
   private $option_groups = NULL;
 
@@ -94,7 +94,7 @@ class CRM_Gdprx_Configuration {
    * inject the contact's default privacy settings
    *  if enabled
    *
-   * @param array<string, mixed> $params
+   * @param array<array-key, mixed> $params
    */
   public function addDefaultPrivacySettings(&$params): void {
     if ($this->isEnabled('default_privacy_settings_enabled')) {
@@ -110,7 +110,7 @@ class CRM_Gdprx_Configuration {
   /**
    * Get a name => entity list of the option groups involved
    *
-   * @return array<string, mixed>
+   * @return array<string, array<string, mixed>>
    */
   public function getOptionGroups(): array {
     if ($this->option_groups === NULL) {
@@ -119,7 +119,9 @@ class CRM_Gdprx_Configuration {
         'name' => ['IN' => ['consent_category', 'consent_source', 'consent_type']],
       ]);
       foreach ((is_array($query) ? $query['values'] : []) as $entity) {
-        $this->option_groups[$entity['name']] = $entity;
+        if (is_array($entity) && isset($entity['name'])) {
+          $this->option_groups[_gdprx_str($entity['name'])] = $entity;
+        }
       }
     }
     return $this->option_groups;

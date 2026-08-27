@@ -29,6 +29,9 @@ class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
 
     // load option group IDs
     $groups = $config->getOptionGroups();
+    $category_group_id = $groups['consent_category']['id'] ?? NULL;
+    $source_group_id   = $groups['consent_source']['id'] ?? NULL;
+    $type_group_id     = $groups['consent_type']['id'] ?? NULL;
 
     // query the DB
     CRM_Core_DAO::disableFullGroupByMode();
@@ -53,36 +56,40 @@ class CRM_Gdprx_Page_SummaryTab extends CRM_Core_Page {
       GROUP BY record.id
       ORDER BY record.date DESC;', [
         1 => [$contact_id, 'Integer'],
-        2 => [$groups['consent_category']['id'], 'Integer'],
-        3 => [$groups['consent_source']['id'], 'Integer'],
-        4 => [$groups['consent_type']['id'], 'Integer'],
+        2 => [$category_group_id, 'Integer'],
+        3 => [$source_group_id, 'Integer'],
+        4 => [$type_group_id, 'Integer'],
       ]);
     CRM_Core_DAO::reenableFullGroupByMode();
 
+    $format_full = _gdprx_str($civi_config->dateformatFull);
+    $format_datetime = _gdprx_str($civi_config->dateformatDatetime);
+
     while ($data->fetch()) {
+      $record_note = _gdprx_str($data->record_note);
       $record_expiry = $data->record_expiry
-        ? CRM_Utils_Date::customFormat($data->record_expiry, $civi_config->dateformatFull)
+        ? CRM_Utils_Date::customFormat(_gdprx_str($data->record_expiry), $format_full)
         : '';
       $record_expiry_full = $data->record_expiry
-        ? CRM_Utils_Date::customFormat($data->record_expiry, $civi_config->dateformatDatetime)
+        ? CRM_Utils_Date::customFormat(_gdprx_str($data->record_expiry), $format_datetime)
         : '';
-      $record_note_short = mb_strlen($data->record_note) > 16
-        ? substr($data->record_note, 0, 13) . '...'
-        : $data->record_note;
+      $record_note_short = mb_strlen($record_note) > 16
+        ? substr($record_note, 0, 13) . '...'
+        : $record_note;
       $records[] = [
         'record_id'          => $data->record_id,
-        'record_date'        => CRM_Utils_Date::customFormat($data->record_date, $civi_config->dateformatFull),
-        'record_date_full'   => CRM_Utils_Date::customFormat($data->record_date, $civi_config->dateformatDatetime),
+        'record_date'        => CRM_Utils_Date::customFormat(_gdprx_str($data->record_date), $format_full),
+        'record_date_full'   => CRM_Utils_Date::customFormat(_gdprx_str($data->record_date), $format_datetime),
         'record_expiry'      => $record_expiry,
         'record_expiry_full' => $record_expiry_full,
         'record_category'    => $data->record_category,
         'record_source'      => $data->record_source,
         'record_type'        => $data->record_type,
         'record_terms_name'  => $data->record_terms_name,
-        'record_terms_full'  => htmlspecialchars($data->record_terms_full),
+        'record_terms_full'  => htmlspecialchars(_gdprx_str($data->record_terms_full)),
         'record_terms_id'    => $data->record_terms_id,
         'record_note_short'  => $record_note_short,
-        'record_note'        => htmlspecialchars($data->record_note),
+        'record_note'        => htmlspecialchars($record_note),
       ];
     }
 

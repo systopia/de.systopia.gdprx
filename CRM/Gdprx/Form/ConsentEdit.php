@@ -25,9 +25,10 @@ use CRM_Gdprx_ExtensionUtil as E;
  */
 class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
 
+  // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
   public function buildQuickForm(): void {
-    $record_id  = (int) CRM_Utils_Request::retrieve('id', 'String');
-    $contact_id = CRM_Utils_Request::retrieve('cid', 'Integer');
+    $record_id  = _gdprx_int(CRM_Utils_Request::retrieve('id', 'String'));
+    $contact_id = _gdprx_int(CRM_Utils_Request::retrieve('cid', 'Integer'));
     $multi      = (bool) CRM_Utils_Request::retrieve('multi', 'Integer');
     $config = CRM_Gdprx_Configuration::getSingleton();
 
@@ -40,7 +41,7 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
       $this->add('hidden', 'record_id', '0');
     }
 
-    $this->add('hidden', 'contact_id', $contact_id);
+    $this->add('hidden', 'contact_id', (string) $contact_id);
 
     // add date, prefilled with current date
     $this->add(
@@ -145,17 +146,18 @@ class CRM_Gdprx_Form_ConsentEdit extends CRM_Core_Form {
     $data = $record_id > 0 ? CRM_Gdprx_Consent::getRecord($record_id) : NULL;
     if ($data !== NULL) {
       // there is already a record
-      $date_values = [];
-      $date_values['consent_ui_date'] = date('Y-m-d H:i:s', (int) strtotime($data['consent_date']));
-      $date_values['consent_ui_expiry_date'] = date('Y-m-d H:i:s', (int) strtotime($data['consent_expiry_date']));
+      $consent_date = (int) strtotime(_gdprx_str($data['consent_date'] ?? ''));
+      $expiry_date_raw = (int) strtotime(_gdprx_str($data['consent_expiry_date'] ?? ''));
 
       $this->setDefaults([
-        'consent_ui_category'    => $data['consent_category'],
-        'consent_ui_source'      => $data['consent_source'],
-        'consent_ui_type'        => $data['consent_type'],
-        'consent_ui_note'        => $data['consent_note'],
-        'consent_ui_terms'       => $data['consent_terms'],
-      ] + $date_values);
+        'consent_ui_category'    => $data['consent_category'] ?? NULL,
+        'consent_ui_source'      => $data['consent_source'] ?? NULL,
+        'consent_ui_type'        => $data['consent_type'] ?? NULL,
+        'consent_ui_note'        => $data['consent_note'] ?? NULL,
+        'consent_ui_terms'       => $data['consent_terms'] ?? NULL,
+        'consent_ui_date'        => date('Y-m-d H:i:s', $consent_date),
+        'consent_ui_expiry_date' => date('Y-m-d H:i:s', $expiry_date_raw),
+      ]);
     }
     else {
       // pre-fill source only (dates have been set above); category is left

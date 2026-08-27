@@ -24,49 +24,40 @@ declare(strict_types = 1);
  * @return array<string, mixed>|null
  */
 function civicrm_api3_consent_record_create(array $params): ?array {
-  if (!isset($params['date']) || $params['date'] === '') {
-    $date = date('YmdHis');
-  }
-  else {
-    $date = date('YmdHis', strtotime($params['date']));
-  }
+  $date = (!isset($params['date']) || $params['date'] === '')
+    ? date('YmdHis')
+    : date('YmdHis', (int) strtotime(_gdprx_str($params['date'])));
 
-  if (!isset($params['expiry_date']) || $params['expiry_date'] === '') {
-    $expiry_date = date('YmdHis');
-  }
-  else {
-    $expiry_date = date('YmdHis', strtotime($params['expiry_date']));
-  }
+  $expiry_date = (!isset($params['expiry_date']) || $params['expiry_date'] === '')
+    ? date('YmdHis')
+    : date('YmdHis', (int) strtotime(_gdprx_str($params['expiry_date'])));
 
-  if (!isset($params['note']) || $params['note'] === '') {
-    $note = NULL;
-  }
-  else {
-    $note = $params['note'];
-  }
+  $note = (!isset($params['note']) || $params['note'] === '') ? NULL : _gdprx_str($params['note']);
 
   // check the terms
   if (isset($params['terms']) && $params['terms'] !== '') {
-    $terms = CRM_Gdprx_Terms::getOrCreate($params['terms']);
+    $terms_id = CRM_Gdprx_Terms::getOrCreate(_gdprx_str($params['terms']))->getID();
   }
   elseif (isset($params['terms_hash']) && $params['terms_hash'] !== '') {
-    $terms = CRM_Gdprx_Terms::findByHash($params['terms_hash']);
+    $terms_hash = _gdprx_str($params['terms_hash']);
+    $terms = CRM_Gdprx_Terms::findByHash($terms_hash);
     if ($terms === NULL) {
-      throw new CRM_Core_Exception("Terms '{$params['terms_hash']}' are not on record.");
+      throw new CRM_Core_Exception("Terms '{$terms_hash}' are not on record.");
     }
+    $terms_id = $terms->getID();
   }
   else {
-    $terms = NULL;
+    $terms_id = NULL;
   }
 
   return CRM_Gdprx_Consent::createConsentRecord(
-    $params['contact_id'],
-    $params['category'],
-    $params['source'],
+    _gdprx_int($params['contact_id']),
+    _gdprx_str($params['category']),
+    _gdprx_str($params['source']),
     $date,
-    $params['note'] ?? NULL,
-    $params['type'] ?? NULL,
-    $terms !== NULL ? $terms->getID() : NULL,
+    $note,
+    isset($params['type']) ? _gdprx_str($params['type']) : NULL,
+    $terms_id,
     $expiry_date);
 }
 

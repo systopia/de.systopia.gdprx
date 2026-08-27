@@ -28,6 +28,24 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 define('GDPRX_DEBUG_LOGGING', (bool) getenv('GDPRX_DEBUG_LOGGING'));
 
 /**
+ * Coerce a value of unknown type (API params, form values, DAO columns) to a string.
+ *
+ * @param mixed $value
+ */
+function _gdprx_str($value): string {
+  return is_scalar($value) ? (string) $value : '';
+}
+
+/**
+ * Coerce a value of unknown type (API params, form values, DAO columns) to an int.
+ *
+ * @param mixed $value
+ */
+function _gdprx_int($value): int {
+  return is_scalar($value) ? (int) $value : 0;
+}
+
+/**
  * Implements hook_civicrm_container().
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_container/
@@ -67,12 +85,10 @@ function gdprx_civicrm_pre(string $op, string $objectName, int|string|null $id, 
     if ($id === NULL) {
       // only apply if it's a new contact (no ID)
       $config = CRM_Gdprx_Configuration::getSingleton();
-      if (isset($params['privacy']) && is_array($params['privacy']) && $params['privacy'] !== []) {
-        $config->addDefaultPrivacySettings($params['privacy']);
+      if (!isset($params['privacy']) || !is_array($params['privacy'])) {
+        $params['privacy'] = [];
       }
-      else {
-        $config->addDefaultPrivacySettings($params['privacy']);
-      }
+      $config->addDefaultPrivacySettings($params['privacy']);
     }
   }
 }
@@ -91,12 +107,12 @@ function gdprx_civicrm_tabset(string $tabsetName, array &$tabs, array $context):
     $group_id = CRM_Gdprx_CustomData::getGroupID('consent');
     $tab_key  = "custom_{$group_id}";
     foreach ($tabs as $i => $tab) {
-      if ($tab['id'] === $tab_key) {
+      if (is_array($tab) && ($tab['id'] ?? NULL) === $tab_key) {
         unset($tabs[$i]);
         break;
       }
     }
-    $contactID = $context['contact_id'];
+    $contactID = _gdprx_int($context['contact_id'] ?? 0);
     // add our own tab
     $tabs[] = [
       'id'     => 'gdprx',

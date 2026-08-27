@@ -23,50 +23,29 @@ declare(strict_types = 1);
  *
  * @return array<string, mixed>
  */
-// phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
 function civicrm_api3_consent_record_has_consent(array $params): array {
   // prepare date
-  $timestamp = strtotime($params['date']);
+  $timestamp = strtotime(_gdprx_str($params['date']));
   if ($timestamp === FALSE) {
     return civicrm_api3_create_error('Invalid date given!');
   }
   $date = date('YmdHis', $timestamp);
 
-  // prepare positive types
-  if (!is_array($params['positive_types'])) {
-    $params['positive_types'] = explode(',', $params['positive_types']);
-  }
-  $positive_types = [];
-  foreach ($params['positive_types'] as $positive_type) {
-    $positive_type = (int) $positive_type;
-    if ($positive_type !== 0) {
-      $positive_types[] = $positive_type;
-    }
-  }
+  $positive_types = _gdprx_consent_record_int_list($params['positive_types']);
   if ($positive_types === []) {
     return civicrm_api3_create_error('Invalid positive_types given!');
   }
 
-  // prepare negative types
-  if (!is_array($params['negative_types'])) {
-    $params['negative_types'] = explode(',', $params['negative_types']);
-  }
-  $negative_types = [];
-  foreach ($params['negative_types'] as $negative_type) {
-    $negative_type = (int) $negative_type;
-    if ($negative_type !== 0) {
-      $negative_types[] = $negative_type;
-    }
-  }
+  $negative_types = _gdprx_consent_record_int_list($params['negative_types']);
   if ($negative_types === []) {
     return civicrm_api3_create_error('Invalid negative_types given!');
   }
 
   // run the query
   $consent_date = CRM_Gdprx_Consent::hasConsent(
-      $params['contact_id'],
-      $params['category'],
-      $params['type'],
+      _gdprx_int($params['contact_id']),
+      _gdprx_str($params['category']),
+      (bool) ($params['type'] ?? TRUE),
       $date,
       $positive_types,
       $negative_types);
@@ -83,6 +62,25 @@ function civicrm_api3_consent_record_has_consent(array $params): array {
       'has_consent'  => 0,
     ]);
   }
+}
+
+/**
+ * Normalise a comma-separated string or an array into a list of non-zero ints.
+ *
+ * @param mixed $value
+ *
+ * @return list<int>
+ */
+function _gdprx_consent_record_int_list($value): array {
+  $items = is_array($value) ? $value : explode(',', _gdprx_str($value));
+  $result = [];
+  foreach ($items as $item) {
+    $int = (int) (is_scalar($item) ? $item : 0);
+    if ($int !== 0) {
+      $result[] = $int;
+    }
+  }
+  return $result;
 }
 
 /**

@@ -108,19 +108,19 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
     if ($apiRequest['entity'] === $this->entity && $apiRequest['action'] === $this->action) {
 
       // check if the call was successfull
-      if (!isset($result['is_error']) || (int) $result['is_error'] === 0) {
+      if (!isset($result['is_error']) || _gdprx_int($result['is_error']) === 0) {
 
         // check if the contact is there
-        $contact_id = $this->getDataValue($this->contact_source, $apiRequest, $result);
-        if ((int) $contact_id > 0) {
+        $contact_id = _gdprx_int($this->getDataValue($this->contact_source, $apiRequest, $result));
+        if ($contact_id > 0) {
 
           // all good: create GDPR consent record
           CRM_Gdprx_Consent::createConsentRecord(
             $contact_id,
-            $this->getDataValue($this->category, $apiRequest, $result),
-            $this->getDataValue($this->source, $apiRequest, $result),
-            date('YmdHis', (int) strtotime((string) $this->getDataValue($this->date_source, $apiRequest, $result))),
-            $this->getDataValue($this->note_source, $apiRequest, $result)
+            _gdprx_str($this->getDataValue($this->category, $apiRequest, $result)),
+            _gdprx_str($this->getDataValue($this->source, $apiRequest, $result)),
+            date('YmdHis', (int) strtotime(_gdprx_str($this->getDataValue($this->date_source, $apiRequest, $result)))),
+            _gdprx_str($this->getDataValue($this->note_source, $apiRequest, $result))
           );
         }
       }
@@ -145,12 +145,8 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
     elseif (substr($data_spec, 0, 9) === 'request::') {
       // parameter should be taken from request parameters
       $attribute = substr($data_spec, 9);
-      if (isset($request['params'][$attribute])) {
-        return $request['params'][$attribute];
-      }
-      else {
-        return '';
-      }
+      $requestParams = is_array($request['params'] ?? NULL) ? $request['params'] : [];
+      return $requestParams[$attribute] ?? '';
 
     }
     elseif (substr($data_spec, 0, 7) === 'reply::') {

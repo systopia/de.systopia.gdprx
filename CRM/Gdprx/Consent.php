@@ -351,9 +351,8 @@ class CRM_Gdprx_Consent {
    *
    * @param int $id
    *
-   * @return array{entity_id: mixed, consent_date: mixed, consent_expiry_date: mixed, consent_category: mixed, consent_source: mixed, consent_type: mixed, consent_terms: mixed, consent_note: mixed}|null
+   * @return array<string, mixed>|null
    */
-  // phpcs:ignore Generic.Files.LineLength.TooLong
   public static function getRecord($id): ?array {
     $data = CRM_Core_DAO::executeQuery('SELECT * FROM civicrm_value_gdpr_consent WHERE id = %1',
       [1 => [$id, 'Integer']]);

@@ -30,11 +30,9 @@ class CRM_Gdprx_Terms {
 
   /**
    * get the internal ID of this record
-   *
-   * @return mixed
    */
-  public function getID() {
-    return $this->record->record_id;
+  public function getID(): int {
+    return (int) $this->record->record_id;
   }
 
   /**
