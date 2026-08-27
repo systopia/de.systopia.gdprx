@@ -38,11 +38,11 @@ class CRM_Gdprx_Terms {
   }
 
   /**
-   * Get the record
+   * Get the terms record for the given full text, creating it if necessary
    *
    * @param string $terms_full
    */
-  public static function getOrCreate($terms_full): ?self {
+  public static function getOrCreate($terms_full): self {
     $hash = sha1($terms_full);
     $terms = self::findByHash($hash);
     if ($terms !== NULL) {
@@ -58,7 +58,11 @@ class CRM_Gdprx_Terms {
         3 => [$terms_full, 'String'],
       ]);
     // and return the result
-    return self::findByHash($hash);
+    $terms = self::findByHash($hash);
+    if ($terms === NULL) {
+      throw new \RuntimeException('Failed to create GDPR terms record.');
+    }
+    return $terms;
   }
 
   /**
