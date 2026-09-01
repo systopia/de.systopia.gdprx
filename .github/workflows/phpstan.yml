@@ -81,6 +81,10 @@ jobs:
               "civicrm/civicrm-packages:${INPUTS_CIVICRM_VERSION}"
           fi
 
+          if [ ! -d "../action-provider" ]; then
+            git clone --depth=1 https://lab.civicrm.org/extensions/action-provider.git ../action-provider
+          fi
+
           # Run with --no-scripts so ComposerHelper doesn't prevent installation
           # of civicrm packages.
           composer update --no-scripts --no-progress --${MATRIX_PREFER} --optimize-autoloader --ignore-platform-reqs
