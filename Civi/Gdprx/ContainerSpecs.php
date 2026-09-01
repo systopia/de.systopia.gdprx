@@ -18,8 +18,8 @@ declare(strict_types = 1);
 
 namespace Civi\Gdprx;
 
+use Civi\ActionProvider\Action\AbstractAction;
 use CRM_Gdprx_ExtensionUtil as E;
-
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -28,7 +28,7 @@ class ContainerSpecs implements CompilerPassInterface {
   /**
    * Register this one action: GdprxAddConsentRecord
    */
-  public function process(ContainerBuilder $container) {
+  public function process(ContainerBuilder $container): void {
     if (!$container->hasDefinition('action_provider')) {
       return;
     }
@@ -38,7 +38,7 @@ class ContainerSpecs implements CompilerPassInterface {
       'Civi\Gdprx\ActionProvider\Action\AddConsentRecord',
       E::ts('GDPR-X: Add Consent Record'),
       [
-        \Civi\ActionProvider\Action\AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+        AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       ],
     ]);
   }
