@@ -316,7 +316,13 @@ class CRM_Gdprx_CustomData {
    * create a new entity
    */
   // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
-  protected function updateEntity($entity_type, $requested_data, $current_data, $required_fields = [], $force = FALSE) {
+  protected function updateEntity(
+    $entity_type,
+    $requested_data,
+    $current_data,
+    $required_fields = [],
+    $force = FALSE
+  ) {
     $update_query = [];
 
     // first: identify fields that need to be updated

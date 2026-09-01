@@ -125,12 +125,19 @@ class CRM_Gdprx_ConsentUI {
   /**
    * handles the validate form hook action
    *
+   * @param string $formName
    * @param array<string, mixed> $fields
    * @param array<string, mixed> $files
+   * @param \CRM_Contact_Form_Contact $form
    * @param array<string, mixed> $errors
    */
-  // phpcs:ignore Generic.Files.LineLength.TooLong
-  public static function validateForm(string $formName, array &$fields, array &$files, \CRM_Contact_Form_Contact &$form, array &$errors): void {
+  public static function validateForm(
+    string $formName,
+    array &$fields,
+    array &$files,
+    \CRM_Contact_Form_Contact &$form,
+    array &$errors
+  ): void {
     if ((int) $form->_contactId > 0) {
       // we are in edit mode, nothing to do here!
       return;

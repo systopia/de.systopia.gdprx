@@ -48,11 +48,11 @@ class CRM_Gdprx_Consent {
       self::$category_list = [];
       $query = civicrm_api3('OptionValue', 'get', [
         'option_group_id' => 'consent_category',
-        'option.limit'    => 0,
-        'option.sort'     => 'weight asc',
-        'sequential'      => 1,
-        'is_active'       => 1,
-        'return'          => 'value,label',
+        'option.limit' => 0,
+        'option.sort' => 'weight asc',
+        'sequential' => 1,
+        'is_active' => 1,
+        'return' => 'value,label',
       ]);
       foreach ((is_array($query) ? $query['values'] : []) as $option_value) {
         self::$category_list[$option_value['value']] = $option_value['label'];
@@ -71,11 +71,11 @@ class CRM_Gdprx_Consent {
       self::$sources_list = [];
       $query = civicrm_api3('OptionValue', 'get', [
         'option_group_id' => 'consent_source',
-        'option.limit'    => 0,
-        'option.sort'     => 'weight asc',
-        'sequential'      => 1,
-        'is_active'       => 1,
-        'return'          => 'value,label',
+        'option.limit' => 0,
+        'option.sort' => 'weight asc',
+        'sequential' => 1,
+        'is_active' => 1,
+        'return' => 'value,label',
       ]);
       foreach ((is_array($query) ? $query['values'] : []) as $option_value) {
         self::$sources_list[$option_value['value']] = $option_value['label'];
@@ -96,11 +96,11 @@ class CRM_Gdprx_Consent {
       try {
         $source_default = civicrm_api3('OptionValue', 'getvalue', [
           'option_group_id' => 'consent_source',
-          'option.limit'    => 1,
-          'option.sort'     => 'weight desc',
-          'is_active'       => 1,
-          'is_default'      => 1,
-          'return'          => 'value',
+          'option.limit' => 1,
+          'option.sort' => 'weight desc',
+          'is_active' => 1,
+          'is_default' => 1,
+          'return' => 'value',
         ]);
       }
       catch (CRM_Core_Exception $ex) {
@@ -122,11 +122,11 @@ class CRM_Gdprx_Consent {
       try {
         $category_default = civicrm_api3('OptionValue', 'getvalue', [
           'option_group_id' => 'consent_category',
-          'option.limit'    => 1,
-          'option.sort'     => 'weight desc',
-          'is_active'       => 1,
-          'is_default'      => 1,
-          'return'          => 'value',
+          'option.limit' => 1,
+          'option.sort' => 'weight desc',
+          'is_active' => 1,
+          'is_default' => 1,
+          'return' => 'value',
         ]);
       }
       catch (CRM_Core_Exception $ex) {
@@ -146,11 +146,11 @@ class CRM_Gdprx_Consent {
       self::$types_list = [];
       $query = civicrm_api3('OptionValue', 'get', [
         'option_group_id' => 'consent_type',
-        'option.limit'    => 0,
-        'option.sort'     => 'weight asc',
-        'sequential'      => 1,
-        'is_active'       => 1,
-        'return'          => 'value,label',
+        'option.limit' => 0,
+        'option.sort' => 'weight asc',
+        'sequential' => 1,
+        'is_active' => 1,
+        'return' => 'value,label',
       ]);
       foreach ((is_array($query) ? $query['values'] : []) as $option_value) {
         self::$types_list[$option_value['value']] = $option_value['label'];
@@ -163,8 +163,8 @@ class CRM_Gdprx_Consent {
    * add a new user consent entry for the contact
    *
    * @param int $contact_id
-   * @param int|string $category  option value or label of the consent_category option group
-   * @param int|string $source    option value or label of the consent_source option group
+   * @param int|string $category option value or label of the consent_category option group
+   * @param int|string $source option value or label of the consent_source option group
    * @param string $date
    * @param string|null $note
    * @param int|string|null $type
@@ -173,8 +173,16 @@ class CRM_Gdprx_Consent {
    *
    * @return array<string, mixed>|null
    */
-  // phpcs:ignore Generic.Files.LineLength.TooLong
-  public static function createConsentRecord($contact_id, $category, $source, $date = 'now', $note = '', $type = NULL, $terms_id = NULL, $expiry_date = NULL) {
+  public static function createConsentRecord(
+    $contact_id,
+    $category,
+    $source,
+    $date = 'now',
+    $note = '',
+    $type = NULL,
+    $terms_id = NULL,
+    $expiry_date = NULL
+  ): ?array {
     return self::updateConsentRecord(
       '-1', $contact_id, $category, $source, $date, $note, $type, $terms_id, $expiry_date
     );
@@ -183,10 +191,10 @@ class CRM_Gdprx_Consent {
   /**
    * update existing consent record
    *
-   * @param int|string $record_id  the multi-value row index, or '-1' to create a new entry
+   * @param int|string $record_id the multi-value row index, or '-1' to create a new entry
    * @param int $contact_id
-   * @param int|string $category  option value or label of the consent_category option group
-   * @param int|string $source    option value or label of the consent_source option group
+   * @param int|string $category option value or label of the consent_category option group
+   * @param int|string $source option value or label of the consent_source option group
    * @param string $date
    * @param string|null $note
    * @param int|string|null $type
@@ -195,8 +203,18 @@ class CRM_Gdprx_Consent {
    *
    * @return array<string, mixed>|null
    */
-  // phpcs:ignore Generic.Files.LineLength.TooLong, Generic.Metrics.CyclomaticComplexity.TooHigh
-  public static function updateConsentRecord($record_id, $contact_id, $category, $source, $date = 'now', $note = '', $type = NULL, $terms_id = NULL, $expiry_date = NULL) {
+  // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
+  public static function updateConsentRecord(
+    $record_id,
+    $contact_id,
+    $category,
+    $source,
+    $date = 'now',
+    $note = '',
+    $type = NULL,
+    $terms_id = NULL,
+    $expiry_date = NULL
+  ): ?array {
     if (GDPRX_DEBUG_LOGGING) {
       Civi::log()->debug(
         "create/update consent record: {$contact_id}, {$category}, {$source}, "
@@ -230,9 +248,9 @@ class CRM_Gdprx_Consent {
 
     // create record
     $data = [
-      'consent.consent_date'     => date('YmdHis', (int) strtotime($date)),
+      'consent.consent_date' => date('YmdHis', (int) strtotime($date)),
       'consent.consent_category' => $category,
-      'consent.consent_source'   => $source,
+      'consent.consent_source' => $source,
     ];
 
     if ($expiry_date !== NULL && $expiry_date !== '') {
@@ -286,7 +304,7 @@ class CRM_Gdprx_Consent {
    * Get a valid consent record.
    *
    * @param int $contact_id
-   * @param int|string $category  option value or label of the consent_category option group
+   * @param int|string $category option value or label of the consent_category option group
    * @param bool $positive
    * @param string $date
    * @param array<int, int> $positive_types
@@ -294,8 +312,14 @@ class CRM_Gdprx_Consent {
    *
    * @return string|null the date of the given consent, or NULL if no currently valid consent recorded
    */
-  // phpcs:ignore Generic.Files.LineLength.TooLong
-  public static function hasConsent($contact_id, $category, $positive = TRUE, $date = 'now', $positive_types = [2, 4, 5], $negative_types = [3]) {
+  public static function hasConsent(
+    $contact_id,
+    $category,
+    $positive = TRUE,
+    $date = 'now',
+    $positive_types = [2, 4, 5],
+    $negative_types = [3]
+  ): ?string {
     // if we're looking for negative consent, swap the search patterns
     if (!$positive) {
       $tmp = $positive_types;
@@ -311,14 +335,14 @@ class CRM_Gdprx_Consent {
     $negative_types_list = implode(',', $negative_types);
     $query_sql = "
     SELECT
-      MAX(positive.date) last_positive_consent, 
-      MAX(negative.date) last_negative_consent 
+      MAX(positive.date) last_positive_consent,
+      MAX(negative.date) last_negative_consent
     FROM civicrm_contact contact
-    LEFT JOIN civicrm_value_gdpr_consent positive ON positive.entity_id = contact.id 
+    LEFT JOIN civicrm_value_gdpr_consent positive ON positive.entity_id = contact.id
                                                   AND positive.type IN ({$positive_types_list})
                                                   AND positive.category = {$category}
                                                   AND positive.date <= '{$date}'
-    LEFT JOIN civicrm_value_gdpr_consent negative ON negative.entity_id = contact.id 
+    LEFT JOIN civicrm_value_gdpr_consent negative ON negative.entity_id = contact.id
                                                   AND negative.type IN ({$negative_types_list})
                                                   AND negative.category = {$category}
                                                   AND negative.date <= '{$date}'
@@ -330,7 +354,7 @@ class CRM_Gdprx_Consent {
       if ($query->last_negative_consent) {
         // negative wins if the date is the same
         if ($query->last_positive_consent > $query->last_negative_consent
-            || (!$positive && $query->last_positive_consent === $query->last_negative_consent)) {
+          || (!$positive && $query->last_positive_consent === $query->last_negative_consent)) {
           return $query->last_positive_consent;
         }
         else {
@@ -358,14 +382,14 @@ class CRM_Gdprx_Consent {
       [1 => [$id, 'Integer']]);
     if ($data->fetch()) {
       return [
-        'entity_id'           => $data->entity_id,
-        'consent_date'        => $data->date,
+        'entity_id' => $data->entity_id,
+        'consent_date' => $data->date,
         'consent_expiry_date' => $data->expiry,
-        'consent_category'    => $data->category,
-        'consent_source'      => $data->source,
-        'consent_type'        => $data->type,
-        'consent_terms'       => $data->terms_id,
-        'consent_note'        => $data->note,
+        'consent_category' => $data->category,
+        'consent_source' => $data->source,
+        'consent_type' => $data->type,
+        'consent_terms' => $data->terms_id,
+        'consent_note' => $data->note,
       ];
     }
     else {
@@ -379,10 +403,10 @@ class CRM_Gdprx_Consent {
    * You can implement this hook e.g. to update the contact's privacy settings
    *  based on the recorded consents
    *
-   * @param string $mode        'create' if new record or 'update'
-   * @param int $contact_id     contact this record belongs to
-   * @param int|null $record_id  record ID if this is an 'update', NULL otherwise
-   * @param array<string, mixed> $data  the content of the record written
+   * @param string $mode 'create' if new record or 'update'
+   * @param int $contact_id contact this record belongs to
+   * @param int|null $record_id record ID if this is an 'update', NULL otherwise
+   * @param array<string, mixed> $data the content of the record written
    *
    * @return mixed
    */

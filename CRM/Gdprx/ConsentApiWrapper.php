@@ -59,27 +59,34 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
    * Create an API Wrapper to derive GDPR consent records
    * from a successful API call, e.g. a group sign-up
    *
-   * @param string $entity          the API entity to process
-   * @param string $action          the API action to process
-   * @param string $category        data specifier (see below) for label or value of the consent_category option group.
-   * @param string $source          data specifier (see below) for label or value of the consent_source option group.
+   * @param string $entity the API entity to process
+   * @param string $action the API action to process
+   * @param string $category data specifier (see below) for label or value of the consent_category option group.
+   * @param string $source data specifier (see below) for label or value of the consent_source option group.
    * @param string|null $note_source data specifier (see below) for the note field, or NULL (default)
-   * @param string $date_source     data specifier (see below) for the date entry
-   * @param string $contact_source  data specifier (see below) for the contact
+   * @param string $date_source data specifier (see below) for the date entry
+   * @param string $contact_source data specifier (see below) for the contact
    *
    * data specifiers can be either:
    *  'request::<attribute>' in this case the attribute is taken from the API request.params
    *  'reply::<attribute>'   in this case the attribute is taken from the API reply
    *  otherwise              the string is taken literally
    */
-  // phpcs:ignore Generic.Files.LineLength.TooLong
-  public function __construct($entity, $action, $category, $source, $note_source = NULL, $date_source = 'now', $contact_source = 'reply::contact_id') {
-    $this->entity         = $entity;
-    $this->action         = $action;
-    $this->category       = $category;
-    $this->source         = $source;
-    $this->note_source    = $note_source;
-    $this->date_source    = $date_source;
+  public function __construct(
+    $entity,
+    $action,
+    $category,
+    $source,
+    $note_source = NULL,
+    $date_source = 'now',
+    $contact_source = 'reply::contact_id'
+  ) {
+    $this->entity = $entity;
+    $this->action = $action;
+    $this->category = $category;
+    $this->source = $source;
+    $this->note_source = $note_source;
+    $this->date_source = $date_source;
     $this->contact_source = $contact_source;
   }
 
@@ -115,11 +122,12 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
         if ($contact_id > 0) {
 
           // all good: create GDPR consent record
+          $dateValue = _gdprx_str($this->getDataValue($this->date_source, $apiRequest, $result));
           CRM_Gdprx_Consent::createConsentRecord(
             $contact_id,
             _gdprx_str($this->getDataValue($this->category, $apiRequest, $result)),
             _gdprx_str($this->getDataValue($this->source, $apiRequest, $result)),
-            date('YmdHis', (int) strtotime(_gdprx_str($this->getDataValue($this->date_source, $apiRequest, $result)))),
+            date('YmdHis', (int) strtotime($dateValue)),
             _gdprx_str($this->getDataValue($this->note_source, $apiRequest, $result))
           );
         }
@@ -132,6 +140,7 @@ class CRM_Gdprx_ConsentApiWrapper implements API_Wrapper {
   /**
    * Extract the speficied value, see constructor definition
    *
+   * @param string|null $data_spec
    * @param array<string, mixed> $request
    * @param array<string, mixed> $reply
    *
