@@ -14,19 +14,29 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 /**
  * Generic functions regarding the consent records
  */
 class CRM_Gdprx_Configuration {
 
-  private static $singleton = NULL;
+  private static ?CRM_Gdprx_Configuration $singleton = NULL;
+
+  /**
+   * @var array<string, mixed>
+   */
   private $config;
+
+  /**
+   * @var array<string, array<string, mixed>>|null
+   */
   private $option_groups = NULL;
 
   /**
    * Get the configuration singleton
    */
-  public static function getSingleton() {
+  public static function getSingleton(): CRM_Gdprx_Configuration {
     if (self::$singleton === NULL) {
       self::$singleton = new CRM_Gdprx_Configuration();
     }
@@ -35,31 +45,38 @@ class CRM_Gdprx_Configuration {
 
   private function __construct() {
     // load current config
-    $this->config = Civi::settings()->get('gdprx_settings');
-    if (empty($this->config)) {
-      // TODO: default values?
-      $this->config = array();
-    }
+    // TODO: default values?
+    $settings = Civi::settings()->get('gdprx_settings');
+    $this->config = is_array($settings) ? $settings : [];
   }
 
   /**
    * Get the given setting value
    */
-  public function getSetting($name, $default = NULL) {
-    return CRM_Utils_Array::value($name, $this->config, $default);
+  public function getSetting(string $name, mixed $default = NULL): mixed {
+    return $this->config[$name] ?? $default;
+  }
+
+  /**
+   * Is the given (boolean) setting switched on?
+   */
+  public function isEnabled(string $name): bool {
+    return (bool) $this->getSetting($name);
   }
 
   /**
    * Get all current settings
+   *
+   * @return array<string, mixed>
    */
-  public function getSettings() {
+  public function getSettings(): array {
     return $this->config;
   }
 
   /**
    * Set the given setting to value
    */
-  public function setSetting($name, $value, $write = FALSE) {
+  public function setSetting(string $name, mixed $value, bool $write = FALSE): void {
     $this->config[$name] = $value;
     if ($write) {
       $this->writeSettings();
@@ -69,16 +86,18 @@ class CRM_Gdprx_Configuration {
   /**
    * Write the current settings to DB
    */
-  public function writeSettings() {
+  public function writeSettings(): void {
     Civi::settings()->set('gdprx_settings', $this->config);
   }
 
   /**
    * inject the contact's default privacy settings
    *  if enabled
+   *
+   * @param array<array-key, mixed> $params
    */
-  public function addDefaultPrivacySettings(&$params) {
-    if ($this->getSetting('default_privacy_settings_enabled')) {
+  public function addDefaultPrivacySettings(&$params): void {
+    if ($this->isEnabled('default_privacy_settings_enabled')) {
       $params['do_not_email'] = $this->getSetting('default_privacy_do_not_email');
       $params['do_not_phone'] = $this->getSetting('default_privacy_do_not_phone');
       $params['do_not_mail']  = $this->getSetting('default_privacy_do_not_mail');
@@ -90,17 +109,22 @@ class CRM_Gdprx_Configuration {
 
   /**
    * Get a name => entity list of the option groups involved
+   *
+   * @return array<string, array<string, mixed>>
    */
-  public function getOptionGroups() {
+  public function getOptionGroups(): array {
     if ($this->option_groups === NULL) {
-      $this->option_groups = array();
-      $query = civicrm_api3('OptionGroup', 'get', array(
-        'name' => array('IN' => array('consent_category','consent_source','consent_type'))
-      ));
-      foreach ($query['values'] as $entity) {
-        $this->option_groups[$entity['name']] = $entity;
+      $this->option_groups = [];
+      $query = civicrm_api3('OptionGroup', 'get', [
+        'name' => ['IN' => ['consent_category', 'consent_source', 'consent_type']],
+      ]);
+      foreach ((is_array($query) ? $query['values'] : []) as $entity) {
+        if (is_array($entity) && isset($entity['name'])) {
+          $this->option_groups[_gdprx_str($entity['name'])] = $entity;
+        }
       }
     }
     return $this->option_groups;
   }
+
 }

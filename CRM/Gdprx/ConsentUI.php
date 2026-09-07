@@ -14,6 +14,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Gdprx_ExtensionUtil as E;
 
 class CRM_Gdprx_ConsentUI {
@@ -21,15 +23,15 @@ class CRM_Gdprx_ConsentUI {
   /**
    * handles the build form hook action
    */
-  public static function buildForm($formName, &$form) {
-    if (!empty($form->_contactId)) {
+  public static function buildForm(string $formName, \CRM_Contact_Form_Contact &$form): void {
+    if ((int) $form->_contactId > 0) {
       // we are in edit mode, nothing to do here!
       return;
     }
 
     // check if this is enabled
     $config = CRM_Gdprx_Configuration::getSingleton();
-    if (!$config->getSetting('enforce_record_for_new_contacts')) {
+    if (!$config->isEnabled('enforce_record_for_new_contacts')) {
       return;
     }
 
@@ -40,18 +42,18 @@ class CRM_Gdprx_ConsentUI {
     $form->add(
       'datepicker',
       'consent_ui_date',
-      E::ts("Date"),
+      E::ts('Date'),
       ['class' => ''],
       TRUE,
       ['time' => FALSE]
     );
     $form->setDefaults(['consent_ui_date' => date('Y-m-d')]);
 
-    if ($config->getSetting('use_consent_expiry_date')) {
+    if ($config->isEnabled('use_consent_expiry_date')) {
       $form->add(
         'datepicker',
         'consent_ui_expiry_date',
-        E::ts("Expires"),
+        E::ts('Expires'),
         ['class' => ''],
         FALSE,
         ['time' => FALSE]
@@ -60,92 +62,104 @@ class CRM_Gdprx_ConsentUI {
 
     // add category dropdown from option group
     $form->add('select',
-      "consent_ui_category",
-      E::ts("Category"),
-      array('0' => E::ts("- please select -")) + CRM_Gdprx_Consent::getCategoryList(),
+      'consent_ui_category',
+      E::ts('Category'),
+      ['0' => E::ts('- please select -')] + CRM_Gdprx_Consent::getCategoryList(),
       TRUE,
-      array('class' => 'user-category')
+      ['class' => 'user-category']
     );
 
     // add source category
     $form->add('select',
-      "consent_ui_source",
-      E::ts("Source"),
-      array('0' => E::ts("- please select -")) + CRM_Gdprx_Consent::getSourceList(),
+      'consent_ui_source',
+      E::ts('Source'),
+      ['0' => E::ts('- please select -')] + CRM_Gdprx_Consent::getSourceList(),
       TRUE,
-      array('class' => 'user-source')
+      ['class' => 'user-source']
     );
 
     // add type dropdown from option group
-    if ($config->getSetting('use_consent_type')) {
+    if ($config->isEnabled('use_consent_type')) {
       $form->add('select',
-        "consent_ui_type",
-        E::ts("Type"),
+        'consent_ui_type',
+        E::ts('Type'),
         CRM_Gdprx_Consent::getTypeList(),
         FALSE,
-        array('class' => 'user-type')
+        ['class' => 'user-type']
       );
     }
 
     // terms
-    if ($config->getSetting('use_consent_terms')) {
+    if ($config->isEnabled('use_consent_terms')) {
       $form->add('select',
-        "consent_ui_terms",
-        E::ts("Terms"),
-        array('0' => E::ts("- none -")) + CRM_Gdprx_Terms::getList(),
+        'consent_ui_terms',
+        E::ts('Terms'),
+        ['0' => E::ts('- none -')] + CRM_Gdprx_Terms::getList(),
         FALSE,
-        array('class' => 'user-type')
+        ['class' => 'user-type']
       );
     }
 
-    // remark (note)
-    if ($config->getSetting('use_consent_note')) {
+    // optional note field
+    if ($config->isEnabled('use_consent_note')) {
       $form->add(
         'text',
-        "consent_ui_note",
-        E::ts("Note")
+        'consent_ui_note',
+        E::ts('Note')
       );
     }
 
-    // set default values
+    // set default values - category is deliberately not pre-filled (unlike source)
+    // so the user is forced to pick one
     $form->setDefaults([
-      'consent_ui_category'   => '0', // CRM_Gdprx_Consent::getCategoryDefault()
+      'consent_ui_category'   => '0',
       'consent_ui_source'     => CRM_Gdprx_Consent::getSourceDefault(),
     ]);
 
     // add template path for these fields
-    CRM_Core_Region::instance('page-body')->add(array(
-      'template' => "CRM/Gdprx/ConsentForm.tpl"
-    ));
+    CRM_Core_Region::instance('page-body')->add([
+      'template' => 'CRM/Gdprx/ConsentForm.tpl',
+    ]);
   }
-
 
   /**
    * handles the validate form hook action
+   *
+   * @param string $formName
+   * @param array<string, mixed> $fields
+   * @param array<string, mixed> $files
+   * @param \CRM_Contact_Form_Contact $form
+   * @param array<string, mixed> $errors
    */
-  public static function validateForm($formName, &$fields, &$files, &$form, &$errors) {
-    if (!empty($form->_contactId)) {
+  public static function validateForm(
+    string $formName,
+    array &$fields,
+    array &$files,
+    \CRM_Contact_Form_Contact &$form,
+    array &$errors
+  ): void {
+    if ((int) $form->_contactId > 0) {
       // we are in edit mode, nothing to do here!
       return;
     }
 
     // check if this is enabled
     $config = CRM_Gdprx_Configuration::getSingleton();
-    if (!$config->getSetting('enforce_record_for_new_contacts')) {
+    if (!$config->isEnabled('enforce_record_for_new_contacts')) {
       return;
     }
 
-    $category = $fields ['consent_ui_category'] ?? NULL;
-    if (!$category || $category == '0') {
+    $category = $fields['consent_ui_category'] ?? NULL;
+    if (in_array($category, [NULL, '', '0'], TRUE)) {
       $errors['consent_ui_category'] = E::ts('Category is mandatory');
     }
 
-    $source = $fields ['consent_ui_source'] ?? NULL;
-    if (!$source || $source == '0') {
+    $source = $fields['consent_ui_source'] ?? NULL;
+    if (in_array($source, [NULL, '', '0'], TRUE)) {
       $errors['consent_ui_source'] = E::ts('Source is mandatory');
     }
 
-    $contact_origin = $fields ['consent_ui_note'] ?? NULL;
+    $contact_origin = _gdprx_str($fields['consent_ui_note'] ?? '');
     if (strlen($contact_origin) > 1024) {
       $errors['consent_ui_note'] = E::ts('Note cannot be more the 1024 characters');
     }
@@ -154,20 +168,20 @@ class CRM_Gdprx_ConsentUI {
   /**
    * handles the post process hook action
    */
-  public static function postProcess($formName, &$form) {
-    if (empty($form->_contactId)) {
+  public static function postProcess(string $formName, \CRM_Contact_Form_Contact &$form): void {
+    if ((int) $form->_contactId === 0) {
       // contact doesn't exist yet
       return;
     }
 
     // check if this is enabled
     $config = CRM_Gdprx_Configuration::getSingleton();
-    if (!$config->getSetting('enforce_record_for_new_contacts')) {
+    if (!$config->isEnabled('enforce_record_for_new_contacts')) {
       return;
     }
 
     $values = $form->exportValues();
-    if (!empty($values['consent_ui_category'])) {
+    if ((string) ($values['consent_ui_category'] ?? '0') !== '0') {
       CRM_Gdprx_Consent::createConsentRecord($form->_contactId,
                                              $values['consent_ui_category'],
                                              $values['consent_ui_source'],
@@ -178,4 +192,5 @@ class CRM_Gdprx_ConsentUI {
                                              $values['consent_ui_expiry_date'] ?? NULL);
     }
   }
+
 }

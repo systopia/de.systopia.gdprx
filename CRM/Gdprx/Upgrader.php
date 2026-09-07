@@ -14,6 +14,8 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
 use CRM_Gdprx_ExtensionUtil as E;
 
 /**
@@ -23,6 +25,8 @@ class CRM_Gdprx_Upgrader extends CRM_Extension_Upgrader_Base {
 
   /**
    * Installer
+   *
+   * @return bool
    */
   public function install() {
     // create new terms table
@@ -61,4 +65,5 @@ class CRM_Gdprx_Upgrader extends CRM_Extension_Upgrader_Base {
 
     return TRUE;
   }
+
 }

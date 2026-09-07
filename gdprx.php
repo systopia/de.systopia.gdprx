@@ -14,19 +14,43 @@
 | written permission from the original author(s).        |
 +--------------------------------------------------------*/
 
+declare(strict_types = 1);
+
+// The extension main file mixes this require with function definitions by design (civix structure).
+// phpcs:disable PSR1.Files.SideEffects
 require_once 'gdprx.civix.php';
+// phpcs:enable PSR1.Files.SideEffects
 
 use CRM_Gdprx_ExtensionUtil as E;
-use \Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-define('GDPRX_DEBUG_LOGGING', FALSE);
+// Toggle verbose consent-record logging via the GDPRX_DEBUG_LOGGING environment variable.
+define('GDPRX_DEBUG_LOGGING', (bool) getenv('GDPRX_DEBUG_LOGGING'));
 
 /**
- * Implements hook_civicrm_container()
+ * Coerce a value of unknown type (API params, form values, DAO columns) to a string.
+ *
+ * @param mixed $value
+ */
+function _gdprx_str($value): string {
+  return is_scalar($value) ? (string) $value : '';
+}
+
+/**
+ * Coerce a value of unknown type (API params, form values, DAO columns) to an int.
+ *
+ * @param mixed $value
+ */
+function _gdprx_int($value): int {
+  return is_scalar($value) ? (int) $value : 0;
+}
+
+/**
+ * Implements hook_civicrm_container().
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_container/
  */
-function gdprx_civicrm_container(ContainerBuilder $container) {
+function gdprx_civicrm_container(ContainerBuilder $container): void {
   if (class_exists('Civi\Gdprx\ContainerSpecs')) {
     $container->addCompilerPass(new Civi\Gdprx\ContainerSpecs());
   }
@@ -34,13 +58,16 @@ function gdprx_civicrm_container(ContainerBuilder $container) {
 
 /**
  * Add a task to create multiple records
+ *
+ * @phpstan-param array<string, mixed> $tasks
  */
-function gdprx_civicrm_searchTasks($objectType, &$tasks) {
-  if ($objectType == 'contact') {
-    $tasks['create_gdprx'] = array(
-        'title'  => E::ts("Add Consent Records"),
-        'class'  => 'CRM_Gdprx_Form_ConsentTask',
-        'result' => false);
+function gdprx_civicrm_searchTasks(string $objectType, array &$tasks): void {
+  if ($objectType === 'contact') {
+    $tasks['create_gdprx'] = [
+      'title'  => E::ts('Add Consent Records'),
+      'class'  => 'CRM_Gdprx_Form_ConsentTask',
+      'result' => FALSE,
+    ];
   }
 }
 
@@ -49,46 +76,50 @@ function gdprx_civicrm_searchTasks($objectType, &$tasks) {
  *
  * Will make sure that edits to contact/bpks will be
  *  handled correctly
+ *
+ * @phpstan-param array<string, mixed> $params
  */
-function gdprx_civicrm_pre($op, $objectName, $id, &$params) {
+function gdprx_civicrm_pre(string $op, string $objectName, int|string|null $id, array &$params): void {
   // see if we should apply the default privacy settings
-  if ($objectName == 'Individual' || $objectName == 'Organization' || $objectName == 'Household') {
-    if (empty($id)) {
+  if ($objectName === 'Individual' || $objectName === 'Organization' || $objectName === 'Household') {
+    if ($id === NULL) {
       // only apply if it's a new contact (no ID)
       $config = CRM_Gdprx_Configuration::getSingleton();
-      if (!empty($params['privacy']) && is_array($params['privacy'])) {
-        $config->addDefaultPrivacySettings($params['privacy']);
-      } else {
-        $config->addDefaultPrivacySettings($params['privacy']);
+      if (!isset($params['privacy']) || !is_array($params['privacy'])) {
+        $params['privacy'] = [];
       }
+      $config->addDefaultPrivacySettings($params['privacy']);
     }
   }
 }
 
 /**
-* Implements hook_civicrm_tabset() (updated from hook_civicrm_tabs)
-*
-* Will inject a custom gdprx tab
-*/
-function gdprx_civicrm_tabset($tabsetName, &$tabs, $context) {
-  if ($tabsetName == 'civicrm/contact/view') {
+ * Implements hook_civicrm_tabset().
+ *
+ * Will inject a custom gdprx tab (updated from the former hook_civicrm_tabs).
+ *
+ * @phpstan-param array<int|string, mixed> $tabs
+ * @phpstan-param array<string, mixed> $context
+ */
+function gdprx_civicrm_tabset(string $tabsetName, array &$tabs, array $context): void {
+  if ($tabsetName === 'civicrm/contact/view') {
     // remove the default table
     $group_id = CRM_Gdprx_CustomData::getGroupID('consent');
     $tab_key  = "custom_{$group_id}";
-    for ($i = 0; $i < count($tabs); $i++) {
-      if ($tabs[$i]['id'] == $tab_key) {
+    foreach ($tabs as $i => $tab) {
+      if (is_array($tab) && ($tab['id'] ?? NULL) === $tab_key) {
         unset($tabs[$i]);
         break;
       }
     }
-    $contactID = $context['contact_id'];
+    $contactID = _gdprx_int($context['contact_id'] ?? 0);
     // add our own tab
     $tabs[] = [
-        'id'     => 'gdprx',
-        'url'    => CRM_Utils_System::url('civicrm/gdprx/tab', "reset=1&snippet=1&force=1&cid={$contactID}"),
-        'title'  => E::ts('Consent'),
-        'count'  => CRM_Gdprx_Page_SummaryTab::getRecordCount($contactID),
-        'weight' => 400
+      'id'     => 'gdprx',
+      'url'    => CRM_Utils_System::url('civicrm/gdprx/tab', "reset=1&snippet=1&force=1&cid={$contactID}"),
+      'title'  => E::ts('Consent'),
+      'count'  => CRM_Gdprx_Page_SummaryTab::getRecordCount($contactID),
+      'weight' => 400,
     ];
   }
 }
@@ -98,7 +129,7 @@ function gdprx_civicrm_tabset($tabsetName, &$tabs, $context) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
  */
-function gdprx_civicrm_config(&$config) {
+function gdprx_civicrm_config(?\CRM_Core_Config &$config): void {
   _gdprx_civix_civicrm_config($config);
 }
 
@@ -107,7 +138,7 @@ function gdprx_civicrm_config(&$config) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_install
  */
-function gdprx_civicrm_install() {
+function gdprx_civicrm_install(): void {
   _gdprx_civix_civicrm_install();
 }
 
@@ -116,7 +147,7 @@ function gdprx_civicrm_install() {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_enable
  */
-function gdprx_civicrm_enable() {
+function gdprx_civicrm_enable(): void {
   _gdprx_civix_civicrm_enable();
 
   // add custom fields
@@ -129,38 +160,44 @@ function gdprx_civicrm_enable() {
 }
 
 /**
- * Implements hook_civicrm_buildForm()
+ * Implements hook_civicrm_buildForm().
  */
-function gdprx_civicrm_buildForm($formName, &$form) {
-  if ($formName == 'CRM_Contact_Form_Contact') {
+function gdprx_civicrm_buildForm(string $formName, \CRM_Core_Form &$form): void {
+  if ($form instanceof CRM_Contact_Form_Contact) {
     CRM_Gdprx_ConsentUI::buildForm($formName, $form);
   }
 
-  if (  $formName == 'CRM_Contact_Form_Inline_CommunicationPreferences'
-     || $formName == 'CRM_Contact_Form_Contact') {
+  if ($formName === 'CRM_Contact_Form_Inline_CommunicationPreferences'
+     || $formName === 'CRM_Contact_Form_Contact') {
     $config = CRM_Gdprx_Configuration::getSingleton();
-    if ($config->getSetting('disable_privacy_edit')) {
+    if ($config->isEnabled('disable_privacy_edit')) {
       CRM_Core_Resources::singleton()->addVars('gdprx', [
-          'privacy_help' => E::ts("These settings cannot be edited directly any more. Please use then consent tab.")]);
+        'privacy_help' => E::ts('These settings cannot be edited directly any more. Please use then consent tab.'),
+      ]);
       CRM_Core_Resources::singleton()->addScriptFile('de.systopia.gdprx', 'js/DisablePrivacyEditing.js');
     }
   }
 }
 
 /**
- * Implements hook_civicrm_validateForm()
+ * Implements hook_civicrm_validateForm().
+ *
+ * @phpstan-param array<string, mixed> $fields
+ * @phpstan-param array<string, mixed> $files
+ * @phpstan-param array<string, mixed> $errors
  */
-function gdprx_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
-  if ($formName == 'CRM_Contact_Form_Contact') {
+// phpcs:ignore Generic.Files.LineLength.TooLong
+function gdprx_civicrm_validateForm(string $formName, array &$fields, array &$files, \CRM_Core_Form &$form, array &$errors): void {
+  if ($form instanceof CRM_Contact_Form_Contact) {
     CRM_Gdprx_ConsentUI::validateForm($formName, $fields, $files, $form, $errors);
   }
 }
 
 /**
- * Implements hook_civicrm_postProcess()
+ * Implements hook_civicrm_postProcess().
  */
-function gdprx_civicrm_postProcess($formName, &$form) {
-  if ($formName == 'CRM_Contact_Form_Contact') {
+function gdprx_civicrm_postProcess(string $formName, \CRM_Core_Form &$form): void {
+  if ($form instanceof CRM_Contact_Form_Contact) {
     CRM_Gdprx_ConsentUI::postProcess($formName, $form);
   }
 }

@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * Stub narrowing CRM_Core_DAO::executeQuery() from the upstream `CRM_Core_DAO|object`
+ * union down to the DAO it actually returns. CRM_Core_DAO is a universalObjectCratesClass,
+ * so callers can then read result columns as dynamic properties without `property.notFound`.
+ */
+class CRM_Core_DAO {
+
+  /**
+   * @param string|array<string, mixed> $query
+   * @param array<int|string, mixed> $params
+   * @param array<string, mixed> $options
+   *
+   * @return CRM_Core_DAO
+   */
+  public static function &executeQuery(
+    $query,
+    array $params = [],
+    bool $abort = TRUE,
+    ?string $daoName = NULL,
+    bool $freeDAO = FALSE,
+    bool $i18nRewrite = TRUE,
+    bool $trapException = FALSE,
+    array $options = []
+  );
+
+}
