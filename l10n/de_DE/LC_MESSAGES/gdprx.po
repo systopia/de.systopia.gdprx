@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GDPR Compliance Extension\n"
-"POT-Creation-Date: 2021-10-02 09:15+0200\n"
+"POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: Bjoern Endres <Bjoern.Endres@didonai.com>\n"
 "Language-Team: SYSTOPIA <info@systopia.de>\n"
@@ -9,10 +9,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 3.9\n"
 
 #: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
-#: CRM/Gdprx/Form/ConsentTask.php resources/*.json
+#: CRM/Gdprx/Form/ConsentTask.php
 msgid "Date"
 msgstr "Datum"
 
@@ -24,7 +24,7 @@ msgstr "Gültig bis"
 #: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
 #: CRM/Gdprx/Form/ConsentTask.php
 #: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php
-#: templates/CRM/Gdprx/Page/SummaryTab.tpl resources/*.json
+#: templates/CRM/Gdprx/Page/SummaryTab.tpl
 msgid "Category"
 msgstr "Kategorie"
 
@@ -36,20 +36,19 @@ msgstr "- bitte wählen -"
 #: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
 #: CRM/Gdprx/Form/ConsentTask.php
 #: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php
-#: templates/CRM/Gdprx/Page/SummaryTab.tpl resources/*.json
+#: templates/CRM/Gdprx/Page/SummaryTab.tpl
 msgid "Source"
 msgstr "Quelle"
 
 #: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
 #: CRM/Gdprx/Form/ConsentTask.php
 #: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php
-#: templates/CRM/Gdprx/Page/SummaryTab.tpl resources/*.json
+#: templates/CRM/Gdprx/Page/SummaryTab.tpl
 msgid "Type"
 msgstr "Typ"
 
 #: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
 #: CRM/Gdprx/Form/ConsentTask.php templates/CRM/Gdprx/Page/SummaryTab.tpl
-#: resources/*.json
 msgid "Terms"
 msgstr "Bedingungen"
 
@@ -60,7 +59,7 @@ msgstr "- keine -"
 #: CRM/Gdprx/ConsentUI.php CRM/Gdprx/Form/ConsentEdit.php
 #: CRM/Gdprx/Form/ConsentTask.php
 #: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php
-#: templates/CRM/Gdprx/Page/SummaryTab.tpl resources/*.json
+#: templates/CRM/Gdprx/Page/SummaryTab.tpl
 msgid "Note"
 msgstr "Anmerkung"
 
@@ -174,10 +173,6 @@ msgstr "Vorauswahl konnte nicht gespeichert werden. Der Fehler ist: %1"
 msgid "Set Default Failed"
 msgstr "Speichern der Voreinstellung fehlgeschlagen"
 
-#: CRM/Gdprx/Upgrader/Base.php
-msgid "Upgrade %1 to revision %2"
-msgstr ""
-
 #: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php
 msgid "Default Category"
 msgstr "Kategorie (Default)"
@@ -196,7 +191,7 @@ msgstr "Kontakt ID"
 msgid "Record Date"
 msgstr "Gültig ab"
 
-#: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php resources/*.json
+#: Civi/Gdprx/ActionProvider/Action/AddConsentRecord.php
 msgid "Expiry Date"
 msgstr "Gültig bis"
 
@@ -289,42 +284,32 @@ msgstr "Gültig ab"
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: resources/*.json
-msgid "Consent Category"
-msgstr "Kategorie"
+#~ msgid "Consent Category"
+#~ msgstr "Kategorie"
 
-#: resources/*.json
-msgid "Contact Consent"
-msgstr "Herkunft"
+#~ msgid "Contact Consent"
+#~ msgstr "Herkunft"
 
-#: resources/*.json
-msgid "Consent Source"
-msgstr "Quelle"
+#~ msgid "Consent Source"
+#~ msgstr "Quelle"
 
-#: resources/*.json
-msgid "Consent Type"
-msgstr "Typ"
+#~ msgid "Consent Type"
+#~ msgstr "Typ"
 
-#: resources/*.json
-msgid "Default"
-msgstr "Standard"
+#~ msgid "Default"
+#~ msgstr "Standard"
 
-#: resources/*.json
-msgid "None"
-msgstr "ohne"
+#~ msgid "None"
+#~ msgstr "ohne"
 
-#: resources/*.json
-msgid "Opt-In"
-msgstr "Opt-In"
+#~ msgid "Opt-In"
+#~ msgstr "Opt-In"
 
-#: resources/*.json
-msgid "Opt-Out"
-msgstr "Opt-Out"
+#~ msgid "Opt-Out"
+#~ msgstr "Opt-Out"
 
-#: resources/*.json
-msgid "Soft Opt-In"
-msgstr "Soft Opt-In"
+#~ msgid "Soft Opt-In"
+#~ msgstr "Soft Opt-In"
 
-#: resources/*.json
-msgid "Double Opt-In"
-msgstr "Double Opt-In"
+#~ msgid "Double Opt-In"
+#~ msgstr "Double Opt-In"
